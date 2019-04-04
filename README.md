@@ -4,8 +4,8 @@ DVP3 is the third portfolio course in Full Sail University's Mobile Development 
 
 ## Exercises
 
-The Exercises section is comprised of--minimally--3 folders, one for each weekly coding exercise.  More folders may or may not be required, dependent on the introduction of additional coding exercise or the lack there of.  Each folder will have it's own README.md that explicates the nature of the exercise.
+The Exercises section is comprised of--minimally--3 folders, one for each weekly coding exercise.  More folders may or may not be required, dependent on the introduction of additional coding exercises or the lack there of as the month progresses.  Each folder will have it's own README.md that explicates the nature of the contained exercise.
 
 ## Final Project
 
-The Final Project section is comprised of 2 folders thus far.  One folder contains the primary client application to be developed throughout the month, and other contains the companion API server to be developed in tandem, in lieu of using an established web API.  These folders, too, will have their own README.md explicating the nature of the applications within.
+The Final Project section is comprised of 2 folders thus far.  One folder contains the primary client application to be developed throughout the month, and other contains the companion web API server to be developed in tandem, in lieu of using an established web API.  These folders, too, will have their own README.md explicating the nature of the applications within.
