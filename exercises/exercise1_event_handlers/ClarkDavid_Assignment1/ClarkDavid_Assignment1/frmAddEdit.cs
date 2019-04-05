@@ -17,19 +17,31 @@ using System.Windows.Forms;
 
 namespace ClarkDavid_Assignment1
 {
-    public partial class frmMain : Form
+    public partial class frmAddEdit : Form
     {
         // Form Movement Capture
 
-        private bool  CaptureMove { get; set; } = false;
-        private Point Origin      { get; set; }
+        private bool   CaptureMove { get; set; } = false;
+        private Point  Origin      { get; set; }
 
+        // Course to Edit
+        public string  CourseName  { get; set; } = "";
+
+        // Custom Events
+
+        public event EventHandler< AddedEditedCourse > CourseAddedEdited;
 
         // Constructor
-        public frmMain()
+        public frmAddEdit()
         {
             InitializeComponent();
             FixClientWinSize();
+        }
+
+        // Tie add/edit ability to existence of text.
+        private void txtAddEdit_TextChanged( object sender, EventArgs e )
+        {
+            btnOkay.Enabled = txtAddEdit.Text.Length > 0;
         }
 
         // The following 4 methods probably warrant subclassing.
@@ -47,14 +59,14 @@ namespace ClarkDavid_Assignment1
         }
 
         // Prepare to capture form movement.
-        private void frmMain_MouseDown( object sender, MouseEventArgs e )
+        private void frmAddEdit_MouseDown( object sender, MouseEventArgs e )
         {
             CaptureMove = true;
             Origin      = e.Location;
         }
 
         // Capture form movement.
-        private void frmMain_MouseMove( object sender, MouseEventArgs e )
+        private void frmAddEdit_MouseMove( object sender, MouseEventArgs e )
         {
             if( CaptureMove ) Location =  new Point( Location.X - Origin.X + e.X
                                                    , Location.Y - Origin.Y + e.Y );
@@ -62,24 +74,22 @@ namespace ClarkDavid_Assignment1
         }
 
         // Stop capturing form movement.
-        private void frmMain_MouseUp( object sender, MouseEventArgs e )
+        private void frmAddEdit_MouseUp( object sender, MouseEventArgs e )
         {
             CaptureMove = false;
         }
 
-        private void mnuExit_Click( object sender, EventArgs e )
+        // Inform subscribers of new or edited course and close.
+        private void btnOkay_Click( object sender, EventArgs e )
         {
+            CourseAddedEdited?.Invoke( this, new AddedEditedCourse( txtAddEdit.Text ) );
             Close();
         }
 
-        private void btnAdd_Click( object sender, EventArgs e )
+        // Populate the add/edit box with text to edit, if any.
+        private void frmAddEdit_Load( object sender, EventArgs e )
         {
-
-        }
-
-        private void btnEdit_Click( object sender, EventArgs e )
-        {
-
+            txtAddEdit.Text = CourseName;
         }
     }
 }
