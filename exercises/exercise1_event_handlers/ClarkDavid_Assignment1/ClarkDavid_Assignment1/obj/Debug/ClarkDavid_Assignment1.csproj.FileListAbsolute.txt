@@ -1,0 +1,10 @@
+\\vmware-host\Shared Folders\Desktop\dvp3\exercises\exercise1_event_handlers\ClarkDavid_Assignment1\ClarkDavid_Assignment1\bin\Debug\ClarkDavid_Assignment1.exe.config
+\\vmware-host\Shared Folders\Desktop\dvp3\exercises\exercise1_event_handlers\ClarkDavid_Assignment1\ClarkDavid_Assignment1\bin\Debug\ClarkDavid_Assignment1.exe
+\\vmware-host\Shared Folders\Desktop\dvp3\exercises\exercise1_event_handlers\ClarkDavid_Assignment1\ClarkDavid_Assignment1\bin\Debug\ClarkDavid_Assignment1.pdb
+\\vmware-host\Shared Folders\Desktop\dvp3\exercises\exercise1_event_handlers\ClarkDavid_Assignment1\ClarkDavid_Assignment1\obj\Debug\ClarkDavid_Assignment1.csprojAssemblyReference.cache
+\\vmware-host\Shared Folders\Desktop\dvp3\exercises\exercise1_event_handlers\ClarkDavid_Assignment1\ClarkDavid_Assignment1\obj\Debug\ClarkDavid_Assignment1.frmMain.resources
+\\vmware-host\Shared Folders\Desktop\dvp3\exercises\exercise1_event_handlers\ClarkDavid_Assignment1\ClarkDavid_Assignment1\obj\Debug\ClarkDavid_Assignment1.Properties.Resources.resources
+\\vmware-host\Shared Folders\Desktop\dvp3\exercises\exercise1_event_handlers\ClarkDavid_Assignment1\ClarkDavid_Assignment1\obj\Debug\ClarkDavid_Assignment1.csproj.GenerateResource.cache
+\\vmware-host\Shared Folders\Desktop\dvp3\exercises\exercise1_event_handlers\ClarkDavid_Assignment1\ClarkDavid_Assignment1\obj\Debug\ClarkDavid_Assignment1.csproj.CoreCompileInputs.cache
+\\vmware-host\Shared Folders\Desktop\dvp3\exercises\exercise1_event_handlers\ClarkDavid_Assignment1\ClarkDavid_Assignment1\obj\Debug\ClarkDavid_Assignment1.exe
+\\vmware-host\Shared Folders\Desktop\dvp3\exercises\exercise1_event_handlers\ClarkDavid_Assignment1\ClarkDavid_Assignment1\obj\Debug\ClarkDavid_Assignment1.pdb
