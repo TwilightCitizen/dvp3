@@ -104,6 +104,7 @@ namespace ClarkDavid_Assignment1
             this.btnDelete.TabIndex = 7;
             this.btnDelete.Text = "&Delete";
             this.btnDelete.UseVisualStyleBackColor = true;
+            this.btnDelete.Click += new System.EventHandler(this.btnDelete_Click);
             // 
             // btnSwap
             // 
@@ -114,6 +115,7 @@ namespace ClarkDavid_Assignment1
             this.btnSwap.TabIndex = 5;
             this.btnSwap.Text = "&Swap";
             this.btnSwap.UseVisualStyleBackColor = true;
+            this.btnSwap.Click += new System.EventHandler(this.btnSwap_Click);
             // 
             // lblComplete
             // 
@@ -141,6 +143,7 @@ namespace ClarkDavid_Assignment1
             this.lstComplete.Name = "lstComplete";
             this.lstComplete.Size = new System.Drawing.Size(280, 758);
             this.lstComplete.TabIndex = 3;
+            this.lstComplete.SelectedIndexChanged += new System.EventHandler(this.lstComplete_SelectedIndexChanged);
             // 
             // lstPending
             // 
@@ -150,6 +153,7 @@ namespace ClarkDavid_Assignment1
             this.lstPending.Name = "lstPending";
             this.lstPending.Size = new System.Drawing.Size(280, 758);
             this.lstPending.TabIndex = 1;
+            this.lstPending.SelectedIndexChanged += new System.EventHandler(this.lstPending_SelectedIndexChanged);
             // 
             // mnuMain
             // 

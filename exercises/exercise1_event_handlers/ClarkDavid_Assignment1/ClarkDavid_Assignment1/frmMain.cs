@@ -6,13 +6,7 @@
  * Date:     April 5, 2019 */
 
 using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
 using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace ClarkDavid_Assignment1
@@ -23,7 +17,6 @@ namespace ClarkDavid_Assignment1
 
         private bool  CaptureMove { get; set; } = false;
         private Point Origin      { get; set; }
-
 
         // Constructor
         public frmMain()
@@ -72,14 +65,133 @@ namespace ClarkDavid_Assignment1
             Close();
         }
 
+        // Display Add/Edit form for adding a course.  Added course will
+        // arrive via custom event to registered handler.
         private void btnAdd_Click( object sender, EventArgs e )
         {
+            Hide();
 
+            var dlg                = new frmAddEdit();
+            
+            dlg.CourseAddedEdited += CourseAdded;
+
+            dlg.ShowDialog( this );
+            Show();
         }
 
+        // Display Add/Edit form for editing a selected course.  The edited
+        // course will arrive via a custom event to the registered handler.
         private void btnEdit_Click( object sender, EventArgs e )
         {
+            Hide();
 
+            var dlg                = new frmAddEdit();
+
+            dlg.CourseAddedEdited += CourseEdited;
+            dlg.CourseName         = lstPending.SelectedIndex != -1 ?
+                                     lstPending.SelectedItem.ToString() :
+                                     lstComplete.SelectedItem.ToString();
+
+            dlg.ShowDialog( this );
+            Show();
+            DisableButtons();
+        }
+
+        // Add the received course to courses pending completion.  These
+        // can be moved to completed via the swap button.
+        private void CourseAdded( object sender, AddedEditedCourse e )
+        {
+            lstPending.Items.Add( e.Name );
+        }
+
+        // Either a pending or completed course is complete, but not both.
+        // Update the selected one with the name returned from the dialog.
+        private void CourseEdited( object sender, AddedEditedCourse e )
+        {
+            int index = -1;
+
+            if( lstPending.SelectedIndex != -1 )
+            {
+                index = lstPending.SelectedIndex;
+
+                lstPending.Items.RemoveAt( index );
+                lstPending.Items.Insert( index, e.Name );
+            }
+            else
+            {
+                index = lstComplete.SelectedIndex;
+
+                lstComplete.Items.RemoveAt( index );
+                lstComplete.Items.Insert( index, e.Name );
+            }
+        }
+
+        // The next two methods assure mutally exclusive item selection between
+        // the pending and completed courses lists, also enabling appropriate
+        // user actions on a selected course.
+
+        private void lstPending_SelectedIndexChanged( object sender, EventArgs e )
+        {
+            lstComplete.SelectedIndex = -1;
+
+            if( lstPending.SelectedIndex != -1 )
+                EnableButtons();
+            else
+                DisableButtons();
+        }
+
+        private void lstComplete_SelectedIndexChanged( object sender, EventArgs e )
+        {
+            lstPending.SelectedIndex = -1;
+
+            if( lstComplete.SelectedIndex != -1 )
+                EnableButtons();
+            else
+                DisableButtons();
+        }
+
+        // Enable selected item user actions.
+        private void EnableButtons()
+        {
+            btnEdit.Enabled   = true;
+            btnSwap.Enabled   = true;
+            btnDelete.Enabled = true;
+        }
+
+        // Disable selected item user actions.
+        private void DisableButtons()
+        {
+            btnEdit.Enabled   = false;
+            btnSwap.Enabled   = false;
+            btnDelete.Enabled = false;
+        }
+
+        // Swap the selected item to the other list.
+        private void btnSwap_Click( object sender, EventArgs e )
+        {
+            if( lstPending.SelectedIndex != -1 )
+            { 
+                lstComplete.Items.Add( lstPending.SelectedItem );
+                lstPending.Items.Remove( lstPending.SelectedItem );
+            }
+            else
+            {
+                lstPending.Items.Add( lstComplete.SelectedItem );
+                lstComplete.Items.Remove( lstComplete.SelectedItem );
+            }
+
+            DisableButtons();
+        }
+
+        // Remove the selected item.
+        private void btnDelete_Click( object sender, EventArgs e )
+        {
+            if( lstPending.SelectedIndex != -1 )
+                lstPending.Items.Remove( lstPending.SelectedItem );
+            else
+                lstComplete.Items.Remove( lstComplete.SelectedItem );
+
+            DisableButtons();
         }
     }
 }

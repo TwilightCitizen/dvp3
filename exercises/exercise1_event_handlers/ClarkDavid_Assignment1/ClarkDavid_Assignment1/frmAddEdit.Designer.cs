@@ -40,12 +40,14 @@ namespace ClarkDavid_Assignment1
             this.lblAddEdit = new System.Windows.Forms.Label();
             this.txtAddEdit = new System.Windows.Forms.TextBox();
             this.btnOkay = new System.Windows.Forms.Button();
+            this.btnCancel = new System.Windows.Forms.Button();
             this.grpMain.SuspendLayout();
             this.SuspendLayout();
             // 
             // grpMain
             // 
             this.grpMain.BackColor = System.Drawing.Color.Transparent;
+            this.grpMain.Controls.Add(this.btnCancel);
             this.grpMain.Controls.Add(this.lblAddEdit);
             this.grpMain.Controls.Add(this.txtAddEdit);
             this.grpMain.Controls.Add(this.btnOkay);
@@ -74,7 +76,7 @@ namespace ClarkDavid_Assignment1
             // 
             // btnOkay
             // 
-            this.btnOkay.Location = new System.Drawing.Point(221, 901);
+            this.btnOkay.Location = new System.Drawing.Point(148, 901);
             this.btnOkay.Name = "btnOkay";
             this.btnOkay.Size = new System.Drawing.Size(135, 57);
             this.btnOkay.TabIndex = 2;
@@ -82,12 +84,25 @@ namespace ClarkDavid_Assignment1
             this.btnOkay.UseVisualStyleBackColor = true;
             this.btnOkay.Click += new System.EventHandler(this.btnOkay_Click);
             // 
+            // btnCancel
+            // 
+            this.btnCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
+            this.btnCancel.Location = new System.Drawing.Point(293, 901);
+            this.btnCancel.Name = "btnCancel";
+            this.btnCancel.Size = new System.Drawing.Size(135, 57);
+            this.btnCancel.TabIndex = 3;
+            this.btnCancel.Text = "&Cancel";
+            this.btnCancel.UseVisualStyleBackColor = true;
+            this.btnCancel.Click += new System.EventHandler(this.btnCancel_Click);
+            // 
             // frmAddEdit
             // 
+            this.AcceptButton = this.btnOkay;
             this.AutoScaleDimensions = new System.Drawing.SizeF(14F, 29F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("$this.BackgroundImage")));
             this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.CancelButton = this.btnCancel;
             this.ClientSize = new System.Drawing.Size(659, 1272);
             this.Controls.Add(this.grpMain);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
@@ -111,5 +126,6 @@ namespace ClarkDavid_Assignment1
         private System.Windows.Forms.TextBox txtAddEdit;
         private System.Windows.Forms.Button btnOkay;
         private System.Windows.Forms.Label lblAddEdit;
+        private System.Windows.Forms.Button btnCancel;
     }
 }
