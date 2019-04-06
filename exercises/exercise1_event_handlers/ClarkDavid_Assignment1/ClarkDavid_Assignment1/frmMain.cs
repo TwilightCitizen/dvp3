@@ -8,6 +8,9 @@
 using System;
 using System.Drawing;
 using System.Windows.Forms;
+using System.Xml.Linq;
+using System.IO;
+using System.Linq;
 
 namespace ClarkDavid_Assignment1
 {
@@ -192,6 +195,130 @@ namespace ClarkDavid_Assignment1
                 lstComplete.Items.Remove( lstComplete.SelectedItem );
 
             DisableButtons();
+        }
+
+        // Save the lists to an XML file.  XML will be encoded to Base64,
+        // prepended with MD5 sum to preserve file integrity.
+        private void mnuSave_Click( object sender, EventArgs e )
+        {
+            var dlg = new SaveFileDialog();
+
+            // Filter for Exercise 1 files.
+            dlg.Filter = "EX1 Files (*.ex1)|*.ex1";
+
+            if( dlg.ShowDialog() == DialogResult.OK )
+            {
+                using( StreamWriter sw = new StreamWriter( dlg.OpenFile() ) )
+                {
+                    // Convert the lists to XML.
+                    var xml   = new XElement( "courses",
+                        new XElement
+                        (
+                            "pending"
+                        ,   from string course in lstPending.Items
+                            select new XElement( "course", course )
+                        )
+                    ,   new XElement
+                    ( 
+                            "complete"
+                        ,   from string course in lstComplete.Items
+                            select new XElement( "course", course )
+                        )
+                    ).ToString();
+
+                    // Convert XML to Base64.
+                    var base64 = xml.ToBase64();
+                    var md5    = base64.ToMD5();
+
+                    /* Write the file. */
+                    sw.Write( md5 );
+                    sw.Write( base64 );
+                }
+            }
+        }
+
+        // Save the lists to a human-readable/printable text file.
+        private void mnuPrint_Click( object sender, EventArgs e )
+        {
+            var dlg = new SaveFileDialog();
+
+            // Filter for text files.
+            dlg.Filter = "Text Files (*.txt)|*.txt";
+
+            if( dlg.ShowDialog() == DialogResult.OK )
+            {
+                // Write the file.
+                using( StreamWriter sw = new StreamWriter( dlg.OpenFile() ) )
+                {
+                    sw.WriteLine( "Pending:" + Environment.NewLine );
+
+                    foreach( var course in lstPending.Items )
+                        sw.WriteLine( " - " + course.ToString() );
+
+                    sw.WriteLine( Environment.NewLine + "Complete:" + Environment.NewLine );
+
+                    foreach( var course in lstComplete.Items )
+                        sw.WriteLine( " - " + course.ToString() );
+                }
+            }
+        }
+
+        // Load an XML file to populate the lists.
+        private void mnuLoad_Click( object sender, EventArgs e )
+        {
+            var dlg = new OpenFileDialog();
+
+            // Filter for Exercise 1 files.
+            dlg.Filter = "EX1 Files (*.ex1)|*.ex1";
+
+            if( dlg.ShowDialog() == DialogResult.OK )
+            {
+                using( StreamReader sr = new StreamReader( dlg.OpenFile() ) )
+                {
+                    // Read in the file, checking the MD5 hash integrity.
+                    var file   = sr.ReadToEnd();
+                    var md5    = file.Substring( 0, 32 );
+                    var base64 = file.Substring( 32 );
+                    var text   = base64.FromBase64();
+
+                    // Deserialize the XML, adding the courses to the lists
+                    // or notifiy of an invalid file.
+                    if( md5 == base64.ToMD5() )
+                    {
+                        try
+                        {
+                            var xml = XDocument.Parse( text );
+
+                            lstPending.Items.Clear();
+                            lstComplete.Items.Clear();
+
+                            foreach( var course in xml.Descendants( "pending" ) )
+                                lstPending.Items.Add( course.Value.ToString() );
+
+                            foreach( var course in xml.Descendants( "complete" ) )
+                                lstComplete.Items.Add( course.Value.ToString() );
+                        }
+                        catch
+                        {
+                            NotifyInvalidFile();
+                        }
+                    }
+                    else
+                        NotifyInvalidFile();
+                }
+            }
+        }
+
+        // Notify the user of an invalid file.
+        private void NotifyInvalidFile()
+        {
+            MessageBox.Show
+            ( 
+                "File is not a valid Exercise 1 file or was corrupted!"
+            ,   "Invalid File"
+            ,   MessageBoxButtons.OK
+            ,   MessageBoxIcon.Exclamation
+            );
         }
     }
 }

@@ -162,7 +162,7 @@ namespace ClarkDavid_Assignment1
             this.mnuFile});
             this.mnuMain.Location = new System.Drawing.Point(3, 31);
             this.mnuMain.Name = "mnuMain";
-            this.mnuMain.Size = new System.Drawing.Size(568, 45);
+            this.mnuMain.Size = new System.Drawing.Size(568, 47);
             this.mnuMain.TabIndex = 0;
             // 
             // mnuFile
@@ -174,40 +174,43 @@ namespace ClarkDavid_Assignment1
             this.sep1,
             this.mnuExit});
             this.mnuFile.Name = "mnuFile";
-            this.mnuFile.Size = new System.Drawing.Size(70, 41);
+            this.mnuFile.Size = new System.Drawing.Size(70, 43);
             this.mnuFile.Text = "&File";
             // 
             // mnuLoad
             // 
             this.mnuLoad.Name = "mnuLoad";
             this.mnuLoad.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.L)));
-            this.mnuLoad.Size = new System.Drawing.Size(273, 42);
+            this.mnuLoad.Size = new System.Drawing.Size(360, 42);
             this.mnuLoad.Text = "&Load";
+            this.mnuLoad.Click += new System.EventHandler(this.mnuLoad_Click);
             // 
             // mnuSave
             // 
             this.mnuSave.Name = "mnuSave";
             this.mnuSave.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.S)));
-            this.mnuSave.Size = new System.Drawing.Size(273, 42);
+            this.mnuSave.Size = new System.Drawing.Size(360, 42);
             this.mnuSave.Text = "&Save";
+            this.mnuSave.Click += new System.EventHandler(this.mnuSave_Click);
             // 
             // mnuPrint
             // 
             this.mnuPrint.Name = "mnuPrint";
             this.mnuPrint.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.P)));
-            this.mnuPrint.Size = new System.Drawing.Size(273, 42);
+            this.mnuPrint.Size = new System.Drawing.Size(360, 42);
             this.mnuPrint.Text = "&Print";
+            this.mnuPrint.Click += new System.EventHandler(this.mnuPrint_Click);
             // 
             // sep1
             // 
             this.sep1.Name = "sep1";
-            this.sep1.Size = new System.Drawing.Size(270, 6);
+            this.sep1.Size = new System.Drawing.Size(357, 6);
             // 
             // mnuExit
             // 
             this.mnuExit.Name = "mnuExit";
             this.mnuExit.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Q)));
-            this.mnuExit.Size = new System.Drawing.Size(273, 42);
+            this.mnuExit.Size = new System.Drawing.Size(360, 42);
             this.mnuExit.Text = "E&xit";
             this.mnuExit.Click += new System.EventHandler(this.mnuExit_Click);
             // 
