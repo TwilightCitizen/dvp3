@@ -104,6 +104,7 @@ namespace ClarkDavid_Assignment2
             this.btnDelete.TabIndex = 4;
             this.btnDelete.Text = "Delete";
             this.btnDelete.UseVisualStyleBackColor = true;
+            this.btnDelete.Click += new System.EventHandler(this.btnDelete_Click);
             // 
             // btnEdit
             // 
@@ -123,12 +124,14 @@ namespace ClarkDavid_Assignment2
             this.lstSeries.Font = new System.Drawing.Font("Microsoft Sans Serif", 27.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lstSeries.LargeImageList = this.imgIcons;
             this.lstSeries.Location = new System.Drawing.Point(20, 95);
+            this.lstSeries.MultiSelect = false;
             this.lstSeries.Name = "lstSeries";
             this.lstSeries.Size = new System.Drawing.Size(555, 828);
             this.lstSeries.SmallImageList = this.imgIcons;
             this.lstSeries.Sorting = System.Windows.Forms.SortOrder.Ascending;
             this.lstSeries.TabIndex = 1;
             this.lstSeries.UseCompatibleStateImageBehavior = false;
+            this.lstSeries.SelectedIndexChanged += new System.EventHandler(this.lstSeries_SelectedIndexChanged);
             // 
             // mnuMain
             // 

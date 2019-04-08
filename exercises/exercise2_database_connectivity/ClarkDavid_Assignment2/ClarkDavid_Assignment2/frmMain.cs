@@ -37,6 +37,10 @@ namespace ClarkDavid_Assignment2
 
         private const string SELECT   = "select id, title, yearReleased, author, director, genre, icon from SeriesTitles";
 
+        /* Data Table */
+
+        private DataTable Table { get; set; } = null;
+
         /* Constructors */
 
         public frmMain()
@@ -135,8 +139,8 @@ namespace ClarkDavid_Assignment2
             }
         }
 
-        /* Return a connection string built up from the passed in server
-         * and the hardcoded constants for the other portions. */
+        /* Return a connection string built up from the passed components,
+         * returning null if any are blank or null. */
 
         private string GetConnectString( string server, string user, string password, string database, string port, string sslMode = "none" )
         {
@@ -154,24 +158,22 @@ namespace ClarkDavid_Assignment2
             );
         }
 
-        private async Task< DataTable >GetDataTableAsync()
+        /* Connect to the database specified in the connection string, execute the
+         * provided query, and return a datatable containing the results.  Return null
+         * if any steps fail. */
+
+        private async Task< DataTable >GetDataTableAsync( string connect, string select )
         {
-            var server  = await ReadServerAsync( PATH );
-
-            if( server  == null ) return null;
-
-            var connect = GetConnectString( server, USER, PASSWORD, DATABASE, PORT );
-
             if( connect == null ) return null;
 
             try
             {
                 using( var connection = new MySqlConnection( connect ) )
-                using( var adapter    = new MySqlDataAdapter( SELECT, connection ) )
+                using( var adapter    = new MySqlDataAdapter( select, connection ) )
                 {
                     var table = new DataTable();
 
-                    adapter.Fill( table );
+                    await adapter.FillAsync( table );
 
                     return table;
                 }
@@ -184,64 +186,102 @@ namespace ClarkDavid_Assignment2
             }
         }
 
-        private async Task< int? >SaveTableChangesAsync( DataTable table )
+        /* Connect to the database specified in the connection string, build non-
+         * select queries from the provided query, update the database, and return
+         * the number of affected rows.  Return null if any steps fail. */
+
+        private async Task< int? >SaveTableChangesAsync( string connect, string select, DataTable table )
         {
-            var server  = await ReadServerAsync( PATH );
-
-            if( server  == null ) return null;
-
-            var connect = GetConnectString( server, USER, PASSWORD, DATABASE, PORT );
-
             if( connect == null ) return null;
 
             try
             {
                 using( var connection = new MySqlConnection( connect ) )
-                using( var adapter    = new MySqlDataAdapter( SELECT, connection ) )
+                using( var adapter    = new MySqlDataAdapter( select, connection ) )
                 using( var builder    = new MySqlCommandBuilder( adapter ) )
                 {
-                    return adapter.Update( table );
+                    return await adapter.UpdateAsync( table );
                 }
             }
-            catch // ( Exception e )
+            catch ( Exception e )
             {
-                // MessageBox.Show( e.Message );
+                MessageBox.Show( e.Message );
 
                 return null;
             }
         }
 
 
+        /* Retreive data table from database, populating the image list and list view
+         * with the returned images and other values. */
+
+        private async Task PopulateListAysnc()
+        {
+            var server = await ReadServerAsync( PATH );
+
+            if( server != null )
+            {
+                var connect = GetConnectString( server, USER, PASSWORD, DATABASE, PORT );
+
+                Table = await GetDataTableAsync( connect, SELECT );
+
+                if( Table != null )
+                {
+                    imgIcons.Images.Clear();
+
+                    foreach( DataRow row in Table.Rows )
+                    {
+                        try
+                        {
+                            /* On the chance that a series has a non-existent image,
+                             * do not install it to the image list.  The list view
+                             * item will index a non-existent image and show nothing. */ 
+
+                            var bytes  = (byte[]) row[ "icon" ];
+
+                            using( var stream = new MemoryStream( bytes ) )
+                                imgIcons.Images.Add( row[ "id" ].ToString(), Image.FromStream( stream ) );
+                        }
+                        catch{ }
+
+                        var item = new ListViewItem( row[ "title" ].ToString(), row[ "id" ].ToString() );
+
+                        item.Tag = row;
+
+                        lstSeries.Items.Add( item );
+                    }
+                }
+            }
+        }
+
+        /* Remove the selected series from the data table, passing changes to save to
+         * the database.  If changes update successfully, remove the series from the
+         * list and accept the deletion in the data table. */
+
+        private async Task DeleteSeriesAsync()
+        {
+            var server = await ReadServerAsync( PATH );
+
+            if( server != null )
+            {
+                var connect = GetConnectString( server, USER, PASSWORD, DATABASE, PORT );
+
+                Table.Rows[ Table.Rows.IndexOf( (DataRow) lstSeries.SelectedItems[ 0 ].Tag ) ].Delete();
+
+                if( await SaveTableChangesAsync( connect, SELECT, Table ) != null )
+                {
+                    lstSeries.Items.Remove( lstSeries.SelectedItems[ 0 ] );
+
+                    Table.AcceptChanges();
+                }
+            }
+        }
+
         /* Form Event Handlers */
 
         private async void frmMain_Load( object sender, EventArgs e )
         {
-            var table = await GetDataTableAsync();
-
-            //imgIcons.Images.Clear();
-
-            foreach( DataRow row in table.Rows )
-            {
-                var stream = new MemoryStream( (byte[]) row[ "icon" ] );
-                var image  = Image.FromStream( stream );
-
-                stream.Dispose();
-
-                imgIcons.Images.Add( row[ "id" ].ToString(), image );
-
-                var item  = new ListViewItem( row[ "title" ].ToString(), row[ "id" ].ToString() );
-
-                item.Tag = row;
-
-                lstSeries.Items.Add( item );
-            }
-
-            // table.Rows[ 0 ][ "title" ] = "Karate";
-            // table.Rows[ 5 ].Delete();
-
-            var rows = await SaveTableChangesAsync( table );
-
-            MessageBox.Show( "Stop!" );
+            await PopulateListAysnc();
         }
 
         private void mnuPrint_Click( object sender, EventArgs e )
@@ -252,6 +292,19 @@ namespace ClarkDavid_Assignment2
         private void mnuQuit_Click( object sender, EventArgs e )
         {
             Close();
+        }
+
+        private void lstSeries_SelectedIndexChanged( object sender, EventArgs e )
+        {
+            /* Edit and deletion depend on actual selection */
+
+            btnEdit.Enabled   =
+            btnDelete.Enabled = lstSeries.SelectedItems.Count > 0;
+        }
+
+        private async void btnDelete_Click(object sender, EventArgs e)
+        {
+            await DeleteSeriesAsync(); 
         }
     }
 }
