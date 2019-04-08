@@ -14,6 +14,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.IO;
+using MySql.Data.MySqlClient;
 
 namespace ClarkDavid_Assignment2
 {
@@ -23,6 +25,17 @@ namespace ClarkDavid_Assignment2
 
         private bool  CaptureMove { get; set; } = false;
         private Point Origin      { get; set; }
+
+        /* Constants */
+
+        private const string PATH     = "C:\\VFW\\connect.txt";
+
+        private const string USER     = "dbsAdmin";
+        private const string PASSWORD = "password";
+        private const string DATABASE = "Series";
+        private const string PORT     = "8889";
+
+        private const string SELECT   = "select id, title, yearReleased, author, director, genre, icon from SeriesTitles";
 
         /* Constructors */
 
@@ -74,7 +87,7 @@ namespace ClarkDavid_Assignment2
          * 1800 resolution, the screen exceeds the bounds of the iPhone image and
          * window, so no scaling need occur. */
 
-        private void ScaleToFitScreen( Control control, float factor = 0.75f )
+        private void ScaleToFitScreen( Form form, float factor = 0.75f )
         {
             if( Height > Screen.PrimaryScreen.WorkingArea.Size.Height )
             {
@@ -84,7 +97,7 @@ namespace ClarkDavid_Assignment2
                 
                 ScaleChildren = ( Control parent ) =>
                 {
-                    foreach( Control child in parent.Controls)
+                    foreach( Control child in parent.Controls )
                     {
                         Font font = child.Font;
 
@@ -94,8 +107,146 @@ namespace ClarkDavid_Assignment2
                     }
                 };
 
-                ScaleChildren( control );
+                ScaleChildren( form );
             }
+        }
+
+        /* Attempts to read a server address from a text file at a hard
+         * coded path, return the server address on success or null on
+         * failure. */
+        
+        private async Task< string > ReadServerAsync( string path  )
+        {
+            if( string.IsNullOrEmpty( path ) ) return null;
+
+            try
+            {
+                var reader = new StreamReader( path );
+                return await reader.ReadToEndAsync();
+            }
+            catch
+            {
+                return null;
+            }
+        }
+
+        /* Return a connection string built up from the passed in server
+         * and the hardcoded constants for the other portions. */
+
+        private string GetConnectString( string server, string user, string password, string database, string port, string sslMode = "none" )
+        {
+            var args = new string[]{  server, user, password, port, sslMode };
+
+            if( args.Any( arg => string.IsNullOrEmpty( arg ) ) ) return null;
+            
+            return string.Concat(
+                $"server={ server };"
+            ,   $"userid={ user };"
+            ,   $"password={ password };"
+            ,   $"database={ database };"
+            ,   $"port={ port };"
+            ,   $"sslmode={ sslMode }"
+            );
+        }
+
+        private async Task< DataTable >GetDataTableAsync()
+        {
+            var server  = await ReadServerAsync( PATH );
+
+            if( server  == null ) return null;
+
+            var connect = GetConnectString( server, USER, PASSWORD, DATABASE, PORT );
+
+            if( connect == null ) return null;
+
+            try
+            {
+                using( var connection = new MySqlConnection( connect ) )
+                using( var adapter    = new MySqlDataAdapter( SELECT, connection ) )
+                {
+                    var table = new DataTable();
+
+                    adapter.Fill( table );
+
+                    return table;
+                }
+            }
+            catch // ( Exception e )
+            {
+                // MessageBox.Show( e.Message );
+
+                return null;
+            }
+        }
+
+        private async Task< int? >SaveTableChangesAsync( DataTable table )
+        {
+            var server  = await ReadServerAsync( PATH );
+
+            if( server  == null ) return null;
+
+            var connect = GetConnectString( server, USER, PASSWORD, DATABASE, PORT );
+
+            if( connect == null ) return null;
+
+            try
+            {
+                using( var connection = new MySqlConnection( connect ) )
+                using( var adapter    = new MySqlDataAdapter( SELECT, connection ) )
+                using( var builder    = new MySqlCommandBuilder( adapter ) )
+                {
+                    return adapter.Update( table );
+                }
+            }
+            catch // ( Exception e )
+            {
+                // MessageBox.Show( e.Message );
+
+                return null;
+            }
+        }
+
+
+        /* Form Event Handlers */
+
+        private async void frmMain_Load( object sender, EventArgs e )
+        {
+            var table = await GetDataTableAsync();
+
+            //imgIcons.Images.Clear();
+
+            foreach( DataRow row in table.Rows )
+            {
+                var stream = new MemoryStream( (byte[]) row[ "icon" ] );
+                var image  = Image.FromStream( stream );
+
+                stream.Dispose();
+
+                imgIcons.Images.Add( row[ "id" ].ToString(), image );
+
+                var item  = new ListViewItem( row[ "title" ].ToString(), row[ "id" ].ToString() );
+
+                item.Tag = row;
+
+                lstSeries.Items.Add( item );
+            }
+
+            // table.Rows[ 0 ][ "title" ] = "Karate";
+            // table.Rows[ 5 ].Delete();
+
+            var rows = await SaveTableChangesAsync( table );
+
+            MessageBox.Show( "Stop!" );
+        }
+
+        private void mnuPrint_Click( object sender, EventArgs e )
+        {
+
+        }
+
+        private void mnuQuit_Click( object sender, EventArgs e )
+        {
+            Close();
         }
     }
 }

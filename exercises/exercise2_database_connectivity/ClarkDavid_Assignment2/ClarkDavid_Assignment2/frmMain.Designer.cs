@@ -35,77 +35,146 @@ namespace ClarkDavid_Assignment2
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(frmMain));
             this.grpContent = new System.Windows.Forms.GroupBox();
-            this.button3 = new System.Windows.Forms.Button();
-            this.textBox2 = new System.Windows.Forms.TextBox();
-            this.textBox1 = new System.Windows.Forms.TextBox();
-            this.button2 = new System.Windows.Forms.Button();
-            this.button1 = new System.Windows.Forms.Button();
+            this.tblButtons = new System.Windows.Forms.TableLayoutPanel();
+            this.btnAdd = new System.Windows.Forms.Button();
+            this.btnDelete = new System.Windows.Forms.Button();
+            this.btnEdit = new System.Windows.Forms.Button();
+            this.lstSeries = new System.Windows.Forms.ListView();
+            this.mnuMain = new System.Windows.Forms.MenuStrip();
+            this.fileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.mnuPrint = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
+            this.mnuQuit = new System.Windows.Forms.ToolStripMenuItem();
+            this.imgIcons = new System.Windows.Forms.ImageList(this.components);
             this.grpContent.SuspendLayout();
+            this.tblButtons.SuspendLayout();
+            this.mnuMain.SuspendLayout();
             this.SuspendLayout();
             // 
             // grpContent
             // 
             this.grpContent.BackColor = System.Drawing.Color.Transparent;
-            this.grpContent.Controls.Add(this.button3);
-            this.grpContent.Controls.Add(this.textBox2);
-            this.grpContent.Controls.Add(this.textBox1);
-            this.grpContent.Controls.Add(this.button2);
-            this.grpContent.Controls.Add(this.button1);
+            this.grpContent.Controls.Add(this.tblButtons);
+            this.grpContent.Controls.Add(this.lstSeries);
+            this.grpContent.Controls.Add(this.mnuMain);
             this.grpContent.Location = new System.Drawing.Point(50, 186);
             this.grpContent.Name = "grpContent";
             this.grpContent.Size = new System.Drawing.Size(595, 1019);
             this.grpContent.TabIndex = 0;
             this.grpContent.TabStop = false;
             // 
-            // button3
+            // tblButtons
             // 
-            this.button3.Font = new System.Drawing.Font("Microsoft Sans Serif", 26.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.button3.Location = new System.Drawing.Point(365, 585);
-            this.button3.Name = "button3";
-            this.button3.Size = new System.Drawing.Size(230, 110);
-            this.button3.TabIndex = 4;
-            this.button3.Text = "button3";
-            this.button3.UseVisualStyleBackColor = true;
+            this.tblButtons.ColumnCount = 3;
+            this.tblButtons.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 33.33333F));
+            this.tblButtons.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 33.33333F));
+            this.tblButtons.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 33.33333F));
+            this.tblButtons.Controls.Add(this.btnAdd, 0, 0);
+            this.tblButtons.Controls.Add(this.btnDelete, 2, 0);
+            this.tblButtons.Controls.Add(this.btnEdit, 1, 0);
+            this.tblButtons.Location = new System.Drawing.Point(3, 938);
+            this.tblButtons.Name = "tblButtons";
+            this.tblButtons.RowCount = 1;
+            this.tblButtons.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            this.tblButtons.Size = new System.Drawing.Size(586, 75);
+            this.tblButtons.TabIndex = 4;
             // 
-            // textBox2
+            // btnAdd
             // 
-            this.textBox2.Font = new System.Drawing.Font("Microsoft Sans Serif", 26.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.textBox2.Location = new System.Drawing.Point(26, 944);
-            this.textBox2.Name = "textBox2";
-            this.textBox2.Size = new System.Drawing.Size(334, 47);
-            this.textBox2.TabIndex = 3;
-            this.textBox2.Text = "Testing 123";
+            this.btnAdd.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.btnAdd.Font = new System.Drawing.Font("Microsoft Sans Serif", 27.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnAdd.Location = new System.Drawing.Point(3, 3);
+            this.btnAdd.Name = "btnAdd";
+            this.btnAdd.Size = new System.Drawing.Size(189, 69);
+            this.btnAdd.TabIndex = 5;
+            this.btnAdd.Text = "Add";
+            this.btnAdd.UseVisualStyleBackColor = true;
             // 
-            // textBox1
+            // btnDelete
             // 
-            this.textBox1.Font = new System.Drawing.Font("Microsoft Sans Serif", 26.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.textBox1.Location = new System.Drawing.Point(197, 424);
-            this.textBox1.Name = "textBox1";
-            this.textBox1.Size = new System.Drawing.Size(334, 47);
-            this.textBox1.TabIndex = 2;
-            this.textBox1.Text = "Testing 123";
+            this.btnDelete.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.btnDelete.Enabled = false;
+            this.btnDelete.Font = new System.Drawing.Font("Microsoft Sans Serif", 27.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnDelete.Location = new System.Drawing.Point(393, 3);
+            this.btnDelete.Name = "btnDelete";
+            this.btnDelete.Size = new System.Drawing.Size(190, 69);
+            this.btnDelete.TabIndex = 4;
+            this.btnDelete.Text = "Delete";
+            this.btnDelete.UseVisualStyleBackColor = true;
             // 
-            // button2
+            // btnEdit
             // 
-            this.button2.Font = new System.Drawing.Font("Microsoft Sans Serif", 26.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.button2.Location = new System.Drawing.Point(159, 203);
-            this.button2.Name = "button2";
-            this.button2.Size = new System.Drawing.Size(230, 110);
-            this.button2.TabIndex = 1;
-            this.button2.Text = "button2";
-            this.button2.UseVisualStyleBackColor = true;
+            this.btnEdit.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.btnEdit.Enabled = false;
+            this.btnEdit.Font = new System.Drawing.Font("Microsoft Sans Serif", 27.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnEdit.Location = new System.Drawing.Point(198, 3);
+            this.btnEdit.Name = "btnEdit";
+            this.btnEdit.Size = new System.Drawing.Size(189, 69);
+            this.btnEdit.TabIndex = 3;
+            this.btnEdit.Text = "Edit";
+            this.btnEdit.UseVisualStyleBackColor = true;
             // 
-            // button1
+            // lstSeries
             // 
-            this.button1.Font = new System.Drawing.Font("Microsoft Sans Serif", 26.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.button1.Location = new System.Drawing.Point(17, 35);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(183, 70);
-            this.button1.TabIndex = 0;
-            this.button1.Text = "button1";
-            this.button1.UseVisualStyleBackColor = true;
+            this.lstSeries.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.lstSeries.Font = new System.Drawing.Font("Microsoft Sans Serif", 27.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lstSeries.LargeImageList = this.imgIcons;
+            this.lstSeries.Location = new System.Drawing.Point(20, 95);
+            this.lstSeries.Name = "lstSeries";
+            this.lstSeries.Size = new System.Drawing.Size(555, 828);
+            this.lstSeries.SmallImageList = this.imgIcons;
+            this.lstSeries.Sorting = System.Windows.Forms.SortOrder.Ascending;
+            this.lstSeries.TabIndex = 1;
+            this.lstSeries.UseCompatibleStateImageBehavior = false;
+            // 
+            // mnuMain
+            // 
+            this.mnuMain.AutoSize = false;
+            this.mnuMain.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.fileToolStripMenuItem});
+            this.mnuMain.Location = new System.Drawing.Point(3, 16);
+            this.mnuMain.Name = "mnuMain";
+            this.mnuMain.Size = new System.Drawing.Size(589, 58);
+            this.mnuMain.TabIndex = 0;
+            // 
+            // fileToolStripMenuItem
+            // 
+            this.fileToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.mnuPrint,
+            this.toolStripSeparator1,
+            this.mnuQuit});
+            this.fileToolStripMenuItem.Font = new System.Drawing.Font("Segoe UI", 27.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.fileToolStripMenuItem.Name = "fileToolStripMenuItem";
+            this.fileToolStripMenuItem.Size = new System.Drawing.Size(67, 54);
+            this.fileToolStripMenuItem.Text = "☰";
+            // 
+            // mnuPrint
+            // 
+            this.mnuPrint.Name = "mnuPrint";
+            this.mnuPrint.Size = new System.Drawing.Size(181, 54);
+            this.mnuPrint.Text = "Print";
+            this.mnuPrint.Click += new System.EventHandler(this.mnuPrint_Click);
+            // 
+            // toolStripSeparator1
+            // 
+            this.toolStripSeparator1.Name = "toolStripSeparator1";
+            this.toolStripSeparator1.Size = new System.Drawing.Size(178, 6);
+            // 
+            // mnuQuit
+            // 
+            this.mnuQuit.Name = "mnuQuit";
+            this.mnuQuit.Size = new System.Drawing.Size(181, 54);
+            this.mnuQuit.Text = "Quit";
+            this.mnuQuit.Click += new System.EventHandler(this.mnuQuit_Click);
+            // 
+            // imgIcons
+            // 
+            this.imgIcons.ColorDepth = System.Windows.Forms.ColorDepth.Depth32Bit;
+            this.imgIcons.ImageSize = new System.Drawing.Size(91, 134);
+            this.imgIcons.TransparentColor = System.Drawing.Color.Transparent;
             // 
             // frmMain
             // 
@@ -116,15 +185,19 @@ namespace ClarkDavid_Assignment2
             this.ClientSize = new System.Drawing.Size(687, 1351);
             this.Controls.Add(this.grpContent);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
+            this.MainMenuStrip = this.mnuMain;
             this.Name = "frmMain";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "D";
             this.TransparencyKey = System.Drawing.Color.Gray;
+            this.Load += new System.EventHandler(this.frmMain_Load);
             this.MouseDown += new System.Windows.Forms.MouseEventHandler(this.frmMain_MouseDown);
             this.MouseMove += new System.Windows.Forms.MouseEventHandler(this.frmMain_MouseMove);
             this.MouseUp += new System.Windows.Forms.MouseEventHandler(this.frmMain_MouseUp);
             this.grpContent.ResumeLayout(false);
-            this.grpContent.PerformLayout();
+            this.tblButtons.ResumeLayout(false);
+            this.mnuMain.ResumeLayout(false);
+            this.mnuMain.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -132,11 +205,17 @@ namespace ClarkDavid_Assignment2
         #endregion
 
         private System.Windows.Forms.GroupBox grpContent;
-        private System.Windows.Forms.TextBox textBox1;
-        private System.Windows.Forms.Button button2;
-        private System.Windows.Forms.Button button1;
-        private System.Windows.Forms.Button button3;
-        private System.Windows.Forms.TextBox textBox2;
+        private System.Windows.Forms.MenuStrip mnuMain;
+        private System.Windows.Forms.ToolStripMenuItem fileToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem mnuPrint;
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
+        private System.Windows.Forms.ToolStripMenuItem mnuQuit;
+        private System.Windows.Forms.TableLayoutPanel tblButtons;
+        private System.Windows.Forms.Button btnDelete;
+        private System.Windows.Forms.Button btnEdit;
+        private System.Windows.Forms.ListView lstSeries;
+        private System.Windows.Forms.Button btnAdd;
+        private System.Windows.Forms.ImageList imgIcons;
     }
 }
 
