@@ -44,7 +44,7 @@ namespace ClarkDavid_Assignment2
             this.btnEdit = new System.Windows.Forms.Button();
             this.lstSeries = new System.Windows.Forms.ListView();
             this.mnuMain = new System.Windows.Forms.MenuStrip();
-            this.fileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.mnuBurger = new System.Windows.Forms.ToolStripMenuItem();
             this.mnuPrint = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
             this.mnuQuit = new System.Windows.Forms.ToolStripMenuItem();
@@ -134,22 +134,22 @@ namespace ClarkDavid_Assignment2
             // 
             this.mnuMain.AutoSize = false;
             this.mnuMain.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.fileToolStripMenuItem});
+            this.mnuBurger});
             this.mnuMain.Location = new System.Drawing.Point(3, 16);
             this.mnuMain.Name = "mnuMain";
             this.mnuMain.Size = new System.Drawing.Size(589, 58);
             this.mnuMain.TabIndex = 0;
             // 
-            // fileToolStripMenuItem
+            // mnuBurger
             // 
-            this.fileToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.mnuBurger.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.mnuPrint,
             this.toolStripSeparator1,
             this.mnuQuit});
-            this.fileToolStripMenuItem.Font = new System.Drawing.Font("Segoe UI", 27.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.fileToolStripMenuItem.Name = "fileToolStripMenuItem";
-            this.fileToolStripMenuItem.Size = new System.Drawing.Size(67, 54);
-            this.fileToolStripMenuItem.Text = "☰";
+            this.mnuBurger.Font = new System.Drawing.Font("Segoe UI", 27.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.mnuBurger.Name = "mnuBurger";
+            this.mnuBurger.Size = new System.Drawing.Size(67, 54);
+            this.mnuBurger.Text = "☰";
             // 
             // mnuPrint
             // 
@@ -206,7 +206,7 @@ namespace ClarkDavid_Assignment2
 
         private System.Windows.Forms.GroupBox grpContent;
         private System.Windows.Forms.MenuStrip mnuMain;
-        private System.Windows.Forms.ToolStripMenuItem fileToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem mnuBurger;
         private System.Windows.Forms.ToolStripMenuItem mnuPrint;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
         private System.Windows.Forms.ToolStripMenuItem mnuQuit;

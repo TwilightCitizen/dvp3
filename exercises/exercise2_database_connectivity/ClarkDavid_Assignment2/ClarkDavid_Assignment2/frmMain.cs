@@ -93,21 +93,26 @@ namespace ClarkDavid_Assignment2
             {
                 Scale( new SizeF( factor, factor ) );
                 
-                Action< Control > ScaleChildren = null;
-                
+                Action< Control >  ScaleChildren = null;
+                //Action< MenuItem > ScaleMenus    = null;
+
                 ScaleChildren = ( Control parent ) =>
                 {
                     foreach( Control child in parent.Controls )
                     {
-                        Font font = child.Font;
-
-                        child.Font = new Font( font.Name, font.SizeInPoints * factor * factor );
+                        child.Font = new Font( child.Font.Name, child.Font.SizeInPoints * factor * factor );
 
                         ScaleChildren( child );
                     }
                 };
 
                 ScaleChildren( form );
+
+                /* Menus do not constitute "controls".  They need to be scaled separately. */
+
+                form.MainMenuStrip.Items.OfType< ToolStripItem >().ToList().ForEach( item =>
+                    item.Font = new Font( item.Font.Name, item.Font.SizeInPoints * factor * factor )
+                );
             }
         }
 
