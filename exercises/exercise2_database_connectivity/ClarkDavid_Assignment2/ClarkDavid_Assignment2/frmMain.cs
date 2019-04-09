@@ -114,7 +114,7 @@ namespace ClarkDavid_Assignment2
 
                 /* Menus do not constitute "controls".  They need to be scaled separately. */
 
-                form.MainMenuStrip.Items.OfType< ToolStripItem >().ToList().ForEach( item =>
+                form.MainMenuStrip?.Items.OfType< ToolStripItem >().ToList().ForEach( item =>
                     item.Font = new Font( item.Font.Name, item.Font.SizeInPoints * factor * factor )
                 );
             }
@@ -305,6 +305,28 @@ namespace ClarkDavid_Assignment2
         private async void btnDelete_Click(object sender, EventArgs e)
         {
             await DeleteSeriesAsync(); 
+        }
+
+        private void btnAdd_Click( object sender, EventArgs e )
+        {
+            var dlg = new dlgAddEdit();
+
+            Hide();
+
+            dlg.ShowDialog( this );
+
+            Show();
+        }
+
+        private void btnEdit_Click( object sender, EventArgs e )
+        {
+            var dlg = new dlgAddEdit();
+
+            Hide();
+
+            dlg.ShowDialog( this );
+
+            Show();
         }
     }
 }

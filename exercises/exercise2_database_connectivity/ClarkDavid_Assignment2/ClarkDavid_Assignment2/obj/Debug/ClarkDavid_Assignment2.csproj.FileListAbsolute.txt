@@ -10,3 +10,4 @@
 \\vmware-host\Shared Folders\Desktop\dvp3\exercises\exercise2_database_connectivity\ClarkDavid_Assignment2\ClarkDavid_Assignment2\obj\Debug\ClarkDavid_Assignment2.pdb
 \\vmware-host\Shared Folders\Desktop\dvp3\exercises\exercise2_database_connectivity\ClarkDavid_Assignment2\ClarkDavid_Assignment2\bin\Debug\MySql.Data.dll
 \\vmware-host\Shared Folders\Desktop\dvp3\exercises\exercise2_database_connectivity\ClarkDavid_Assignment2\ClarkDavid_Assignment2\obj\Debug\ClarkDavid_Assignment2.csproj.CopyComplete
+\\vmware-host\Shared Folders\Desktop\dvp3\exercises\exercise2_database_connectivity\ClarkDavid_Assignment2\ClarkDavid_Assignment2\obj\Debug\ClarkDavid_Assignment2.dlgAddEdit.resources
