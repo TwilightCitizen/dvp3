@@ -347,7 +347,7 @@ namespace ClarkDavid_Assignment2
                             Table.AcceptChanges();
                         }
                         else
-                            Table.Rows.Remove( add );
+                            Table.RejectChanges();
                     }
                 }  
             }
@@ -363,7 +363,6 @@ namespace ClarkDavid_Assignment2
             using( var dlg = new dlgAddEdit( edit ) )
             {
                 Hide();
-                edit.BeginEdit();
                 dlg.ShowDialog( this );
                 Show();
                 lstSeries.SelectedIndices.Clear();
@@ -378,6 +377,19 @@ namespace ClarkDavid_Assignment2
 
                         if( await SaveTableChangesAsync( connect, SELECT, Table ) != null )
                         {
+                            try
+                            {
+                                /* On the chance that a series has a non-existent image,
+                                 * do not install it to the image list.  The list view
+                                 * item will index a non-existent image and show nothing. */ 
+
+                                var bytes = (byte[]) edit[ "icon" ];
+
+                                using( var stream = new MemoryStream( bytes ) )
+                                    imgIcons.Images.Add( edit[ "id" ].ToString(), Image.FromStream( stream ) );
+                            }
+                            catch{ }
+
                             var item = new ListViewItem( edit[ "title" ].ToString(), edit[ "id" ].ToString() );
 
                             item.Tag = edit;
@@ -385,9 +397,48 @@ namespace ClarkDavid_Assignment2
                             Table.AcceptChanges();
                         }
                         else
-                            edit.CancelEdit();
+                            Table.RejectChanges();
                     }
                 }  
+            }
+        }
+
+        /* Present the user file a file save dialog to nominate a text file to print
+         * all the series in a human readable format unless canceled. */
+
+        private async Task PrintToFile( DataTable table )
+        {
+            var dlg = new SaveFileDialog();
+
+            dlg.Filter = "Text Files (*.txt)|*.txt";
+
+            if( dlg.ShowDialog() == DialogResult.OK )
+            {
+                try
+                {
+                    using( var stream = new StreamWriter( dlg.OpenFile() ) )
+                        foreach( DataRow row in table.Rows)
+                        {
+                            var lines = new List< string>()
+                            {
+                                $"==========================================="
+                            ,   $"              Book or Movie"
+                            ,   $"==========================================="
+                            ,   $" Title     - { row[ "title"        ] }"
+                            ,   $" Year      - { row[ "yearReleased" ] }"
+                            ,   $" Publisher - { row[ "publisher"    ] }"
+                            ,   $" Author    - { row[ "author"       ] }"
+                            ,   $" Director  - { row[ "director"     ] }"
+                            ,   $" Genre     - { row[ "genre"        ] }"
+                            ,   $"==========================================="
+                            ,   $""
+                            ,   $""
+                            };
+
+                            await Task.Run( () => lines.ForEach( line => stream.WriteLine( line ) ) );
+                        }
+                }
+                catch{ }
             }
         }
 
@@ -398,9 +449,9 @@ namespace ClarkDavid_Assignment2
             await PopulateListAysnc();
         }
 
-        private void mnuPrint_Click( object sender, EventArgs e )
+        private async void mnuPrint_Click( object sender, EventArgs e )
         {
-
+            await PrintToFile( Table );
         }
 
         private void mnuQuit_Click( object sender, EventArgs e )
