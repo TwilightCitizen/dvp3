@@ -37,29 +37,36 @@ namespace ClarkDavid_Assignment2
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(dlgAddEdit));
             this.grpContent = new System.Windows.Forms.GroupBox();
+            this.picCover = new System.Windows.Forms.PictureBox();
+            this.lblCover = new System.Windows.Forms.Label();
+            this.txtGenre = new System.Windows.Forms.TextBox();
+            this.lblGenre = new System.Windows.Forms.Label();
+            this.txtDirector = new System.Windows.Forms.TextBox();
+            this.lblDirector = new System.Windows.Forms.Label();
+            this.txtAuthor = new System.Windows.Forms.TextBox();
+            this.lblAuthor = new System.Windows.Forms.Label();
+            this.txtPublisher = new System.Windows.Forms.TextBox();
+            this.lblPublisher = new System.Windows.Forms.Label();
+            this.nudYear = new System.Windows.Forms.NumericUpDown();
+            this.lblYear = new System.Windows.Forms.Label();
+            this.txtTitle = new System.Windows.Forms.TextBox();
+            this.lblTitle = new System.Windows.Forms.Label();
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
             this.btnSave = new System.Windows.Forms.Button();
             this.btnCancel = new System.Windows.Forms.Button();
-            this.lblTitle = new System.Windows.Forms.Label();
-            this.txtTitle = new System.Windows.Forms.TextBox();
-            this.lblYear = new System.Windows.Forms.Label();
-            this.nudYear = new System.Windows.Forms.NumericUpDown();
-            this.lblPublisher = new System.Windows.Forms.Label();
-            this.txtPublisher = new System.Windows.Forms.TextBox();
-            this.txtAuthor = new System.Windows.Forms.TextBox();
-            this.lblAuthor = new System.Windows.Forms.Label();
-            this.txtDirector = new System.Windows.Forms.TextBox();
-            this.lblDirector = new System.Windows.Forms.Label();
-            this.txtGenre = new System.Windows.Forms.TextBox();
-            this.lblGenre = new System.Windows.Forms.Label();
+            this.btnChange = new System.Windows.Forms.Button();
             this.grpContent.SuspendLayout();
-            this.tableLayoutPanel1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.picCover)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudYear)).BeginInit();
+            this.tableLayoutPanel1.SuspendLayout();
             this.SuspendLayout();
             // 
             // grpContent
             // 
             this.grpContent.BackColor = System.Drawing.Color.Transparent;
+            this.grpContent.Controls.Add(this.btnChange);
+            this.grpContent.Controls.Add(this.picCover);
+            this.grpContent.Controls.Add(this.lblCover);
             this.grpContent.Controls.Add(this.txtGenre);
             this.grpContent.Controls.Add(this.lblGenre);
             this.grpContent.Controls.Add(this.txtDirector);
@@ -78,6 +85,151 @@ namespace ClarkDavid_Assignment2
             this.grpContent.Size = new System.Drawing.Size(581, 998);
             this.grpContent.TabIndex = 1;
             this.grpContent.TabStop = false;
+            // 
+            // picCover
+            // 
+            this.picCover.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
+            this.picCover.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.picCover.Location = new System.Drawing.Point(13, 398);
+            this.picCover.Name = "picCover";
+            this.picCover.Size = new System.Drawing.Size(554, 501);
+            this.picCover.SizeMode = System.Windows.Forms.PictureBoxSizeMode.CenterImage;
+            this.picCover.TabIndex = 19;
+            this.picCover.TabStop = false;
+            // 
+            // lblCover
+            // 
+            this.lblCover.AutoSize = true;
+            this.lblCover.Font = new System.Drawing.Font("Microsoft Sans Serif", 27.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblCover.Location = new System.Drawing.Point(6, 353);
+            this.lblCover.Name = "lblCover";
+            this.lblCover.Size = new System.Drawing.Size(175, 42);
+            this.lblCover.TabIndex = 18;
+            this.lblCover.Text = "Cover Art";
+            // 
+            // txtGenre
+            // 
+            this.txtGenre.Font = new System.Drawing.Font("Microsoft Sans Serif", 27.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.txtGenre.Location = new System.Drawing.Point(294, 284);
+            this.txtGenre.Name = "txtGenre";
+            this.txtGenre.Size = new System.Drawing.Size(274, 49);
+            this.txtGenre.TabIndex = 17;
+            // 
+            // lblGenre
+            // 
+            this.lblGenre.AutoSize = true;
+            this.lblGenre.Font = new System.Drawing.Font("Microsoft Sans Serif", 27.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblGenre.Location = new System.Drawing.Point(286, 239);
+            this.lblGenre.Name = "lblGenre";
+            this.lblGenre.Size = new System.Drawing.Size(122, 42);
+            this.lblGenre.TabIndex = 16;
+            this.lblGenre.Text = "Genre";
+            // 
+            // txtDirector
+            // 
+            this.txtDirector.Font = new System.Drawing.Font("Microsoft Sans Serif", 27.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.txtDirector.Location = new System.Drawing.Point(13, 284);
+            this.txtDirector.Name = "txtDirector";
+            this.txtDirector.Size = new System.Drawing.Size(274, 49);
+            this.txtDirector.TabIndex = 15;
+            // 
+            // lblDirector
+            // 
+            this.lblDirector.AutoSize = true;
+            this.lblDirector.Font = new System.Drawing.Font("Microsoft Sans Serif", 27.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblDirector.Location = new System.Drawing.Point(6, 239);
+            this.lblDirector.Name = "lblDirector";
+            this.lblDirector.Size = new System.Drawing.Size(148, 42);
+            this.lblDirector.TabIndex = 14;
+            this.lblDirector.Text = "Director";
+            // 
+            // txtAuthor
+            // 
+            this.txtAuthor.Font = new System.Drawing.Font("Microsoft Sans Serif", 27.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.txtAuthor.Location = new System.Drawing.Point(293, 173);
+            this.txtAuthor.Name = "txtAuthor";
+            this.txtAuthor.Size = new System.Drawing.Size(274, 49);
+            this.txtAuthor.TabIndex = 13;
+            // 
+            // lblAuthor
+            // 
+            this.lblAuthor.AutoSize = true;
+            this.lblAuthor.Font = new System.Drawing.Font("Microsoft Sans Serif", 27.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblAuthor.Location = new System.Drawing.Point(286, 128);
+            this.lblAuthor.Name = "lblAuthor";
+            this.lblAuthor.Size = new System.Drawing.Size(128, 42);
+            this.lblAuthor.TabIndex = 12;
+            this.lblAuthor.Text = "Author";
+            // 
+            // txtPublisher
+            // 
+            this.txtPublisher.Font = new System.Drawing.Font("Microsoft Sans Serif", 27.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.txtPublisher.Location = new System.Drawing.Point(13, 172);
+            this.txtPublisher.Name = "txtPublisher";
+            this.txtPublisher.Size = new System.Drawing.Size(274, 49);
+            this.txtPublisher.TabIndex = 11;
+            // 
+            // lblPublisher
+            // 
+            this.lblPublisher.AutoSize = true;
+            this.lblPublisher.Font = new System.Drawing.Font("Microsoft Sans Serif", 27.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblPublisher.Location = new System.Drawing.Point(6, 127);
+            this.lblPublisher.Name = "lblPublisher";
+            this.lblPublisher.Size = new System.Drawing.Size(174, 42);
+            this.lblPublisher.TabIndex = 10;
+            this.lblPublisher.Text = "Publisher";
+            // 
+            // nudYear
+            // 
+            this.nudYear.Font = new System.Drawing.Font("Microsoft Sans Serif", 27.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.nudYear.Location = new System.Drawing.Point(293, 62);
+            this.nudYear.Maximum = new decimal(new int[] {
+            2155,
+            0,
+            0,
+            0});
+            this.nudYear.Minimum = new decimal(new int[] {
+            1901,
+            0,
+            0,
+            0});
+            this.nudYear.Name = "nudYear";
+            this.nudYear.Size = new System.Drawing.Size(274, 49);
+            this.nudYear.TabIndex = 9;
+            this.nudYear.Value = new decimal(new int[] {
+            1901,
+            0,
+            0,
+            0});
+            // 
+            // lblYear
+            // 
+            this.lblYear.AutoSize = true;
+            this.lblYear.Font = new System.Drawing.Font("Microsoft Sans Serif", 27.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblYear.Location = new System.Drawing.Point(286, 17);
+            this.lblYear.Name = "lblYear";
+            this.lblYear.Size = new System.Drawing.Size(97, 42);
+            this.lblYear.TabIndex = 8;
+            this.lblYear.Text = "Year";
+            // 
+            // txtTitle
+            // 
+            this.txtTitle.Font = new System.Drawing.Font("Microsoft Sans Serif", 27.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.txtTitle.Location = new System.Drawing.Point(13, 61);
+            this.txtTitle.Name = "txtTitle";
+            this.txtTitle.Size = new System.Drawing.Size(274, 49);
+            this.txtTitle.TabIndex = 7;
+            this.txtTitle.TextChanged += new System.EventHandler(this.txtTitle_TextChanged);
+            // 
+            // lblTitle
+            // 
+            this.lblTitle.AutoSize = true;
+            this.lblTitle.Font = new System.Drawing.Font("Microsoft Sans Serif", 27.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblTitle.Location = new System.Drawing.Point(6, 16);
+            this.lblTitle.Name = "lblTitle";
+            this.lblTitle.Size = new System.Drawing.Size(88, 42);
+            this.lblTitle.TabIndex = 6;
+            this.lblTitle.Text = "Title";
             // 
             // tableLayoutPanel1
             // 
@@ -120,116 +272,17 @@ namespace ClarkDavid_Assignment2
             this.btnCancel.UseVisualStyleBackColor = true;
             this.btnCancel.Click += new System.EventHandler(this.btnCancel_Click);
             // 
-            // lblTitle
+            // btnChange
             // 
-            this.lblTitle.AutoSize = true;
-            this.lblTitle.Location = new System.Drawing.Point(46, 44);
-            this.lblTitle.Name = "lblTitle";
-            this.lblTitle.Size = new System.Drawing.Size(27, 13);
-            this.lblTitle.TabIndex = 6;
-            this.lblTitle.Text = "Title";
-            // 
-            // txtTitle
-            // 
-            this.txtTitle.Location = new System.Drawing.Point(39, 75);
-            this.txtTitle.Name = "txtTitle";
-            this.txtTitle.Size = new System.Drawing.Size(100, 20);
-            this.txtTitle.TabIndex = 7;
-            // 
-            // lblYear
-            // 
-            this.lblYear.AutoSize = true;
-            this.lblYear.Location = new System.Drawing.Point(46, 121);
-            this.lblYear.Name = "lblYear";
-            this.lblYear.Size = new System.Drawing.Size(29, 13);
-            this.lblYear.TabIndex = 8;
-            this.lblYear.Text = "Year";
-            // 
-            // nudYear
-            // 
-            this.nudYear.Location = new System.Drawing.Point(42, 169);
-            this.nudYear.Maximum = new decimal(new int[] {
-            2155,
-            0,
-            0,
-            0});
-            this.nudYear.Minimum = new decimal(new int[] {
-            1901,
-            0,
-            0,
-            0});
-            this.nudYear.Name = "nudYear";
-            this.nudYear.Size = new System.Drawing.Size(120, 20);
-            this.nudYear.TabIndex = 9;
-            this.nudYear.Value = new decimal(new int[] {
-            1901,
-            0,
-            0,
-            0});
-            // 
-            // lblPublisher
-            // 
-            this.lblPublisher.AutoSize = true;
-            this.lblPublisher.Location = new System.Drawing.Point(46, 236);
-            this.lblPublisher.Name = "lblPublisher";
-            this.lblPublisher.Size = new System.Drawing.Size(50, 13);
-            this.lblPublisher.TabIndex = 10;
-            this.lblPublisher.Text = "Publisher";
-            // 
-            // txtPublisher
-            // 
-            this.txtPublisher.Location = new System.Drawing.Point(39, 279);
-            this.txtPublisher.Name = "txtPublisher";
-            this.txtPublisher.Size = new System.Drawing.Size(100, 20);
-            this.txtPublisher.TabIndex = 11;
-            // 
-            // txtAuthor
-            // 
-            this.txtAuthor.Location = new System.Drawing.Point(32, 372);
-            this.txtAuthor.Name = "txtAuthor";
-            this.txtAuthor.Size = new System.Drawing.Size(100, 20);
-            this.txtAuthor.TabIndex = 13;
-            // 
-            // lblAuthor
-            // 
-            this.lblAuthor.AutoSize = true;
-            this.lblAuthor.Location = new System.Drawing.Point(39, 329);
-            this.lblAuthor.Name = "lblAuthor";
-            this.lblAuthor.Size = new System.Drawing.Size(38, 13);
-            this.lblAuthor.TabIndex = 12;
-            this.lblAuthor.Text = "Author";
-            // 
-            // txtDirector
-            // 
-            this.txtDirector.Location = new System.Drawing.Point(32, 460);
-            this.txtDirector.Name = "txtDirector";
-            this.txtDirector.Size = new System.Drawing.Size(100, 20);
-            this.txtDirector.TabIndex = 15;
-            // 
-            // lblDirector
-            // 
-            this.lblDirector.AutoSize = true;
-            this.lblDirector.Location = new System.Drawing.Point(39, 417);
-            this.lblDirector.Name = "lblDirector";
-            this.lblDirector.Size = new System.Drawing.Size(44, 13);
-            this.lblDirector.TabIndex = 14;
-            this.lblDirector.Text = "Director";
-            // 
-            // txtGenre
-            // 
-            this.txtGenre.Location = new System.Drawing.Point(32, 550);
-            this.txtGenre.Name = "txtGenre";
-            this.txtGenre.Size = new System.Drawing.Size(100, 20);
-            this.txtGenre.TabIndex = 17;
-            // 
-            // lblGenre
-            // 
-            this.lblGenre.AutoSize = true;
-            this.lblGenre.Location = new System.Drawing.Point(39, 507);
-            this.lblGenre.Name = "lblGenre";
-            this.lblGenre.Size = new System.Drawing.Size(36, 13);
-            this.lblGenre.TabIndex = 16;
-            this.lblGenre.Text = "Genre";
+            this.btnChange.DialogResult = System.Windows.Forms.DialogResult.OK;
+            this.btnChange.Font = new System.Drawing.Font("Microsoft Sans Serif", 27.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnChange.Location = new System.Drawing.Point(513, 398);
+            this.btnChange.Name = "btnChange";
+            this.btnChange.Size = new System.Drawing.Size(54, 52);
+            this.btnChange.TabIndex = 20;
+            this.btnChange.Text = "☰";
+            this.btnChange.UseVisualStyleBackColor = true;
+            this.btnChange.Click += new System.EventHandler(this.btnChange_Click);
             // 
             // dlgAddEdit
             // 
@@ -252,8 +305,9 @@ namespace ClarkDavid_Assignment2
             this.MouseUp += new System.Windows.Forms.MouseEventHandler(this.dlgAddEdit_MouseUp);
             this.grpContent.ResumeLayout(false);
             this.grpContent.PerformLayout();
-            this.tableLayoutPanel1.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.picCover)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudYear)).EndInit();
+            this.tableLayoutPanel1.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
@@ -276,5 +330,8 @@ namespace ClarkDavid_Assignment2
         private System.Windows.Forms.Label lblYear;
         private System.Windows.Forms.TextBox txtTitle;
         private System.Windows.Forms.Label lblTitle;
+        private System.Windows.Forms.PictureBox picCover;
+        private System.Windows.Forms.Label lblCover;
+        private System.Windows.Forms.Button btnChange;
     }
 }

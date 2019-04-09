@@ -10,10 +10,12 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
+using System.Drawing.Imaging;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.IO;
 
 namespace ClarkDavid_Assignment2
 {
@@ -36,20 +38,6 @@ namespace ClarkDavid_Assignment2
             ScaleToFitScreen( this );
 
             AddOrEdit = addOrEdit;
-
-            if( AddOrEdit[ "title" ].ToString() == "The Karate Kid")
-            {
-                AddOrEdit[ "title"        ] = "Karate";
-            }
-            else
-            {
-                AddOrEdit[ "title"        ] = "Test";
-                AddOrEdit[ "yearReleased" ] = 2000;
-                AddOrEdit[ "publisher"    ] = "Test";
-                AddOrEdit[ "author"       ] = "Test";
-                AddOrEdit[ "director"     ] = "Test";
-                AddOrEdit[ "genre"        ] = "Test";
-            }
         }
 
         /* Handlers to Support Movement of Borderless Form */
@@ -122,22 +110,113 @@ namespace ClarkDavid_Assignment2
             }
         }
 
+        /* Populate the editor controls with the appropriate values from the
+         * passed in data row. */
+
+        private void PopulateControls()
+        {
+            txtTitle.Text     = AddOrEdit[ "title"     ].ToString();
+            txtPublisher.Text = AddOrEdit[ "publisher" ].ToString();
+            txtAuthor.Text    = AddOrEdit[ "author"    ].ToString();
+            txtDirector.Text  = AddOrEdit[ "director"  ].ToString();
+            txtGenre.Text     = AddOrEdit[ "genre"     ].ToString();
+
+            nudYear.Value     = decimal.Parse( AddOrEdit[ "yearReleased" ].ToString() == "" ? "1901" : AddOrEdit[ "yearReleased" ].ToString() );
+
+            try
+            {
+                /* On the chance that a series has a non-existent image,
+                    * do not install it to the image list.  The list view
+                    * item will index a non-existent image and show nothing. */ 
+
+                var bytes  = (byte[]) AddOrEdit[ "icon" ];
+
+                using( var stream = new MemoryStream( bytes ) ) picCover.Image = Image.FromStream( stream );
+            }
+            catch{ }
+        }
+
+        /* Update the data row with whatever values are in the editor controls. */
+
+        private void SaveChanges()
+        {
+            try
+            {
+                AddOrEdit[ "title"        ] = txtTitle.Text;
+                AddOrEdit[ "publisher"    ] = txtPublisher.Text;
+                AddOrEdit[ "author"       ] = txtAuthor.Text;
+                AddOrEdit[ "director"     ] = txtDirector.Text;
+                AddOrEdit[ "genre"        ] = txtGenre.Text;
+                AddOrEdit[ "yearReleased" ] = nudYear.Value;
+            }
+            catch( Exception e )
+            {
+                MessageBox.Show( e.Message );
+            }
+        }
+
+        /* Present the user with a dialog to select a JPEG image for the series. */
+
+        private void ChangeImage()
+        {
+            var dlg = new OpenFileDialog();
+
+            dlg.Filter = "JPEG Files (*.jpg;*.jpeg)|*.jpg;*.jpeg";
+
+            if( dlg.ShowDialog() == DialogResult.OK )
+            {
+                byte[] bytes = File.ReadAllBytes( dlg.FileName );
+
+                AddOrEdit[ "icon" ] = bytes;
+
+                using( var stream = new MemoryStream( bytes ) ) picCover.Image = Image.FromStream( stream );
+            }
+
+            /* For whatever reason, the form wants to close here, which is not the
+             * desired behavior, so hook a handler into form close to cancel it. */
+
+            FormClosingEventHandler handler = null;
+
+            handler = ( object sender, FormClosingEventArgs e ) =>
+            {
+                e.Cancel = true;
+
+                this.FormClosing -= handler;
+            };
+
+            this.FormClosing += handler;
+        }
+
         /* Form Event Handlers */
 
         private void dlgAddEdit_Load( object sender, EventArgs e )
         {
-
+            PopulateControls();
+            txtTitle_TextChanged( this, null );
         }
 
         private void btnSave_Click( object sender, EventArgs e )
         {
-            
+            SaveChanges();
             Close();
         }
 
         private void btnCancel_Click( object sender, EventArgs e )
         {
             Close();
+        }
+
+        private void txtTitle_TextChanged( object sender, EventArgs e )
+        {
+            /* Prevent saving a series without a title.  All else can
+             * be blank. */
+
+            btnSave.Enabled = txtTitle.Text.Length > 0;
+        }
+
+        private void btnChange_Click( object sender, EventArgs e )
+        {
+            ChangeImage();
         }
     }
 }

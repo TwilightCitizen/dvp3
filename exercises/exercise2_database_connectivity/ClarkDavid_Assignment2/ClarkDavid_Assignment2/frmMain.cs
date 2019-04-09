@@ -36,6 +36,7 @@ namespace ClarkDavid_Assignment2
         private const string PORT     = "8889";
 
         private const string SELECT   = "select id, title, yearReleased, publisher, author, director, genre, icon from SeriesTitles";
+        private const string UPDATE   = "update series.seriestitles set title = @p1, yearReleased = @p2, publisher = @p3, author = @p4, director = @p5, genre = @p6, icon = @p7 where id = @p8";
 
         /* Data Table */
 
@@ -325,6 +326,19 @@ namespace ClarkDavid_Assignment2
 
                         if( await SaveTableChangesAsync( connect, SELECT, Table ) != null )
                         {
+                            try
+                            {
+                                /* On the chance that a series has a non-existent image,
+                                 * do not install it to the image list.  The list view
+                                 * item will index a non-existent image and show nothing. */ 
+
+                                var bytes = (byte[]) add[ "icon" ];
+
+                                using( var stream = new MemoryStream( bytes ) )
+                                    imgIcons.Images.Add( add[ "id" ].ToString(), Image.FromStream( stream ) );
+                            }
+                            catch{ }
+
                             var item = new ListViewItem( add[ "title" ].ToString(), add[ "id" ].ToString() );
 
                             item.Tag = add;
