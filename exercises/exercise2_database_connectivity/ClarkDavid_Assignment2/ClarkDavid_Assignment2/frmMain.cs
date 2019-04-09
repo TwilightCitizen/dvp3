@@ -35,7 +35,7 @@ namespace ClarkDavid_Assignment2
         private const string DATABASE = "Series";
         private const string PORT     = "8889";
 
-        private const string SELECT   = "select id, title, yearReleased, author, director, genre, icon from SeriesTitles";
+        private const string SELECT   = "select id, title, yearReleased, publisher, author, director, genre, icon from SeriesTitles";
 
         /* Data Table */
 
@@ -98,7 +98,6 @@ namespace ClarkDavid_Assignment2
                 Scale( new SizeF( factor, factor ) );
                 
                 Action< Control >  ScaleChildren = null;
-                //Action< MenuItem > ScaleMenus    = null;
 
                 ScaleChildren = ( Control parent ) =>
                 {
@@ -200,12 +199,35 @@ namespace ClarkDavid_Assignment2
                 using( var adapter    = new MySqlDataAdapter( select, connection ) )
                 using( var builder    = new MySqlCommandBuilder( adapter ) )
                 {
+
+                    /* This feels like a cludge, but it is unfortunately necessary.  Update
+                     * commands called when the data adapter affects record insertions do
+                     * NOT return the newly created ID and do not update the added row
+                     * in the data table as a result.  This results in added records that
+                     * cannot be deleted.  Also, once a failed deletion occurs, accept changes
+                     * called after any other operation that works will still fail becuase the
+                     * deletion is queued to occur.  This handler checks for an insertion after
+                     * a row update occurs, and if an insertion occured, it does what the
+                     * data adapter should be doing in the first place. */
+
+                    MySqlRowUpdatedEventHandler handler = null;
+
+                    handler = ( object sender, MySqlRowUpdatedEventArgs args ) =>
+                    {
+                        if( args.Command.CommandText.Contains( "INSERT" ))
+                            table.Rows[ table.Rows.Count - 1 ][ "id" ] = args.Command.LastInsertedId;
+
+                        adapter.RowUpdated -= handler;
+                    };
+
+                    adapter.RowUpdated += handler;
+
                     return await adapter.UpdateAsync( table );
                 }
             }
-            catch ( Exception e )
+            catch // ( Exception e )
             {
-                MessageBox.Show( e.Message );
+                // MessageBox.Show( e.Message );
 
                 return null;
             }
@@ -258,7 +280,7 @@ namespace ClarkDavid_Assignment2
          * the database.  If changes update successfully, remove the series from the
          * list and accept the deletion in the data table. */
 
-        private async Task DeleteSeriesAsync()
+        private async Task DeleteSeriesAsync( ListViewItem delete )
         {
             var server = await ReadServerAsync( PATH );
 
@@ -266,14 +288,92 @@ namespace ClarkDavid_Assignment2
             {
                 var connect = GetConnectString( server, USER, PASSWORD, DATABASE, PORT );
 
-                Table.Rows[ Table.Rows.IndexOf( (DataRow) lstSeries.SelectedItems[ 0 ].Tag ) ].Delete();
+                Table.Rows[ Table.Rows.IndexOf( (DataRow) delete.Tag ) ].Delete();
 
                 if( await SaveTableChangesAsync( connect, SELECT, Table ) != null )
                 {
-                    lstSeries.Items.Remove( lstSeries.SelectedItems[ 0 ] );
+                    lstSeries.Items.Remove( delete );
 
                     Table.AcceptChanges();
                 }
+            }
+        }
+
+        /* Present the user with the add/edit screen for editing the passed in
+         * data row, presumably a fresh one, though an existing one would work.
+         * If the user does not cancel the add, persist it to the database and
+         * the list view. */
+
+        private async Task AddSeriesAsync( DataRow add )
+        {
+            using( var dlg = new dlgAddEdit( add ) )
+            {
+                Hide();
+                dlg.ShowDialog( this );
+                Show();
+                lstSeries.SelectedIndices.Clear();
+
+                if( dlg.DialogResult == DialogResult.OK )
+                {
+                    var server = await ReadServerAsync( PATH );
+
+                    if( server != null )
+                    {
+                        var connect = GetConnectString( server, USER, PASSWORD, DATABASE, PORT );
+
+                        Table.Rows.Add( add );
+
+                        if( await SaveTableChangesAsync( connect, SELECT, Table ) != null )
+                        {
+                            var item = new ListViewItem( add[ "title" ].ToString(), add[ "id" ].ToString() );
+
+                            item.Tag = add;
+
+                            lstSeries.Items.Add( item );
+                            Table.AcceptChanges();
+                        }
+                        else
+                            Table.Rows.Remove( add );
+                    }
+                }  
+            }
+        }
+
+        /* Present the user with the add/edit screen for editing the passed in
+         * data row, presumably an existing one.  If the user does not cancel the
+         * edit, persist it to the database and overwrite the list view item with
+         * one created from the edits. */
+
+        private async Task EditSeriesAsync( DataRow edit )
+        {
+            using( var dlg = new dlgAddEdit( edit ) )
+            {
+                Hide();
+                edit.BeginEdit();
+                dlg.ShowDialog( this );
+                Show();
+                lstSeries.SelectedIndices.Clear();
+
+                if( dlg.DialogResult == DialogResult.OK )
+                {
+                    var server = await ReadServerAsync( PATH );
+
+                    if( server != null )
+                    {
+                        var connect = GetConnectString( server, USER, PASSWORD, DATABASE, PORT );
+
+                        if( await SaveTableChangesAsync( connect, SELECT, Table ) != null )
+                        {
+                            var item = new ListViewItem( edit[ "title" ].ToString(), edit[ "id" ].ToString() );
+
+                            item.Tag = edit;
+
+                            Table.AcceptChanges();
+                        }
+                        else
+                            edit.CancelEdit();
+                    }
+                }  
             }
         }
 
@@ -302,31 +402,28 @@ namespace ClarkDavid_Assignment2
             btnDelete.Enabled = lstSeries.SelectedItems.Count > 0;
         }
 
-        private async void btnDelete_Click(object sender, EventArgs e)
+        private async void btnDelete_Click( object sender, EventArgs e )
         {
-            await DeleteSeriesAsync(); 
+            /* Confirm Deletion */
+
+            var choice = MessageBox.Show (
+                "Are you sure you want to delete this series?"
+            ,   "Series Deletion"
+            ,   MessageBoxButtons.YesNo
+            ,   MessageBoxIcon.Question
+            );
+
+            if( choice == DialogResult.Yes ) await DeleteSeriesAsync( lstSeries.SelectedItems[ 0 ] ); 
         }
 
-        private void btnAdd_Click( object sender, EventArgs e )
+        private async void btnAdd_Click( object sender, EventArgs e )
         {
-            var dlg = new dlgAddEdit();
-
-            Hide();
-
-            dlg.ShowDialog( this );
-
-            Show();
+            await AddSeriesAsync( Table.NewRow() );
         }
 
-        private void btnEdit_Click( object sender, EventArgs e )
+        private async void btnEdit_Click( object sender, EventArgs e )
         {
-            var dlg = new dlgAddEdit();
-
-            Hide();
-
-            dlg.ShowDialog( this );
-
-            Show();
+            await EditSeriesAsync( (DataRow) lstSeries.SelectedItems[ 0 ].Tag );
         }
     }
 }

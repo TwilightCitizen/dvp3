@@ -24,12 +24,32 @@ namespace ClarkDavid_Assignment2
         private bool  CaptureMove { get; set; } = false;
         private Point Origin      { get; set; }
 
+        /* Series to Edit */
+
+        private DataRow AddOrEdit { get; set; } = null;
+
         /* Constructors */
 
-        public dlgAddEdit()
+        public dlgAddEdit( DataRow addOrEdit )
         {
             InitializeComponent();
             ScaleToFitScreen( this );
+
+            AddOrEdit = addOrEdit;
+
+            if( AddOrEdit[ "title" ].ToString() == "The Karate Kid")
+            {
+                AddOrEdit[ "title"        ] = "Karate";
+            }
+            else
+            {
+                AddOrEdit[ "title"        ] = "Test";
+                AddOrEdit[ "yearReleased" ] = 2000;
+                AddOrEdit[ "publisher"    ] = "Test";
+                AddOrEdit[ "author"       ] = "Test";
+                AddOrEdit[ "director"     ] = "Test";
+                AddOrEdit[ "genre"        ] = "Test";
+            }
         }
 
         /* Handlers to Support Movement of Borderless Form */
@@ -81,7 +101,6 @@ namespace ClarkDavid_Assignment2
                 Scale( new SizeF( factor, factor ) );
                 
                 Action< Control >  ScaleChildren = null;
-                //Action< MenuItem > ScaleMenus    = null;
 
                 ScaleChildren = ( Control parent ) =>
                 {
@@ -112,6 +131,7 @@ namespace ClarkDavid_Assignment2
 
         private void btnSave_Click( object sender, EventArgs e )
         {
+            
             Close();
         }
 
