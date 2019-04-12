@@ -45,7 +45,7 @@ namespace SimpleAPI
 
         /* Event Fired when Request Arrives at Listening Prefix */
 
-        public event EventHandler< RequestReply > RequestArrived;
+        public event EventHandler< Exchange > RequestArrived;
 
         /* Constructor */
 
@@ -116,7 +116,7 @@ namespace SimpleAPI
                             var request = context.Request.Url.Segments.Except( prefix ).ToList().Select( segment =>
                                 segment.Replace( "/", "" ) ).ToList();
 
-                            var requestReply = new RequestReply( request );
+                            var requestReply = new Exchange( request );
 
                             RequestArrived?.Invoke( this, requestReply );
 

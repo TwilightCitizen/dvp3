@@ -14,18 +14,18 @@ using System.Linq;
 
 namespace SimpleAPI
 {
-    public class RequestReply : EventArgs
+    public class Exchange : EventArgs
     {
         public List< string > Request { get; private set; }
 
         public string         Reply   { get; set; }
 
-        public RequestReply( List< string > request )
+        public Exchange( List< string > request )
         {
             Request = request;
         }
 
-        public RequestReply( string[] request)
+        public Exchange( string[] request)
         {
             Request = request.ToList();
         }
