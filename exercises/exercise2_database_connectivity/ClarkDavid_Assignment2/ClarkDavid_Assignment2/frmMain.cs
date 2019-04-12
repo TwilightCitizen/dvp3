@@ -297,6 +297,8 @@ namespace ClarkDavid_Assignment2
 
                     Table.AcceptChanges();
                 }
+                else
+                    Table.RejectChanges();
             }
         }
 
@@ -483,7 +485,9 @@ namespace ClarkDavid_Assignment2
 
         private async void btnAdd_Click( object sender, EventArgs e )
         {
-            await AddSeriesAsync( Table.NewRow() );
+            /* Make sure adding doesn't error out from lack of connection. */
+
+            if( Table != null ) await AddSeriesAsync( Table.NewRow() );
         }
 
         private async void btnEdit_Click( object sender, EventArgs e )
