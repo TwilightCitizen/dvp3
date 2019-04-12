@@ -9,3 +9,7 @@ The Exercises section is comprised of--minimally--3 folders, one for each weekly
 ## Final Project
 
 The Final Project section is comprised of 2 folders thus far.  One folder contains the primary client application to be developed throughout the month, and other contains the companion web API server to be developed in tandem, in lieu of using an established web API.  These folders, too, will have their own README.md explicating the nature of the applications within.
+
+## Library
+
+Library contains any various classes that provide broad functionality across DVP3 projects.  At this juncture, it contains only one: iPhonify class library.
