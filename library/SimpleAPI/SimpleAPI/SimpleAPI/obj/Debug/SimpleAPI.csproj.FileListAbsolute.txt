@@ -1,0 +1,6 @@
+\\vmware-host\Shared Folders\Desktop\dvp3\library\SimpleAPI\SimpleAPI\SimpleAPI\bin\Debug\SimpleAPI.dll
+\\vmware-host\Shared Folders\Desktop\dvp3\library\SimpleAPI\SimpleAPI\SimpleAPI\bin\Debug\SimpleAPI.pdb
+\\vmware-host\Shared Folders\Desktop\dvp3\library\SimpleAPI\SimpleAPI\SimpleAPI\obj\Debug\SimpleAPI.csproj.CoreCompileInputs.cache
+\\vmware-host\Shared Folders\Desktop\dvp3\library\SimpleAPI\SimpleAPI\SimpleAPI\obj\Debug\SimpleAPI.dll
+\\vmware-host\Shared Folders\Desktop\dvp3\library\SimpleAPI\SimpleAPI\SimpleAPI\obj\Debug\SimpleAPI.pdb
+\\vmware-host\Shared Folders\Desktop\dvp3\library\SimpleAPI\SimpleAPI\SimpleAPI\obj\Debug\SimpleAPI.csprojAssemblyReference.cache
