@@ -1,0 +1,13 @@
+\\vmware-host\Shared Folders\Desktop\dvp3\final_project\keepn_tabs_api\KeepnTabsAPI\KeepnTabsAPI\bin\Debug\KeepnTabsAPI.exe.config
+\\vmware-host\Shared Folders\Desktop\dvp3\final_project\keepn_tabs_api\KeepnTabsAPI\KeepnTabsAPI\bin\Debug\KeepnTabsAPI.exe
+\\vmware-host\Shared Folders\Desktop\dvp3\final_project\keepn_tabs_api\KeepnTabsAPI\KeepnTabsAPI\bin\Debug\KeepnTabsAPI.pdb
+\\vmware-host\Shared Folders\Desktop\dvp3\final_project\keepn_tabs_api\KeepnTabsAPI\KeepnTabsAPI\bin\Debug\SimpleAPI.dll
+\\vmware-host\Shared Folders\Desktop\dvp3\final_project\keepn_tabs_api\KeepnTabsAPI\KeepnTabsAPI\bin\Debug\SimpleAPI.pdb
+\\vmware-host\Shared Folders\Desktop\dvp3\final_project\keepn_tabs_api\KeepnTabsAPI\KeepnTabsAPI\obj\Debug\KeepnTabsAPI.csprojAssemblyReference.cache
+\\vmware-host\Shared Folders\Desktop\dvp3\final_project\keepn_tabs_api\KeepnTabsAPI\KeepnTabsAPI\obj\Debug\KeepnTabsAPI.frmController.resources
+\\vmware-host\Shared Folders\Desktop\dvp3\final_project\keepn_tabs_api\KeepnTabsAPI\KeepnTabsAPI\obj\Debug\KeepnTabsAPI.Properties.Resources.resources
+\\vmware-host\Shared Folders\Desktop\dvp3\final_project\keepn_tabs_api\KeepnTabsAPI\KeepnTabsAPI\obj\Debug\KeepnTabsAPI.csproj.GenerateResource.cache
+\\vmware-host\Shared Folders\Desktop\dvp3\final_project\keepn_tabs_api\KeepnTabsAPI\KeepnTabsAPI\obj\Debug\KeepnTabsAPI.csproj.CoreCompileInputs.cache
+\\vmware-host\Shared Folders\Desktop\dvp3\final_project\keepn_tabs_api\KeepnTabsAPI\KeepnTabsAPI\obj\Debug\KeepnTabsAPI.csproj.CopyComplete
+\\vmware-host\Shared Folders\Desktop\dvp3\final_project\keepn_tabs_api\KeepnTabsAPI\KeepnTabsAPI\obj\Debug\KeepnTabsAPI.exe
+\\vmware-host\Shared Folders\Desktop\dvp3\final_project\keepn_tabs_api\KeepnTabsAPI\KeepnTabsAPI\obj\Debug\KeepnTabsAPI.pdb
