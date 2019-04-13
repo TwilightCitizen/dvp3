@@ -50,16 +50,18 @@ namespace KeepnTabsAPI
 
             Server.Handlers = new Dictionary< string, Server.Handler >
             {
-                { "user/add",     UserAdd }
+                { "user/add",     UserAdd     }
             ,   { "user/confirm", UserConfirm }
-            ,   { "user/update",  UserUpdate }
-            ,   { "user/delete",  UserDelete }
-            ,   { "list/add",     ListAdd }
-            ,   { "list/update",  ListUpdate }
-            ,   { "list/delete",  ListDelete }
-            ,   { "task/add",     TaskAdd }
-            ,   { "task/update",  TaskUpdate }
-            ,   { "task/delete",  TaskDelete }
+            ,   { "user/login",   UserLogin   }
+            ,   { "user/logout",  UserLogout  }
+            ,   { "user/update",  UserUpdate  } 
+            ,   { "user/delete",  UserDelete  }
+            ,   { "list/add",     ListAdd     }
+            ,   { "list/update",  ListUpdate  }
+            ,   { "list/delete",  ListDelete  }
+            ,   { "task/add",     TaskAdd     }
+            ,   { "task/update",  TaskUpdate  }
+            ,   { "task/delete",  TaskDelete  }
             };
         }
 
@@ -75,10 +77,10 @@ namespace KeepnTabsAPI
             ReplySuccess = new XElement( ReplyBase );
             ReplyFailure = new XElement( ReplyBase );
 
-            ReplyInvalid.Element( "status"  ).Add( new XText( "invalid" ) );
+            ReplyInvalid.Element( "status"  ).Add( new XElement( "invalid" ) );
             ReplyInvalid.Element( "content" ).Add( new XText( "The request received was invalid or not well formed." ) );
-            ReplySuccess.Element( "status"  ).Add( new XText( "success" ) );
-            ReplyFailure.Element( "status"  ).Add( new XText( "failure" ) );
+            ReplySuccess.Element( "status"  ).Add( new XElement( "success" ) );
+            ReplyFailure.Element( "status"  ).Add( new XElement( "failure" ) );
             ReplyFailure.Element( "content" ).Add( new XText( "The request recieved was well formed but failed." ) );
         }
 
@@ -90,10 +92,14 @@ namespace KeepnTabsAPI
             {
                 var email    = e.Request[ 0 ];
                 var password = e.Request[ 1 ];
+
+                var userid   = "";
+
                 var reply    = new XElement( ReplySuccess );
 
-                reply.Element( "content"  ).Add( new XElement( "email",    new XText( email ) ) );
-                reply.Element( "content"  ).Add( new XElement( "password", new XText( password ) ) );
+                reply.Element( "content" ).Add( new XElement( "useradded"
+                ,   new XElement( "userid", new XText( userid   ) )
+                ) );
 
                 e.Reply = reply.ToString();
             }
@@ -105,54 +111,253 @@ namespace KeepnTabsAPI
 
         private void UserConfirm( object sender, Exchange e )
         {
-            e.Reply = "User Confirm";
+            try
+            {
+                var token = e.Request[ 0 ];
+
+                var reply = new XElement( "html"
+                ,   new XElement( "head"
+                    ,   new XElement( "title"
+                        ,   new XText( "Welcome to Keep'n Tabs" )
+                    ) )
+                ,   new XElement( "body"
+                    ,   new XElement( "h1"
+                        ,   new XText( 
+                                "Congratulations and welcome!  You're account is confirmed."
+                        ) )
+                    ,   new XElement( "h2"
+                        ,   new XText(
+                                "Log into your Keep'n Tabs account from the app to get started."
+                        ) )
+                ) );
+
+                e.Reply = reply.ToString();
+            }
+            catch{ }
+        }
+
+        private void UserLogin( object sender, Exchange e )
+        {
+            try
+            {
+                var email    = e.Request[ 0 ];
+                var password = e.Request[ 1 ];
+
+                var token    = "";
+                var lists    = new List< string >();
+
+                var reply    = new XElement( ReplySuccess );
+
+                reply.Element( "content" ).Add( new XElement( "userloggedin"
+                ,   new XElement( "token", new XText( token ) )
+                ,   new XElement( "lists", lists.Select( list =>
+                        new XElement( "list", new XText( list ) )
+                    ) )
+                ) );
+
+                e.Reply = reply.ToString();
+            }
+            catch
+            {
+                Invalid( sender, e );
+            }
+        }
+
+        private void UserLogout( object sender, Exchange e )
+        {
+            try
+            {
+                var token = e.Request[ 0 ];
+                var reply = new XElement( ReplySuccess );
+
+                reply.Element( "content" ).Add( new XElement( "userloggedout" ) );
+
+                e.Reply   = reply.ToString();
+            }
+            catch
+            {
+                Invalid( sender, e );
+            }
         }
 
         private void UserUpdate( object sender, Exchange e )
         {
-            e.Reply = "User Update";
+            try
+            {
+                var token    = e.Request[ 0 ];
+                var email    = e.Request[ 1 ];
+                var password = e.Request[ 2 ];
+
+                var reply    = new XElement( ReplySuccess );
+
+                reply.Element( "content" ).Add( new XElement( "userupdate"
+                ,   new XElement( "email",    new XText( email    ) )
+                ,   new XElement( "password", new XText( password ) )
+                ) );
+
+                e.Reply = reply.ToString();
+            }
+            catch
+            {
+                Invalid( sender, e );
+            }
         }
 
         private void UserDelete( object sender, Exchange e )
         {
-            e.Reply = "User Delete";
+            try
+            {
+                var token = e.Request[ 0 ];
+
+                var reply = new XElement( ReplySuccess );
+
+                reply.Element( "content" ).Add( new XElement( "userdeleted" ) );
+
+                e.Reply   = reply.ToString();
+            }
+            catch
+            {
+                Invalid( sender, e );
+            }
         }
 
         private void ListAdd( object sender, Exchange e )
         {
-            e.Reply = "List Add";
+            try
+            {
+                var token  = e.Request[ 0 ];
+                var name   = e.Request[ 1 ];
+
+                var listid = "";
+
+                var reply  = new XElement( ReplySuccess );
+
+                reply.Element( "content" ).Add( new XElement( "listadded"
+                ,   new XElement( "listid",    new XText( listid ) )
+                ) );
+
+                e.Reply    = reply.ToString();
+            }
+            catch
+            {
+                Invalid( sender, e );
+            }
         }
 
         private void ListUpdate( object sender, Exchange e )
         {
-            e.Reply = "List Update";
+            try
+            {
+                var token    = e.Request[ 0 ];
+                var listid   = e.Request[ 1 ];
+                var name     = e.Request[ 2 ];
+
+                var reply    = new XElement( ReplySuccess );
+
+                reply.Element( "content" ).Add( new XElement( "listupdated"
+                ,   new XElement( "name", new XText( name ) )
+                ) );
+
+                e.Reply = reply.ToString();
+            }
+            catch
+            {
+                Invalid( sender, e );
+            }
         }
 
         private void ListDelete( object sender, Exchange e )
         {
-            e.Reply = "List Delete";
+            try
+            {
+                var token  = e.Request[ 0 ];
+                var listid = e.Request[ 1 ];
+
+                var reply  = new XElement( ReplySuccess );
+
+                reply.Element( "content" ).Add( new XElement( "listdeleted" ) );
+
+                e.Reply    = reply.ToString();
+            }
+            catch
+            {
+                Invalid( sender, e );
+            }
         }
 
         private void TaskAdd( object sender, Exchange e )
         {
-            e.Reply = "Task Add";
+            try
+            {
+                var token  = e.Request[ 0 ];
+                var listid = e.Request[ 1 ];
+                var text   = e.Request[ 2 ];
+                var done   = e.Request[ 3 ];
+
+                var taskid = "";
+
+                var reply  = new XElement( ReplySuccess );
+
+                reply.Element( "content" ).Add( new XElement( "taskadded"
+                ,   new XElement( "taskid", new XText( taskid ) )
+                ) );
+
+                e.Reply    = reply.ToString();
+            }
+            catch
+            {
+                Invalid( sender, e );
+            }
         }
 
         private void TaskUpdate( object sender, Exchange e )
         {
-            e.Reply = "Task Update";
+            try
+            {
+                var token  = e.Request[ 0 ];
+                var taskid = e.Request[ 1 ];
+                var text   = e.Request[ 2 ];
+                var done   = e.Request[ 3 ];
+
+                var reply  = new XElement( ReplySuccess );
+
+                reply.Element( "content" ).Add( new XElement( "taskupdated"
+                ,   new XElement( "text", new XText( text ) )
+                ,   new XElement( "done", new XText( done ) )
+                ) );
+
+                e.Reply    = reply.ToString();
+            }
+            catch
+            {
+                Invalid( sender, e );
+            }
         }
 
         private void TaskDelete( object sender, Exchange e )
         {
-            e.Reply = "Task Delete";
+            try
+            {
+                var token  = e.Request[ 0 ];
+                var taskid = e.Request[ 1 ];
+
+                var reply  = new XElement( ReplySuccess );
+
+                reply.Element( "content" ).Add( new XElement( "taskdeleted" ) );
+
+                e.Reply    = reply.ToString();
+            }
+            catch
+            {
+                Invalid( sender, e );
+            }
         }
 
         private void Invalid( object sender, Exchange e )
         {
             var reply = new XElement( ReplyInvalid );
 
-            e.Reply = reply.ToString();
+            e.Reply   = reply.ToString();
         }
 
         /* Start/Stop the API Server */
