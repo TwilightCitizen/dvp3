@@ -16,7 +16,7 @@ namespace SimpleAPI
 {
     public class Exchange : EventArgs
     {
-        public List< string > Request { get; private set; }
+        public List< string > Request { get; internal set; }
 
         public string         Reply   { get; set; }
 

@@ -14,6 +14,7 @@ using System.Text;
 using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Collections.Generic;
 
 namespace SimpleAPI
 {
@@ -43,22 +44,31 @@ namespace SimpleAPI
             get { return IsRunning ? Prefix : null; }
         }
 
-        /* Event Fired when Request Arrives at Listening Prefix */
+        /* Handlers Called when Request Arrives at the Listening Prefix */
 
-        public event EventHandler< Exchange > RequestArrived;
+        public delegate void Handler( object sender, Exchange e );
+
+        /* Client Handlers for Specified Resource Identifiers */
+
+        public Dictionary< string, Handler > Handlers { get; set; } = new Dictionary< string, Handler >();
+
+        /* Client Handler for Unspecified Resource Identifiers */
+
+        private Handler DefaultHandler;
 
         /* Constructor */
 
-        public Server( string prefix )
+        public Server( string prefix, Handler defaultHandler )
         {
             /* Prevent listening on an invalid prefix. */
             
             Uri parsed;
 
-            if( !Uri.TryCreate( prefix, UriKind.Absolute, out parsed ) || parsed.Scheme != Uri.UriSchemeHttp )
-                throw new ArgumentException( "Prefix must be a valid HTTP URL.", "prefix" );
+            if( !Uri.TryCreate( prefix, UriKind.Absolute, out parsed )
+             || parsed.Scheme != Uri.UriSchemeHttp ) throw new ArgumentException();
 
-            Prefix = parsed.ToString();
+            Prefix         = parsed.ToString();
+            DefaultHandler = defaultHandler ?? throw new ArgumentNullException();
         }
 
         /* Start the Server. */
@@ -88,10 +98,12 @@ namespace SimpleAPI
         }
 
         /* Listen on the prefix, asynchronously processing requests as they
-         * arrive until the server is stopped.  Alert subscribers when an API
-         * request has arrived with a list of the requested URL's segments
-         * less any prefix segments.  If subscribers return a text reply to
-         * the API request, pass it on for asynchronous processing. */
+         * arrive until the server is stopped.  Discard the URL's Prefix
+         * elements, and attempt to match the beginning of the URL with
+         * any of the specified handler's keys.  Invoke the first matching
+         * specified handler, if any, or the default handler, passing the
+         * request as part of an exchange.  If the handler provides a reply
+         * to the request, pass it on to process asynchronously. */
 
         private async Task ListenAsync( CancellationToken token )
         {
@@ -110,18 +122,27 @@ namespace SimpleAPI
                             
                             task.Wait( token );
 
-                            var context = task.Result;
-                            var prefix  = new Uri( listener.Prefixes.First() ).Segments;
+                            var context   = task.Result;
+                            var prefix    = new Uri( listener.Prefixes.First() ).Segments;
 
-                            var request = context.Request.Url.Segments.Except( prefix ).ToList().Select( segment =>
+                            var request   = context.Request.Url.Segments.Except( prefix ).ToList().Select( segment =>
                                 segment.Replace( "/", "" ) ).ToList();
 
-                            var requestReply = new Exchange( request );
+                            var specified = Handlers.Keys.ToList().Where( key =>
+                                string.Join( "/", request ).StartsWith( key ) ).FirstOrDefault();
 
-                            RequestArrived?.Invoke( this, requestReply );
+                            var exchange = new Exchange( request );
 
-                            if( requestReply.Reply != null )
-                                    await ProcessReplyAsync( context.Response, requestReply.Reply );
+                            if( specified != null)
+                            {
+                                exchange.Request = request.Skip( specified.Count( letter => letter == '/' ) + 1 ).ToList();
+
+                                Handlers[ specified ]( this, exchange );
+                            }
+                            else DefaultHandler( this, exchange );
+
+                            if( exchange.Reply != null )
+                                await ProcessReplyAsync( context.Response, exchange.Reply );
                         }
                         catch{ /* Cancellations Throw */ }
                     }
