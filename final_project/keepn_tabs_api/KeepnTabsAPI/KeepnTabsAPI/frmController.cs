@@ -362,7 +362,8 @@ namespace KeepnTabsAPI
                     if ( reader.HasRows )
                         while( reader.Read() )
                             reply.Descendants( "lists" ).First().Add( new XElement( "list"
-                            ,   new XText( reader[ 0 ].ToString() ) ) );
+                            ,   new XElement( "id", new XText( reader[ 0 ].ToString() ) )
+                            ,   new XElement( "title", new XText( reader[ 1 ].ToString() ) ) ) );
 
                     e.Reply = reply.ToString();
                 }
@@ -544,7 +545,9 @@ namespace KeepnTabsAPI
                     if ( reader.HasRows )
                         while( reader.Read() )
                             reply.Descendants( "tasks" ).First().Add( new XElement( "task"
-                            ,   new XText( reader[ 0 ].ToString() ) ) );
+                            ,   new XElement( "id", new XText( reader[ 0 ].ToString() ) )
+                            ,   new XElement( "title", new XText( reader[ 1 ].ToString() ) )
+                            ,   new XElement( "done", new XText( reader[ 2 ].ToString() ) ) ) );
 
                     e.Reply = reply.ToString();
                 }
