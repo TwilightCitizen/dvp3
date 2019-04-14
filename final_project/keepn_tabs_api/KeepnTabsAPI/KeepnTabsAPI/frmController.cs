@@ -32,47 +32,29 @@ namespace KeepnTabsAPI
 
         /* MySql Database Backing Store */
 
-        private const string Path     = "C:\\VFW\\connect.txt";
-        private const string User     = "dbsAdmin";
-        private const string Password = "password";
-        private const string Database = "keepntabs";
-        private const string Port     = "8889";
-        private const string SslMode  = "none";
+        private const string Path  =
+            "C:\\VFW\\connect.txt",
+            User     = "dbsAdmin",
+            Password = "password",
+            Database = "keepntabs",
+            Port     = "8889",
+            SslMode  = "none";
 
         private MySqlConnection Connection;
 
-        private MySqlCommand    UserAddDB;
-        private MySqlCommand    UserConfirmDB;
-        private MySqlCommand    UserLoginDB;
-        private MySqlCommand    UserLogoutDB;
-        private MySqlCommand    UserUpdateDB;
-        private MySqlCommand    UserDeleteDB;
-        private MySqlCommand    ListAddDB;
-        private MySqlCommand    ListUpdateDB;
-        private MySqlCommand    ListDeleteDB;
-        private MySqlCommand    TaskAddDB;
-        private MySqlCommand    TaskUpdateDB;
-        private MySqlCommand    TaskDeleteDB;
+        private MySqlCommand
+            UserAddDB,    UserConfirmDB, UserLoginDB,  UserLogoutDB,
+            UserUpdateDB, UserDeleteDB,  ListAddDB,    ListUpdateDB,
+            ListDeleteDB, TaskAddDB,     TaskUpdateDB, TaskDeleteDB;
 
-        private MySqlParameter  UserIDDB;
-        private MySqlParameter  EmailDB;
-        private MySqlParameter  PassDB;
-        private MySqlParameter  ConfirmedDB;
-        private MySqlParameter  TokenIDDB;
-        private MySqlParameter  ExpiresDB;
-        private MySqlParameter  ListIDDB;
-        private MySqlParameter  TitleDB;
-        private MySqlParameter  TaskIDDB;
-        private MySqlParameter  DoneDB;
-        private MySqlParameter  StringDB;
-        private MySqlParameter  BoolDB;  
+        private MySqlParameter
+            UserIDDB, EmailDB,  PassDB, TokenIDDB, ListIDDB,
+            TitleDB,  TaskIDDB, DoneDB, StringDB,  BoolDB;  
 
         /* Reply Shells */
 
-        private XElement ReplyBase;
-        private XElement ReplyInvalid;
-        private XElement ReplySuccess;
-        private XElement ReplyFailure;
+        private XElement
+            ReplyBase, ReplyInvalid, ReplySuccess, ReplyFailure;
 
         public frmController()
         {
@@ -90,18 +72,12 @@ namespace KeepnTabsAPI
 
             Server.Handlers = new Dictionary< string, Server.Handler >
             {
-                { "user/add",     UserAdd     }
-            ,   { "user/confirm", UserConfirm }
-            ,   { "user/login",   UserLogin   }
-            ,   { "user/logout",  UserLogout  }
-            ,   { "user/update",  UserUpdate  } 
-            ,   { "user/delete",  UserDelete  }
-            ,   { "list/add",     ListAdd     }
-            ,   { "list/update",  ListUpdate  }
-            ,   { "list/delete",  ListDelete  }
-            ,   { "task/add",     TaskAdd     }
-            ,   { "task/update",  TaskUpdate  }
-            ,   { "task/delete",  TaskDelete  }
+                { "user/add",     UserAdd     },   { "user/confirm", UserConfirm }
+            ,   { "user/login",   UserLogin   },   { "user/logout",  UserLogout  }
+            ,   { "user/update",  UserUpdate  },   { "user/delete",  UserDelete  }
+            ,   { "list/add",     ListAdd     },   { "list/update",  ListUpdate  }
+            ,   { "list/delete",  ListDelete  },   { "task/add",     TaskAdd     }
+            ,   { "task/update",  TaskUpdate  },   { "task/delete",  TaskDelete  }
             };
         }
 
@@ -109,98 +85,82 @@ namespace KeepnTabsAPI
 
         private void InitializeDatabase()
         {
-            try
-            {
-                Connection = new MySqlConnection( GetConnection() );
+            Connection = new MySqlConnection( GetConnection() );
 
-                Connection.Open();
+            UserAddDB     = new MySqlCommand( "useradd",     Connection );
+            UserConfirmDB = new MySqlCommand( "UserConfirm", Connection );
+            UserLoginDB   = new MySqlCommand( "UserLogin",   Connection );
+            UserLogoutDB  = new MySqlCommand( "UserLogout",  Connection );
+            UserUpdateDB  = new MySqlCommand( "UserUpdate",  Connection );
+            UserDeleteDB  = new MySqlCommand( "UserDelete",  Connection );
+            ListAddDB     = new MySqlCommand( "ListAdd",     Connection );
+            ListUpdateDB  = new MySqlCommand( "ListUpdate",  Connection );
+            ListDeleteDB  = new MySqlCommand( "ListDelete",  Connection );
+            TaskAddDB     = new MySqlCommand( "TaskAdd",     Connection );
+            TaskUpdateDB  = new MySqlCommand( "TaskUpdate",  Connection );
+            TaskDeleteDB  = new MySqlCommand( "TaskDelete",  Connection );
 
-                UserAddDB     = new MySqlCommand( "useradd",     Connection );
-                UserConfirmDB = new MySqlCommand( "UserConfirm", Connection );
-                UserLoginDB   = new MySqlCommand( "UserLogin",   Connection );
-                UserLogoutDB  = new MySqlCommand( "UserLogout",  Connection );
-                UserUpdateDB  = new MySqlCommand( "UserUpdate",  Connection );
-                UserDeleteDB  = new MySqlCommand( "UserDelete",  Connection );
-                ListAddDB     = new MySqlCommand( "ListAdd",     Connection );
-                ListUpdateDB  = new MySqlCommand( "ListUpdate",  Connection );
-                ListDeleteDB  = new MySqlCommand( "ListDelete",  Connection );
-                TaskAddDB     = new MySqlCommand( "TaskAdd",     Connection );
-                TaskUpdateDB  = new MySqlCommand( "TaskUpdate",  Connection );
-                TaskDeleteDB  = new MySqlCommand( "TaskDelete",  Connection );
+            UserAddDB     .CommandType = UserConfirmDB .CommandType =  
+            UserLoginDB   .CommandType = UserLogoutDB  .CommandType =  
+            UserUpdateDB  .CommandType = UserDeleteDB  .CommandType =  
+            ListAddDB     .CommandType = ListUpdateDB  .CommandType =  
+            ListDeleteDB  .CommandType = TaskAddDB     .CommandType =  
+            TaskUpdateDB  .CommandType = TaskDeleteDB  .CommandType = CommandType.StoredProcedure;
 
-                UserAddDB     .CommandType = CommandType.StoredProcedure;
-                UserConfirmDB .CommandType = CommandType.StoredProcedure; 
-                UserLoginDB   .CommandType = CommandType.StoredProcedure; 
-                UserLogoutDB  .CommandType = CommandType.StoredProcedure; 
-                UserUpdateDB  .CommandType = CommandType.StoredProcedure; 
-                UserDeleteDB  .CommandType = CommandType.StoredProcedure; 
-                ListAddDB     .CommandType = CommandType.StoredProcedure; 
-                ListUpdateDB  .CommandType = CommandType.StoredProcedure; 
-                ListDeleteDB  .CommandType = CommandType.StoredProcedure; 
-                TaskAddDB     .CommandType = CommandType.StoredProcedure; 
-                TaskUpdateDB  .CommandType = CommandType.StoredProcedure; 
-                TaskDeleteDB  .CommandType = CommandType.StoredProcedure;
+            UserIDDB    = new MySqlParameter( "u",  MySqlDbType.String   );
+            EmailDB     = new MySqlParameter( "e",  MySqlDbType.String   );
+            PassDB      = new MySqlParameter( "p",  MySqlDbType.String   );
+            TokenIDDB   = new MySqlParameter( "tk", MySqlDbType.String   );
+            ListIDDB    = new MySqlParameter( "l",  MySqlDbType.String   );
+            TitleDB     = new MySqlParameter( "t",  MySqlDbType.String   );
+            TaskIDDB    = new MySqlParameter( "ti", MySqlDbType.String   );
+            DoneDB      = new MySqlParameter( "d",  MySqlDbType.Bit      );
+            StringDB    = new MySqlParameter( "r",  MySqlDbType.String   );
+            BoolDB      = new MySqlParameter( "r",  MySqlDbType.Bit      );
 
-                UserIDDB    = new MySqlParameter( "@UserID",    MySqlDbType.String   );
-                EmailDB     = new MySqlParameter( "e",     MySqlDbType.String   );
-                PassDB      = new MySqlParameter( "p",  MySqlDbType.String   );
-                ConfirmedDB = new MySqlParameter( "@Confirmed", MySqlDbType.Bit      );
-                TokenIDDB   = new MySqlParameter( "@TokenID",   MySqlDbType.String   );
-                ExpiresDB   = new MySqlParameter( "@Expires",   MySqlDbType.DateTime );
-                ListIDDB    = new MySqlParameter( "@ListID",    MySqlDbType.String   );
-                TitleDB     = new MySqlParameter( "@Title",     MySqlDbType.String   );
-                TaskIDDB    = new MySqlParameter( "@TaskID",    MySqlDbType.String   );
-                DoneDB      = new MySqlParameter( "@Done",      MySqlDbType.Bit      );
-                StringDB    = new MySqlParameter( "r",          MySqlDbType.String   );
-                BoolDB      = new MySqlParameter( "r",          MySqlDbType.Bit      );
+            StringDB.Direction = ParameterDirection.ReturnValue;
+            BoolDB.Direction   = ParameterDirection.ReturnValue;
 
-                StringDB.Direction = ParameterDirection.ReturnValue;
-                BoolDB.Direction   = ParameterDirection.ReturnValue;
+            UserAddDB     .Parameters.Add( EmailDB   );
+            UserAddDB     .Parameters.Add( PassDB    );
+            UserAddDB     .Parameters.Add( StringDB  );
 
-                UserAddDB     .Parameters.Add( EmailDB   );
-                UserAddDB     .Parameters.Add( PassDB    );
-                UserAddDB     .Parameters.Add( StringDB  );
+            UserConfirmDB .Parameters.Add( UserIDDB  );
 
-                UserConfirmDB .Parameters.Add( UserIDDB  );
-
-                UserLoginDB   .Parameters.Add( EmailDB   );
-                UserLoginDB   .Parameters.Add( PassDB    );
+            UserLoginDB   .Parameters.Add( EmailDB   );
+            UserLoginDB   .Parameters.Add( PassDB    );
+            UserLoginDB   .Parameters.Add( StringDB  );
                 
-                UserLogoutDB  .Parameters.Add( TokenIDDB );
+            UserLogoutDB  .Parameters.Add( TokenIDDB );
                               
-                UserUpdateDB  .Parameters.Add( TokenIDDB );
-                UserUpdateDB  .Parameters.Add( EmailDB   );
-                UserUpdateDB  .Parameters.Add( PassDB    );
+            UserUpdateDB  .Parameters.Add( TokenIDDB );
+            UserUpdateDB  .Parameters.Add( EmailDB   );
+            UserUpdateDB  .Parameters.Add( PassDB    );
                               
-                UserDeleteDB  .Parameters.Add( TokenIDDB );
+            UserDeleteDB  .Parameters.Add( TokenIDDB );
 
-                ListAddDB     .Parameters.Add( TokenIDDB );
-                ListAddDB     .Parameters.Add( TitleDB   );
+            ListAddDB     .Parameters.Add( TokenIDDB );
+            ListAddDB     .Parameters.Add( TitleDB   );
 
-                ListUpdateDB  .Parameters.Add( TokenIDDB );
-                ListUpdateDB  .Parameters.Add( ListIDDB  );
-                ListUpdateDB  .Parameters.Add( TitleDB   );
+            ListUpdateDB  .Parameters.Add( TokenIDDB );
+            ListUpdateDB  .Parameters.Add( ListIDDB  );
+            ListUpdateDB  .Parameters.Add( TitleDB   );
 
-                ListDeleteDB  .Parameters.Add( TokenIDDB );
-                ListDeleteDB  .Parameters.Add( ListIDDB  );
+            ListDeleteDB  .Parameters.Add( TokenIDDB );
+            ListDeleteDB  .Parameters.Add( ListIDDB  );
 
-                TaskAddDB     .Parameters.Add( TokenIDDB );
-                TaskAddDB     .Parameters.Add( ListIDDB  );
-                TaskAddDB     .Parameters.Add( TitleDB   );
-                TaskAddDB     .Parameters.Add( DoneDB    );
+            TaskAddDB     .Parameters.Add( TokenIDDB );
+            TaskAddDB     .Parameters.Add( ListIDDB  );
+            TaskAddDB     .Parameters.Add( TitleDB   );
+            TaskAddDB     .Parameters.Add( DoneDB    );
 
-                TaskUpdateDB  .Parameters.Add( TokenIDDB );
-                TaskUpdateDB  .Parameters.Add( TaskIDDB  );
-                TaskUpdateDB  .Parameters.Add( TitleDB   );
-                TaskUpdateDB  .Parameters.Add( DoneDB    );
+            TaskUpdateDB  .Parameters.Add( TokenIDDB );
+            TaskUpdateDB  .Parameters.Add( TaskIDDB  );
+            TaskUpdateDB  .Parameters.Add( TitleDB   );
+            TaskUpdateDB  .Parameters.Add( DoneDB    );
 
-                TaskDeleteDB  .Parameters.Add( TokenIDDB );
-                TaskDeleteDB  .Parameters.Add( TaskIDDB  );
-            }
-            catch
-            {
-                Connection.Dispose();
-            }
+            TaskDeleteDB  .Parameters.Add( TokenIDDB );
+            TaskDeleteDB  .Parameters.Add( TaskIDDB  );
         }
 
         /* Get MySql connection string. */
@@ -238,7 +198,6 @@ namespace KeepnTabsAPI
             ReplyFailure = new XElement( ReplyBase );
 
             ReplyInvalid.Element( "status"  ).Add( new XElement( "invalid" ) );
-            ReplyInvalid.Element( "content" ).Add( new XText( "The request received was invalid or not well formed." ) );
             ReplySuccess.Element( "status"  ).Add( new XElement( "success" ) );
             ReplyFailure.Element( "status"  ).Add( new XElement( "failure" ) );
         }
@@ -247,33 +206,46 @@ namespace KeepnTabsAPI
 
         private void UserAdd( object sender, Exchange e )
         {
+            MySqlDataReader reader;
+
             try
             {
-                var email                       = e.Request[ 0 ];
-                var password                    = e.Request[ 1 ];
+                var email    = e.Request[ 0 ];
+                var password = e.Request[ 1 ];
 
                 UserAddDB.Parameters[ 0 ].Value = email;
                 UserAddDB.Parameters[ 1 ].Value = password;
 
-                var reader = UserAddDB.ExecuteReader( CommandBehavior.SingleResult );
+                Connection.Open();
 
-                reader.Read();
+                using( reader = UserAddDB.ExecuteReader() )
+                { 
+                    reader.Read();
 
-                var userid                      = reader[ 0 ].ToString();
-                var reply                       = new XElement( ReplySuccess );
+                    var userid = reader[ 0 ].ToString();
 
-                reader.Close();
+                    XElement reply;
 
-                reply.Element( "content" ).Add( new XElement( "useradded"
-                ,   new XElement( "userid", new XText( userid   ) )
-                ) );
+                    if( userid == "" )
+                    { 
+                        reply = new XElement( ReplyFailure );
 
-                e.Reply = reply.ToString();
+                        reply.Element( "content" ).Add( new XElement( "userexists" ) );
+                    }
+                    else
+                    { 
+                        reply = new XElement( ReplySuccess );
+
+                        reply.Element( "content" ).Add( new XElement( "useradded"
+                            , new XElement( "userid", new XText( userid ) )
+                        ) );
+                    }
+
+                    e.Reply = reply.ToString();
+                }
             }
-            catch( Exception ex )
-            {
-                Invalid( sender, e );
-            }
+            catch   { Invalid( sender, e ); }
+            finally { Connection.Close();   }
         }
 
         private void UserConfirm( object sender, Exchange e )
@@ -300,34 +272,57 @@ namespace KeepnTabsAPI
 
                 e.Reply = reply.ToString();
             }
-            catch{ }
+            catch
+            {
+                Invalid( sender, e );
+            }
         }
 
         private void UserLogin( object sender, Exchange e )
         {
+            MySqlDataReader reader;
+
             try
             {
                 var email    = e.Request[ 0 ];
                 var password = e.Request[ 1 ];
 
-                var token    = "";
-                var lists    = new List< string >();
+                UserLoginDB.Parameters[ 0 ].Value = email;
+                UserLoginDB.Parameters[ 1 ].Value = password;
 
-                var reply    = new XElement( ReplySuccess );
+                Connection.Open();
 
-                reply.Element( "content" ).Add( new XElement( "userloggedin"
-                ,   new XElement( "token", new XText( token ) )
-                ,   new XElement( "lists", lists.Select( list =>
-                        new XElement( "list", new XText( list ) )
-                    ) )
-                ) );
+                using( reader = UserLoginDB.ExecuteReader( ) )
+                { 
+                    reader.Read();
 
-                e.Reply = reply.ToString();
+                    var token = reader[ 0 ].ToString();
+
+                    XElement reply;
+
+                    if( token == "" )
+                    {
+                        reply = new XElement( ReplyFailure );
+
+                        reply.Element( "content" ).Add( new XElement( "tryagain" ) );
+                    }
+                    else
+                    {
+                        reply = new XElement( ReplySuccess );
+
+                        reply.Element( "content" ).Add( new XElement( "userloggedin"
+                        ,   new XElement( "token", new XText( token ) )
+                        //,   new XElement( "lists", lists.Select( list =>
+                        //        new XElement( "list", new XText( list ) )
+                        //    ) )
+                        ) );
+                    }
+
+                    e.Reply = reply.ToString();
+                }
             }
-            catch
-            {
-                Invalid( sender, e );
-            }
+            catch   { Invalid( sender, e ); }
+            finally { Connection.Close();   }
         }
 
         private void UserLogout( object sender, Exchange e )

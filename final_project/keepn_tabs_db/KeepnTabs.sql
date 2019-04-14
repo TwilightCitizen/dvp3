@@ -7,7 +7,7 @@
 #
 # Host: 127.0.0.1 (MySQL 5.7.25)
 # Database: KeepnTabs
-# Generation Time: 2019-04-13 20:21:40 +0000
+# Generation Time: 2019-04-14 04:10:26 +0000
 # ************************************************************
 
 
@@ -29,7 +29,9 @@ CREATE TABLE `Lists` (
   `ID` varchar(36) NOT NULL DEFAULT '',
   `Title` varchar(256) NOT NULL DEFAULT '',
   `UserID` varchar(36) NOT NULL DEFAULT '',
-  PRIMARY KEY (`ID`)
+  PRIMARY KEY (`ID`),
+  KEY `UserID` (`UserID`),
+  CONSTRAINT `lists_ibfk_1` FOREIGN KEY (`UserID`) REFERENCES `Users` (`ID`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 
@@ -44,7 +46,9 @@ CREATE TABLE `Tasks` (
   `Title` varchar(256) NOT NULL DEFAULT '',
   `Done` tinyint(1) NOT NULL,
   `ListID` varchar(36) NOT NULL DEFAULT '',
-  PRIMARY KEY (`ID`)
+  PRIMARY KEY (`ID`),
+  KEY `ListID` (`ListID`),
+  CONSTRAINT `tasks_ibfk_1` FOREIGN KEY (`ListID`) REFERENCES `Lists` (`ID`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 
@@ -58,7 +62,9 @@ CREATE TABLE `Tokens` (
   `ID` varchar(36) NOT NULL DEFAULT '',
   `UserID` varchar(36) NOT NULL DEFAULT '',
   `Expires` datetime NOT NULL,
-  PRIMARY KEY (`ID`)
+  PRIMARY KEY (`ID`),
+  KEY `UserID` (`UserID`),
+  CONSTRAINT `tokens_ibfk_1` FOREIGN KEY (`UserID`) REFERENCES `Users` (`ID`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 
@@ -72,6 +78,7 @@ CREATE TABLE `Users` (
   `ID` varchar(36) NOT NULL DEFAULT '',
   `Email` varchar(320) NOT NULL DEFAULT '',
   `Pass` varchar(256) NOT NULL DEFAULT '',
+  `Confirmed` tinyint(4) NOT NULL,
   PRIMARY KEY (`ID`),
   UNIQUE KEY `UniqueEmail` (`Email`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
@@ -79,10 +86,9 @@ CREATE TABLE `Users` (
 LOCK TABLES `Users` WRITE;
 /*!40000 ALTER TABLE `Users` DISABLE KEYS */;
 
-INSERT INTO `Users` (`ID`, `Email`, `Pass`)
+INSERT INTO `Users` (`ID`, `Email`, `Pass`, `Confirmed`)
 VALUES
-	('8164335e-5e03-11e9-ae2a-0e1336d3810b','daclark2@student.fullsail.edu','password'),
-	('d2e34f54-5e02-11e9-ae2a-0e1336d3810b','daclark1@student.fullsail.edu','password');
+	('bfcb24ee-5e4f-11e9-ad13-8dcf6690a175','test@test.com','password',0);
 
 /*!40000 ALTER TABLE `Users` ENABLE KEYS */;
 UNLOCK TABLES;
@@ -120,14 +126,25 @@ begin
 end */;;
 
 /*!50003 SET SESSION SQL_MODE=@OLD_SQL_MODE */;;
+# Dump of PROCEDURE UserConfirm
+# ------------------------------------------------------------
+
+/*!50003 DROP PROCEDURE IF EXISTS `UserConfirm` */;;
+/*!50003 SET SESSION SQL_MODE="ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_AUTO_CREATE_USER,NO_ENGINE_SUBSTITUTION"*/;;
+/*!50003 CREATE*/ /*!50020 DEFINER=`root`@`localhost`*/ /*!50003 PROCEDURE `userconfirm`( u varchar( 36 ) )
+begin
+	update Users set Confirmed = true where ID = u;
+end */;;
+
+/*!50003 SET SESSION SQL_MODE=@OLD_SQL_MODE */;;
 # Dump of PROCEDURE UserLogout
 # ------------------------------------------------------------
 
 /*!50003 DROP PROCEDURE IF EXISTS `UserLogout` */;;
 /*!50003 SET SESSION SQL_MODE="ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_AUTO_CREATE_USER,NO_ENGINE_SUBSTITUTION"*/;;
-/*!50003 CREATE*/ /*!50020 DEFINER=`root`@`localhost`*/ /*!50003 PROCEDURE `UserLogout`( tk varchar( 36 ) )
+/*!50003 CREATE*/ /*!50020 DEFINER=`root`@`localhost`*/ /*!50003 PROCEDURE `userlogout`( tk varchar( 36 ) )
 begin
-	select TokenDelete( tk );
+	call TokenDelete( tk );
 end */;;
 
 /*!50003 SET SESSION SQL_MODE=@OLD_SQL_MODE */;;
@@ -167,7 +184,7 @@ end */;;
 
 /*!50003 DROP FUNCTION IF EXISTS `ListDelete` */;;
 /*!50003 SET SESSION SQL_MODE="ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_AUTO_CREATE_USER,NO_ENGINE_SUBSTITUTION"*/;;
-/*!50003 CREATE*/ /*!50020 DEFINER=`root`@`localhost`*/ /*!50003 FUNCTION `ListDelete`( tk varchar( 36 ), l varchar( 36 ) ) RETURNS tinyint(1)
+/*!50003 CREATE*/ /*!50020 DEFINER=`root`@`localhost`*/ /*!50003 FUNCTION `listdelete`( tk varchar( 36 ), l varchar( 36 ) ) RETURNS tinyint(1)
 begin
 	declare tu varchar( 36 );
 	declare lu varchar( 36 );
@@ -190,7 +207,7 @@ end */;;
 
 /*!50003 DROP FUNCTION IF EXISTS `ListUpdate` */;;
 /*!50003 SET SESSION SQL_MODE="ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_AUTO_CREATE_USER,NO_ENGINE_SUBSTITUTION"*/;;
-/*!50003 CREATE*/ /*!50020 DEFINER=`root`@`localhost`*/ /*!50003 FUNCTION `ListUpdate`( tk varchar( 36 ), l varchar( 36 ), t varchar( 256 ) ) RETURNS tinyint(1)
+/*!50003 CREATE*/ /*!50020 DEFINER=`root`@`localhost`*/ /*!50003 FUNCTION `listupdate`( tk varchar( 36 ), l varchar( 36 ), t varchar( 256 ) ) RETURNS tinyint(1)
 begin
 	declare tu varchar( 36 );
 	declare lu varchar( 36 );
@@ -228,7 +245,7 @@ end */;;
 
 /*!50003 DROP FUNCTION IF EXISTS `TaskAdd` */;;
 /*!50003 SET SESSION SQL_MODE="ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_AUTO_CREATE_USER,NO_ENGINE_SUBSTITUTION"*/;;
-/*!50003 CREATE*/ /*!50020 DEFINER=`root`@`localhost`*/ /*!50003 FUNCTION `TaskAdd`( tk varchar( 36 ), l varchar( 36 ), t varchar( 256 ), d tinyint ) RETURNS varchar(36) CHARSET utf8
+/*!50003 CREATE*/ /*!50020 DEFINER=`root`@`localhost`*/ /*!50003 FUNCTION `taskadd`( tk varchar( 36 ), l varchar( 36 ), t varchar( 256 ), d tinyint ) RETURNS varchar(36) CHARSET utf8
 begin
 	declare tu varchar( 36 );
 	declare lu varchar( 36 );
@@ -242,7 +259,7 @@ begin
 		
 		insert into Tasks( ID, Title, Done, ListID ) values( ti, t, d, l );
 		
-		return( l );
+		return( ti );
 	else
 		return( u );
 	end if;
@@ -254,7 +271,7 @@ end */;;
 
 /*!50003 DROP FUNCTION IF EXISTS `TaskDelete` */;;
 /*!50003 SET SESSION SQL_MODE="ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_AUTO_CREATE_USER,NO_ENGINE_SUBSTITUTION"*/;;
-/*!50003 CREATE*/ /*!50020 DEFINER=`root`@`localhost`*/ /*!50003 FUNCTION `TaskDelete`( tk varchar( 36 ), ti varchar( 36 ) ) RETURNS tinyint(1)
+/*!50003 CREATE*/ /*!50020 DEFINER=`root`@`localhost`*/ /*!50003 FUNCTION `taskdelete`( tk varchar( 36 ), ti varchar( 36 ) ) RETURNS tinyint(1)
 begin
 	declare tu varchar( 36 );
 	declare tl varchar( 36 );
@@ -265,7 +282,7 @@ begin
 	select ListUser( tl )  into lu;
 	
 	if tu is not null and tu = lu then
-		update Tasks set Title = t, Done = d where ID = ti;
+		delete from tasks where ID = ti;
 		
 		return( true );
 	else
@@ -294,7 +311,7 @@ end */;;
 
 /*!50003 DROP FUNCTION IF EXISTS `TaskUpdate` */;;
 /*!50003 SET SESSION SQL_MODE="ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_AUTO_CREATE_USER,NO_ENGINE_SUBSTITUTION"*/;;
-/*!50003 CREATE*/ /*!50020 DEFINER=`root`@`localhost`*/ /*!50003 FUNCTION `TaskUpdate`( tk varchar( 36 ), ti varchar( 36 ), t varchar( 256 ), d tinyint ) RETURNS tinyint(1)
+/*!50003 CREATE*/ /*!50020 DEFINER=`root`@`localhost`*/ /*!50003 FUNCTION `taskupdate`( tk varchar( 36 ), ti varchar( 36 ), t varchar( 256 ), d tinyint ) RETURNS tinyint(1)
 begin
 	declare tu varchar( 36 );
 	declare tl varchar( 36 );
@@ -342,7 +359,7 @@ end */;;
 begin
 	declare tke boolean;
 	
-	select exists( select ID from Token where ID = tk and Expires > now() ) into tke;
+	select exists( select ID from Tokens where ID = tk and Expires > now() ) into tke;
 	
 	return( tke );
 end */;;
@@ -368,7 +385,7 @@ end */;;
 
 /*!50003 DROP FUNCTION IF EXISTS `UserAdd` */;;
 /*!50003 SET SESSION SQL_MODE="ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_AUTO_CREATE_USER,NO_ENGINE_SUBSTITUTION"*/;;
-/*!50003 CREATE*/ /*!50020 DEFINER=`root`@`localhost`*/ /*!50003 FUNCTION `UserAdd`( e varchar( 320 ), p varchar( 256 ) ) RETURNS varchar(36) CHARSET utf8
+/*!50003 CREATE*/ /*!50020 DEFINER=`root`@`localhost`*/ /*!50003 FUNCTION `useradd`( e varchar( 320 ), p varchar( 256 ) ) RETURNS varchar(36) CHARSET utf8
 begin
 	declare u varchar( 36 );
 	
@@ -377,7 +394,7 @@ begin
 	else
 		set u = uuid();
 		
-		insert into Users( ID, Email, Pass ) values( u, e, p );
+		insert into Users( ID, Email, Pass, Confirmed ) values( u, e, p, false );
 	end if;
 	
 	return( u );
@@ -389,7 +406,7 @@ end */;;
 
 /*!50003 DROP FUNCTION IF EXISTS `UserDelete` */;;
 /*!50003 SET SESSION SQL_MODE="ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_AUTO_CREATE_USER,NO_ENGINE_SUBSTITUTION"*/;;
-/*!50003 CREATE*/ /*!50020 DEFINER=`root`@`localhost`*/ /*!50003 FUNCTION `UserDelete`( tk varchar( 36 ) ) RETURNS tinyint(1)
+/*!50003 CREATE*/ /*!50020 DEFINER=`root`@`localhost`*/ /*!50003 FUNCTION `userdelete`( tk varchar( 36 ) ) RETURNS tinyint(1)
 begin
 	declare u varchar( 36 );
 	
@@ -414,7 +431,7 @@ end */;;
 begin
 	declare uid boolean;
 	
-	select exists( select ID from Users where Email = e and Password = p ) into uid;
+	select exists( select ID from Users where Email = e and Pass = p ) into uid;
 	
 	return( uid );
 end */;;
@@ -432,6 +449,21 @@ begin
 	select ID from Users where Email = e and Pass = p into u;
 	
 	return( u );
+end */;;
+
+/*!50003 SET SESSION SQL_MODE=@OLD_SQL_MODE */;;
+# Dump of FUNCTION UserIsConfirmed
+# ------------------------------------------------------------
+
+/*!50003 DROP FUNCTION IF EXISTS `UserIsConfirmed` */;;
+/*!50003 SET SESSION SQL_MODE="ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_AUTO_CREATE_USER,NO_ENGINE_SUBSTITUTION"*/;;
+/*!50003 CREATE*/ /*!50020 DEFINER=`root`@`localhost`*/ /*!50003 FUNCTION `UserIsConfirmed`( e varchar( 320 ), p varchar( 256 ) ) RETURNS tinyint(1)
+begin
+	declare c boolean;
+	
+	select Confirmed from Users where Email = e and Pass = p into c;
+	
+	return( c );
 end */;;
 
 /*!50003 SET SESSION SQL_MODE=@OLD_SQL_MODE */;;
@@ -455,11 +487,11 @@ end */;;
 
 /*!50003 DROP FUNCTION IF EXISTS `UserLogin` */;;
 /*!50003 SET SESSION SQL_MODE="ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_AUTO_CREATE_USER,NO_ENGINE_SUBSTITUTION"*/;;
-/*!50003 CREATE*/ /*!50020 DEFINER=`root`@`localhost`*/ /*!50003 FUNCTION `UserLogin`( e varchar( 320 ), p varchar( 256 ) ) RETURNS varchar(36) CHARSET utf8
+/*!50003 CREATE*/ /*!50020 DEFINER=`root`@`localhost`*/ /*!50003 FUNCTION `userlogin`( e varchar( 320 ), p varchar( 256 ) ) RETURNS varchar(36) CHARSET utf8
 begin
 	declare tk varchar( 36 );
 	
-	if UserExists( e, p ) then
+	if UserExists( e, p ) and UserIsConfirmed( e, p ) then
 		select TokenAdd( UserID( e, p ) ) into tk;
 	else
 		set tk = null;
@@ -474,7 +506,7 @@ end */;;
 
 /*!50003 DROP FUNCTION IF EXISTS `UserUpdate` */;;
 /*!50003 SET SESSION SQL_MODE="ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_AUTO_CREATE_USER,NO_ENGINE_SUBSTITUTION"*/;;
-/*!50003 CREATE*/ /*!50020 DEFINER=`root`@`localhost`*/ /*!50003 FUNCTION `UserUpdate`( tk varchar( 36 ), e varchar( 320 ), p varchar( 256 ) ) RETURNS tinyint(1)
+/*!50003 CREATE*/ /*!50020 DEFINER=`root`@`localhost`*/ /*!50003 FUNCTION `userupdate`( tk varchar( 36 ), e varchar( 320 ), p varchar( 256 ) ) RETURNS tinyint(1)
 begin
 	declare u varchar( 36 );
 	
