@@ -7,7 +7,7 @@
 #
 # Host: 127.0.0.1 (MySQL 5.7.25)
 # Database: KeepnTabs
-# Generation Time: 2019-04-14 16:04:38 +0000
+# Generation Time: 2019-04-14 19:10:46 +0000
 # ************************************************************
 
 
@@ -34,6 +34,17 @@ CREATE TABLE `Lists` (
   CONSTRAINT `lists_ibfk_1` FOREIGN KEY (`UserID`) REFERENCES `Users` (`ID`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
+LOCK TABLES `Lists` WRITE;
+/*!40000 ALTER TABLE `Lists` DISABLE KEYS */;
+
+INSERT INTO `Lists` (`ID`, `Title`, `UserID`)
+VALUES
+	('6b95c0e0-5ee1-11e9-ad13-8dcf6690a175','A%20New%20List','39c60dd6-5ee1-11e9-ad13-8dcf6690a175'),
+	('724ba0ba-5ee3-11e9-ad13-8dcf6690a175','List%20Name','1e832d68-5ee3-11e9-ad13-8dcf6690a175'),
+	('7cbfc5e6-5ee1-11e9-ad13-8dcf6690a175','A%20Newer%20List','39c60dd6-5ee1-11e9-ad13-8dcf6690a175');
+
+/*!40000 ALTER TABLE `Lists` ENABLE KEYS */;
+UNLOCK TABLES;
 
 
 # Dump of table Tasks
@@ -51,6 +62,15 @@ CREATE TABLE `Tasks` (
   CONSTRAINT `tasks_ibfk_1` FOREIGN KEY (`ListID`) REFERENCES `Lists` (`ID`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
+LOCK TABLES `Tasks` WRITE;
+/*!40000 ALTER TABLE `Tasks` DISABLE KEYS */;
+
+INSERT INTO `Tasks` (`ID`, `Title`, `Done`, `ListID`)
+VALUES
+	('993b936a-5ee3-11e9-ad13-8dcf6690a175','A%20Task',0,'724ba0ba-5ee3-11e9-ad13-8dcf6690a175');
+
+/*!40000 ALTER TABLE `Tasks` ENABLE KEYS */;
+UNLOCK TABLES;
 
 
 # Dump of table Tokens
@@ -72,7 +92,8 @@ LOCK TABLES `Tokens` WRITE;
 
 INSERT INTO `Tokens` (`ID`, `UserID`, `Expires`)
 VALUES
-	('dcf96b0c-5ecc-11e9-ad13-8dcf6690a175','eebae398-5e7c-11e9-ad13-8dcf6690a175','2019-04-14 12:19:18');
+	('3a273b86-5ee3-11e9-ad13-8dcf6690a175','1e832d68-5ee3-11e9-ad13-8dcf6690a175','2019-04-14 14:59:23'),
+	('57932f74-5ee1-11e9-ad13-8dcf6690a175','39c60dd6-5ee1-11e9-ad13-8dcf6690a175','2019-04-14 14:45:54');
 
 /*!40000 ALTER TABLE `Tokens` ENABLE KEYS */;
 UNLOCK TABLES;
@@ -97,9 +118,10 @@ LOCK TABLES `Users` WRITE;
 
 INSERT INTO `Users` (`ID`, `Email`, `Pass`, `Confirmed`)
 VALUES
-	('40b7c684-5e6e-11e9-ad13-8dcf6690a175','test@test.com','password',0),
-	('e112b39a-5e6f-11e9-ad13-8dcf6690a175','test2@test.com','password',0),
-	('eebae398-5e7c-11e9-ad13-8dcf6690a175','test3@test.com','password',1);
+	('1e832d68-5ee3-11e9-ad13-8dcf6690a175','new@gmail.com','password',1),
+	('2692094a-5ee1-11e9-ad13-8dcf6690a175','test@test.com','password',0),
+	('39c60dd6-5ee1-11e9-ad13-8dcf6690a175','test3@test.com','password',1),
+	('e112b39a-5e6f-11e9-ad13-8dcf6690a175','test2@test.com','password',0);
 
 /*!40000 ALTER TABLE `Users` ENABLE KEYS */;
 UNLOCK TABLES;
@@ -111,6 +133,25 @@ UNLOCK TABLES;
 --
 DELIMITER ;;
 
+# Dump of PROCEDURE ListTasks
+# ------------------------------------------------------------
+
+/*!50003 DROP PROCEDURE IF EXISTS `ListTasks` */;;
+/*!50003 SET SESSION SQL_MODE="ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_AUTO_CREATE_USER,NO_ENGINE_SUBSTITUTION"*/;;
+/*!50003 CREATE*/ /*!50020 DEFINER=`root`@`localhost`*/ /*!50003 PROCEDURE `ListTasks`( in tk varchar( 36 ), in l varchar( 36 ) )
+begin
+	declare tu varchar( 36 );
+	declare lu varchar( 36 );
+	
+	select TokenUser( tk ) into tu;
+	select ListUser( l )   into lu;
+	
+	if tu is not null and tu = lu then
+		select ID, Title, Done from Tasks where ListID = l;
+	end if;
+end */;;
+
+/*!50003 SET SESSION SQL_MODE=@OLD_SQL_MODE */;;
 # Dump of PROCEDURE TokenDelete
 # ------------------------------------------------------------
 
@@ -155,7 +196,7 @@ end */;;
 /*!50003 SET SESSION SQL_MODE="ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_AUTO_CREATE_USER,NO_ENGINE_SUBSTITUTION"*/;;
 /*!50003 CREATE*/ /*!50020 DEFINER=`root`@`localhost`*/ /*!50003 PROCEDURE `UserLists`( in tk varchar( 36 ) )
 begin
-	select ID from Lists where UserID = TokenUser( tk );
+	select ID, Title from Lists where UserID = TokenUser( tk );
 end */;;
 
 /*!50003 SET SESSION SQL_MODE=@OLD_SQL_MODE */;;
