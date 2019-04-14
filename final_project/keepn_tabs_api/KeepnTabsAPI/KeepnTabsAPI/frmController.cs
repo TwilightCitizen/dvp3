@@ -45,7 +45,8 @@ namespace KeepnTabsAPI
         private MySqlCommand
             UserAddDB,    UserConfirmDB, UserLoginDB,  UserLogoutDB,
             UserUpdateDB, UserDeleteDB,  ListAddDB,    ListUpdateDB,
-            ListDeleteDB, TaskAddDB,     TaskUpdateDB, TaskDeleteDB;
+            ListDeleteDB, TaskAddDB,     TaskUpdateDB, TaskDeleteDB,
+            UserListsDB,  ListTasksDB;
 
         private MySqlParameter
             UserIDDB, EmailDB,  PassDB, TokenIDDB, ListIDDB,
@@ -54,7 +55,8 @@ namespace KeepnTabsAPI
         /* Reply Shells */
 
         private XElement
-            ReplyBase, ReplyInvalid, ReplySuccess, ReplyFailure;
+            ReplyBase,   ReplyInvalid,   ReplySuccess,   ReplyFailure,
+            ConfirmAll;
 
         public frmController()
         {
@@ -78,6 +80,7 @@ namespace KeepnTabsAPI
             ,   { "list/add",     ListAdd     },   { "list/update",  ListUpdate  }
             ,   { "list/delete",  ListDelete  },   { "task/add",     TaskAdd     }
             ,   { "task/update",  TaskUpdate  },   { "task/delete",  TaskDelete  }
+            ,   { "user/lists",   UserLists   },   { "list/tasks",   ListTasks  }
             };
         }
 
@@ -87,15 +90,17 @@ namespace KeepnTabsAPI
         {
             Connection = new MySqlConnection( GetConnection() );
 
-            UserAddDB     = new MySqlCommand( "useradd",     Connection );
+            UserAddDB     = new MySqlCommand( "UserAdd",     Connection );
             UserConfirmDB = new MySqlCommand( "UserConfirm", Connection );
             UserLoginDB   = new MySqlCommand( "UserLogin",   Connection );
             UserLogoutDB  = new MySqlCommand( "UserLogout",  Connection );
             UserUpdateDB  = new MySqlCommand( "UserUpdate",  Connection );
             UserDeleteDB  = new MySqlCommand( "UserDelete",  Connection );
+            UserListsDB   = new MySqlCommand( "UserLists",   Connection );
             ListAddDB     = new MySqlCommand( "ListAdd",     Connection );
             ListUpdateDB  = new MySqlCommand( "ListUpdate",  Connection );
             ListDeleteDB  = new MySqlCommand( "ListDelete",  Connection );
+            ListTasksDB   = new MySqlCommand( "ListTasks",   Connection );
             TaskAddDB     = new MySqlCommand( "TaskAdd",     Connection );
             TaskUpdateDB  = new MySqlCommand( "TaskUpdate",  Connection );
             TaskDeleteDB  = new MySqlCommand( "TaskDelete",  Connection );
@@ -105,7 +110,9 @@ namespace KeepnTabsAPI
             UserUpdateDB  .CommandType = UserDeleteDB  .CommandType =  
             ListAddDB     .CommandType = ListUpdateDB  .CommandType =  
             ListDeleteDB  .CommandType = TaskAddDB     .CommandType =  
-            TaskUpdateDB  .CommandType = TaskDeleteDB  .CommandType = CommandType.StoredProcedure;
+            TaskUpdateDB  .CommandType = TaskDeleteDB  .CommandType =
+            UserListsDB   .CommandType = ListTasksDB   .CommandType =
+                CommandType.StoredProcedure;
 
             UserIDDB    = new MySqlParameter( "u",  MySqlDbType.String   );
             EmailDB     = new MySqlParameter( "e",  MySqlDbType.String   );
@@ -136,31 +143,44 @@ namespace KeepnTabsAPI
             UserUpdateDB  .Parameters.Add( TokenIDDB );
             UserUpdateDB  .Parameters.Add( EmailDB   );
             UserUpdateDB  .Parameters.Add( PassDB    );
-                              
+            UserUpdateDB  .Parameters.Add( BoolDB    );
+
             UserDeleteDB  .Parameters.Add( TokenIDDB );
+            UserDeleteDB  .Parameters.Add( BoolDB    );
+
+            UserListsDB   .Parameters.Add( TokenIDDB );
 
             ListAddDB     .Parameters.Add( TokenIDDB );
             ListAddDB     .Parameters.Add( TitleDB   );
+            ListAddDB     .Parameters.Add( StringDB  );
+
+            ListTasksDB   .Parameters.Add( TokenIDDB );
+            ListTasksDB   .Parameters.Add( ListIDDB  );
 
             ListUpdateDB  .Parameters.Add( TokenIDDB );
             ListUpdateDB  .Parameters.Add( ListIDDB  );
             ListUpdateDB  .Parameters.Add( TitleDB   );
+            ListUpdateDB  .Parameters.Add( BoolDB    );
 
             ListDeleteDB  .Parameters.Add( TokenIDDB );
             ListDeleteDB  .Parameters.Add( ListIDDB  );
+            ListDeleteDB  .Parameters.Add( BoolDB    );
 
             TaskAddDB     .Parameters.Add( TokenIDDB );
             TaskAddDB     .Parameters.Add( ListIDDB  );
             TaskAddDB     .Parameters.Add( TitleDB   );
             TaskAddDB     .Parameters.Add( DoneDB    );
+            TaskAddDB     .Parameters.Add( StringDB  );
 
             TaskUpdateDB  .Parameters.Add( TokenIDDB );
             TaskUpdateDB  .Parameters.Add( TaskIDDB  );
             TaskUpdateDB  .Parameters.Add( TitleDB   );
             TaskUpdateDB  .Parameters.Add( DoneDB    );
+            TaskUpdateDB  .Parameters.Add( BoolDB    );
 
             TaskDeleteDB  .Parameters.Add( TokenIDDB );
             TaskDeleteDB  .Parameters.Add( TaskIDDB  );
+            TaskDeleteDB  .Parameters.Add( BoolDB    );
         }
 
         /* Get MySql connection string. */
@@ -200,6 +220,16 @@ namespace KeepnTabsAPI
             ReplyInvalid.Element( "status"  ).Add( new XElement( "invalid" ) );
             ReplySuccess.Element( "status"  ).Add( new XElement( "success" ) );
             ReplyFailure.Element( "status"  ).Add( new XElement( "failure" ) );
+
+            ConfirmAll = new XElement( "html"
+            ,   new XElement( "head"
+                ,   new XElement( "title"
+                    , new XText("Welcome to Keep'n Tabs") ) )
+            ,   new XElement( "body"
+                ,   new XElement( "h1"
+                    ,   new XText(  "Congratulations and welcome!  You're account is confirmed." ) )
+                ,   new XElement( "h2"
+                    ,   new XText( "Log into your Keep'n Tabs account from the app to get started." ) ) ) );
         }
 
         /* Specified Resource Handlers */
@@ -237,8 +267,7 @@ namespace KeepnTabsAPI
                         reply = new XElement( ReplySuccess );
 
                         reply.Element( "content" ).Add( new XElement( "useradded"
-                            , new XElement( "userid", new XText( userid ) )
-                        ) );
+                            , new XElement( "userid", new XText( userid ) ) ) );
                     }
 
                     e.Reply = reply.ToString();
@@ -252,30 +281,19 @@ namespace KeepnTabsAPI
         {
             try
             {
-                var userID = e.Request[ 0 ];
+                var userid = e.Request[ 0 ];
 
-                var reply = new XElement( "html"
-                ,   new XElement( "head"
-                    ,   new XElement( "title"
-                        ,   new XText( "Welcome to Keep'n Tabs" )
-                    ) )
-                ,   new XElement( "body"
-                    ,   new XElement( "h1"
-                        ,   new XText( 
-                                "Congratulations and welcome!  You're account is confirmed."
-                        ) )
-                    ,   new XElement( "h2"
-                        ,   new XText(
-                                "Log into your Keep'n Tabs account from the app to get started."
-                        ) )
-                ) );
+                UserConfirmDB.Parameters[ 0 ].Value = userid;
+
+                Connection.Open();
+                UserConfirmDB.ExecuteNonQuery();
+
+                var reply = new XElement( ConfirmAll );
 
                 e.Reply = reply.ToString();
             }
-            catch
-            {
-                Invalid( sender, e );
-            }
+            catch   {  Invalid( sender, e ); }
+            finally {  Connection.Close(); }
         }
 
         private void UserLogin( object sender, Exchange e )
@@ -311,12 +329,40 @@ namespace KeepnTabsAPI
                         reply = new XElement( ReplySuccess );
 
                         reply.Element( "content" ).Add( new XElement( "userloggedin"
-                        ,   new XElement( "token", new XText( token ) )
-                        //,   new XElement( "lists", lists.Select( list =>
-                        //        new XElement( "list", new XText( list ) )
-                        //    ) )
-                        ) );
+                            ,   new XElement( "token", new XText( token ) ) ) );
                     }
+
+                    e.Reply = reply.ToString();
+                }
+            }
+            catch   { Invalid( sender, e ); }
+            finally { Connection.Close();   }
+        }
+
+        private void UserLists( object sender, Exchange e )
+        {
+            MySqlDataReader reader;
+
+            try
+            {
+                var token = e.Request[ 0 ];
+
+                UserListsDB.Parameters[ 0 ].Value = token;
+
+                Connection.Open();
+
+                using( reader = UserListsDB.ExecuteReader( ) )
+                { 
+                    XElement reply;
+
+                    reply = new XElement( ReplySuccess );
+
+                    reply.Element("content").Add( new XElement( "lists" ) );
+
+                    if ( reader.HasRows )
+                        while( reader.Read() )
+                            reply.Descendants( "lists" ).First().Add( new XElement( "list"
+                            ,   new XText( reader[ 0 ].ToString() ) ) );
 
                     e.Reply = reply.ToString();
                 }
@@ -330,125 +376,274 @@ namespace KeepnTabsAPI
             try
             {
                 var token = e.Request[ 0 ];
+
+                UserLogoutDB.Parameters[ 0 ].Value = token;
+
+                Connection.Open();
+                UserLogoutDB.ExecuteNonQuery();
+
                 var reply = new XElement( ReplySuccess );
 
                 reply.Element( "content" ).Add( new XElement( "userloggedout" ) );
 
-                e.Reply   = reply.ToString();
+                e.Reply = reply.ToString();
             }
-            catch
-            {
-                Invalid( sender, e );
-            }
+            catch   {  Invalid( sender, e ); }
+            finally {  Connection.Close(); }
         }
 
         private void UserUpdate( object sender, Exchange e )
         {
+            MySqlDataReader reader;
+
             try
             {
                 var token    = e.Request[ 0 ];
                 var email    = e.Request[ 1 ];
                 var password = e.Request[ 2 ];
 
-                var reply    = new XElement( ReplySuccess );
+                UserUpdateDB.Parameters[ 0 ].Value = token;
+                UserUpdateDB.Parameters[ 1 ].Value = email;
+                UserUpdateDB.Parameters[ 2 ].Value = password;
 
-                reply.Element( "content" ).Add( new XElement( "userupdate"
-                ,   new XElement( "email",    new XText( email    ) )
-                ,   new XElement( "password", new XText( password ) )
-                ) );
+                Connection.Open();
 
-                e.Reply = reply.ToString();
+                using( reader = UserUpdateDB.ExecuteReader( ) )
+                { 
+                    reader.Read();
+
+                    var updated = Convert.ToInt32( reader[ 0 ] ) == 1 ? true : false;
+
+                    XElement reply;
+
+                    if( updated )
+                    {
+                        reply = new XElement( ReplySuccess );
+
+                        reply.Element( "content" ).Add( new XElement( "userupdated" ) );
+                    }
+                    else
+                    {
+                        reply = new XElement( ReplyFailure );
+
+                        reply.Element( "content" ).Add( new XElement( "tryagain" ) );
+                    }
+
+                    e.Reply = reply.ToString();
+                }
             }
-            catch
-            {
-                Invalid( sender, e );
-            }
+            catch   { Invalid( sender, e ); }
+            finally { Connection.Close();   }
         }
 
         private void UserDelete( object sender, Exchange e )
         {
+            MySqlDataReader reader;
+
             try
             {
                 var token = e.Request[ 0 ];
 
-                var reply = new XElement( ReplySuccess );
+                UserDeleteDB.Parameters[ 0 ].Value = token;
 
-                reply.Element( "content" ).Add( new XElement( "userdeleted" ) );
+                Connection.Open();
 
-                e.Reply   = reply.ToString();
+                using( reader = UserDeleteDB.ExecuteReader( ) )
+                { 
+                    reader.Read();
+
+                    var deleted = Convert.ToInt32( reader[ 0 ] ) == 1 ? true : false;
+
+                    XElement reply;
+
+                    if( deleted )
+                    {
+                        reply = new XElement( ReplySuccess );
+
+                        reply.Element( "content" ).Add( new XElement( "userdeleted" ) );
+                    }
+                    else
+                    {
+                        reply = new XElement( ReplyFailure );
+
+                        reply.Element( "content" ).Add( new XElement( "tryagain" ) );
+                    }
+
+                    e.Reply = reply.ToString();
+                }
             }
-            catch
-            {
-                Invalid( sender, e );
-            }
+            catch   { Invalid( sender, e ); }
+            finally { Connection.Close();   }
         }
 
         private void ListAdd( object sender, Exchange e )
         {
+            MySqlDataReader reader;
+
+            try
+            {
+                var token = e.Request[ 0 ];
+                var title = e.Request[ 1 ];
+
+                ListAddDB.Parameters[ 0 ].Value = token;
+                ListAddDB.Parameters[ 1 ].Value = title;
+
+                Connection.Open();
+
+                using( reader = ListAddDB.ExecuteReader() )
+                { 
+                    reader.Read();
+
+                    var listid = reader[ 0 ].ToString();
+
+                    XElement reply;
+
+                    if( listid == "" )
+                    { 
+                        reply = new XElement( ReplyFailure );
+
+                        reply.Element( "content" ).Add( new XElement( "tryagain" ) );
+                    }
+                    else
+                    { 
+                        reply = new XElement( ReplySuccess );
+
+                        reply.Element( "content" ).Add( new XElement( "listadded"
+                            , new XElement( "listid", new XText( listid ) ) ) );
+                    }
+
+                    e.Reply = reply.ToString();
+                }
+            }
+            catch   { Invalid( sender, e ); }
+            finally { Connection.Close();   }
+        }
+
+        private void ListTasks( object sender, Exchange e )
+        {
+            MySqlDataReader reader;
+
             try
             {
                 var token  = e.Request[ 0 ];
-                var title  = e.Request[ 1 ];
+                var listid = e.Request[ 1 ];
 
-                var listid = "";
+                ListTasksDB.Parameters[ 0 ].Value = token;
+                ListTasksDB.Parameters[ 1 ].Value = listid;
 
-                var reply  = new XElement( ReplySuccess );
+                Connection.Open();
 
-                reply.Element( "content" ).Add( new XElement( "listadded"
-                ,   new XElement( "listid",    new XText( listid ) )
-                ) );
+                using( reader = ListTasksDB.ExecuteReader( ) )
+                { 
+                    XElement reply;
 
-                e.Reply    = reply.ToString();
+                    reply = new XElement( ReplySuccess );
+
+                    reply.Element("content").Add( new XElement( "tasks" ) );
+
+                    if ( reader.HasRows )
+                        while( reader.Read() )
+                            reply.Descendants( "tasks" ).First().Add( new XElement( "task"
+                            ,   new XText( reader[ 0 ].ToString() ) ) );
+
+                    e.Reply = reply.ToString();
+                }
             }
-            catch
-            {
-                Invalid( sender, e );
-            }
+            catch   { Invalid( sender, e ); }
+            finally { Connection.Close();   }
         }
 
         private void ListUpdate( object sender, Exchange e )
         {
+            MySqlDataReader reader;
+
             try
             {
-                var token    = e.Request[ 0 ];
-                var listid   = e.Request[ 1 ];
-                var title     = e.Request[ 2 ];
+                var token  = e.Request[ 0 ];
+                var listid = e.Request[ 1 ];
+                var title  = e.Request[ 2 ];
 
-                var reply    = new XElement( ReplySuccess );
+                ListUpdateDB.Parameters[ 0 ].Value = token;
+                ListUpdateDB.Parameters[ 1 ].Value = listid;
+                ListUpdateDB.Parameters[ 2 ].Value = title;
 
-                reply.Element( "content" ).Add( new XElement( "listupdated"
-                ,   new XElement( "title", new XText( title ) )
-                ) );
 
-                e.Reply = reply.ToString();
+                Connection.Open();
+
+                using( reader = ListUpdateDB.ExecuteReader() )
+                { 
+                    reader.Read();
+
+                    var updated = Convert.ToInt32( reader[ 0 ] ) == 1 ? true : false;
+
+                    XElement reply;
+
+                    if( updated )
+                    { 
+                        reply = new XElement( ReplySuccess );
+
+                        reply.Element( "content" ).Add( new XElement( "listupdated" ) );
+                    }
+                    else
+                    { 
+                        reply = new XElement( ReplyFailure );
+
+                        reply.Element( "content" ).Add( new XElement( "tryagain" ) );
+                    }
+
+                    e.Reply = reply.ToString();
+                }
             }
-            catch
-            {
-                Invalid( sender, e );
-            }
+            catch   { Invalid( sender, e ); }
+            finally { Connection.Close();   }
         }
 
         private void ListDelete( object sender, Exchange e )
         {
+            MySqlDataReader reader;
+
             try
             {
                 var token  = e.Request[ 0 ];
                 var listid = e.Request[ 1 ];
 
-                var reply  = new XElement( ReplySuccess );
+                ListDeleteDB.Parameters[ 0 ].Value = token;
+                ListDeleteDB.Parameters[ 1 ].Value = listid;
 
-                reply.Element( "content" ).Add( new XElement( "listdeleted" ) );
+                Connection.Open();
 
-                e.Reply    = reply.ToString();
+                using( reader = ListDeleteDB.ExecuteReader( ) )
+                { 
+                    reader.Read();
+
+                    var deleted = Convert.ToInt32( reader[ 0 ] ) == 1 ? true : false;
+
+                    XElement reply;
+
+                    if( deleted )
+                    {
+                        reply = new XElement( ReplySuccess );
+
+                        reply.Element( "content" ).Add( new XElement( "listdeleted" ) );
+                    }
+                    else
+                    {
+                        reply = new XElement( ReplyFailure );
+
+                        reply.Element( "content" ).Add( new XElement( "tryagain" ) );
+                    }
+
+                    e.Reply = reply.ToString();
+                }
             }
-            catch
-            {
-                Invalid( sender, e );
-            }
+            catch   { Invalid( sender, e ); }
+            finally { Connection.Close();   }
         }
 
         private void TaskAdd( object sender, Exchange e )
         {
+            MySqlDataReader reader;
+
             try
             {
                 var token  = e.Request[ 0 ];
@@ -456,24 +651,46 @@ namespace KeepnTabsAPI
                 var title  = e.Request[ 2 ];
                 var done   = e.Request[ 3 ];
 
-                var taskid = "";
+                TaskAddDB.Parameters[ 0 ].Value = token;
+                TaskAddDB.Parameters[ 1 ].Value = listid;
+                TaskAddDB.Parameters[ 2 ].Value = title;
+                TaskAddDB.Parameters[ 3 ].Value = bool.Parse( done ) ? 1 : 0;
 
-                var reply  = new XElement( ReplySuccess );
+                Connection.Open();
 
-                reply.Element( "content" ).Add( new XElement( "taskadded"
-                ,   new XElement( "taskid", new XText( taskid ) )
-                ) );
+                using( reader = TaskAddDB.ExecuteReader() )
+                { 
+                    reader.Read();
 
-                e.Reply    = reply.ToString();
+                    var taskid = reader[ 0 ].ToString();
+
+                    XElement reply;
+
+                    if( taskid == "" )
+                    { 
+                        reply = new XElement( ReplyFailure );
+
+                        reply.Element( "content" ).Add( new XElement( "tryagain" ) );
+                    }
+                    else
+                    { 
+                        reply = new XElement( ReplySuccess );
+
+                        reply.Element( "content" ).Add( new XElement( "taskadded"
+                            , new XElement( "taskid", new XText( taskid ) ) ) );
+                    }
+
+                    e.Reply = reply.ToString();
+                }
             }
-            catch
-            {
-                Invalid( sender, e );
-            }
+            catch( Exception ex )   { Invalid( sender, e ); }
+            finally { Connection.Close();   }
         }
 
         private void TaskUpdate( object sender, Exchange e )
         {
+            MySqlDataReader reader;
+
             try
             {
                 var token  = e.Request[ 0 ];
@@ -481,38 +698,81 @@ namespace KeepnTabsAPI
                 var title  = e.Request[ 2 ];
                 var done   = e.Request[ 3 ];
 
-                var reply  = new XElement( ReplySuccess );
+                TaskUpdateDB.Parameters[ 0 ].Value = token;
+                TaskUpdateDB.Parameters[ 1 ].Value = taskid;
+                TaskUpdateDB.Parameters[ 2 ].Value = title;
+                TaskUpdateDB.Parameters[ 3 ].Value = bool.Parse( done ) ? 1 : 0;
 
-                reply.Element( "content" ).Add( new XElement( "taskupdated"
-                ,   new XElement( "title", new XText( title ) )
-                ,   new XElement( "done",  new XText( done  ) )
-                ) );
+                Connection.Open();
 
-                e.Reply    = reply.ToString();
+                using( reader = TaskUpdateDB.ExecuteReader() )
+                { 
+                    reader.Read();
+
+                    var updated = Convert.ToInt32( reader[ 0 ] ) == 1 ? true : false;
+
+                    XElement reply;
+
+                    if( updated )
+                    { 
+                        reply = new XElement( ReplySuccess );
+
+                        reply.Element( "content" ).Add( new XElement( "taskupdated" ) );
+                    }
+                    else
+                    { 
+                        reply = new XElement( ReplyFailure );
+
+                        reply.Element( "content" ).Add( new XElement( "tryagain" ) );
+                    }
+
+                    e.Reply = reply.ToString();
+                }
             }
-            catch
-            {
-                Invalid( sender, e );
-            }
+            catch   { Invalid( sender, e ); }
+            finally { Connection.Close();   }
         }
 
         private void TaskDelete( object sender, Exchange e )
         {
+            MySqlDataReader reader;
+
             try
             {
                 var token  = e.Request[ 0 ];
                 var taskid = e.Request[ 1 ];
 
-                var reply  = new XElement( ReplySuccess );
+                TaskDeleteDB.Parameters[ 0 ].Value = token;
+                TaskDeleteDB.Parameters[ 1 ].Value = taskid;
 
-                reply.Element( "content" ).Add( new XElement( "taskdeleted" ) );
+                Connection.Open();
 
-                e.Reply    = reply.ToString();
+                using( reader = TaskDeleteDB.ExecuteReader( ) )
+                { 
+                    reader.Read();
+
+                    var deleted = Convert.ToInt32( reader[ 0 ] ) == 1 ? true : false;
+
+                    XElement reply;
+
+                    if( deleted )
+                    {
+                        reply = new XElement( ReplySuccess );
+
+                        reply.Element( "content" ).Add( new XElement( "taskdeleted" ) );
+                    }
+                    else
+                    {
+                        reply = new XElement( ReplyFailure );
+
+                        reply.Element( "content" ).Add( new XElement( "tryagain" ) );
+                    }
+
+                    e.Reply = reply.ToString();
+                }
             }
-            catch
-            {
-                Invalid( sender, e );
-            }
+            catch   { Invalid( sender, e ); }
+            finally { Connection.Close();   }
         }
 
         private void Invalid( object sender, Exchange e )
