@@ -37,7 +37,6 @@ namespace iPhonify
         internal iPhoneBase()
         {
             InitializeComponent();
-            ScaleToFitScreen();
         }
 
         /* Scale the specified control and its constituents by the specified percentage
@@ -51,7 +50,7 @@ namespace iPhonify
          * 
          * This probably needs some additional eyes on it. */
 
-        private void ScaleToFitScreen( float percentage = 0.75f )
+        protected void ScaleToFitScreen( Form form, float percentage = 0.75f )
         {
             /* Guard against scaling the form to same size or larger
              * which would be pointless. */
@@ -85,7 +84,7 @@ namespace iPhonify
                     }
                 };
 
-                ScaleChildren( this );
+                ScaleChildren( form );
 
                 /* Menus do not constitute "controls" so scale them separately. */
 

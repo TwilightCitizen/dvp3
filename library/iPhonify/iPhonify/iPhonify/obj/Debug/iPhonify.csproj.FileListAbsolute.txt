@@ -7,3 +7,4 @@
 \\vmware-host\Shared Folders\Desktop\dvp3\library\iPhonify\iPhonify\iPhonify\obj\Debug\iPhonify.csproj.CoreCompileInputs.cache
 \\vmware-host\Shared Folders\Desktop\dvp3\library\iPhonify\iPhonify\iPhonify\obj\Debug\iPhonify.dll
 \\vmware-host\Shared Folders\Desktop\dvp3\library\iPhonify\iPhonify\iPhonify\obj\Debug\iPhonify.pdb
+\\vmware-host\Shared Folders\Desktop\dvp3\library\iPhonify\iPhonify\iPhonify\obj\Debug\iPhonify.csprojAssemblyReference.cache
