@@ -14,11 +14,11 @@ namespace TicTacToe
     {
         private enum Pieces            { x, o, z }
 
-        private Pieces                 StartingPiece = Pieces.x;
+        private Pieces                 Piece        = Pieces.x;
 
         private enum Colors            { blue, red }
 
-        private Colors                 CurrentColor  = Colors.blue;
+        private Colors                 CurrentColor = Colors.blue;
 
         private List< Button >         AllTiles;
 
@@ -28,6 +28,7 @@ namespace TicTacToe
         {
             InitializeComponent();
             CollectTiles();
+            SubscribeClicks();
         }
 
         private void loadGameToolStripMenuItem_Click( object sender, EventArgs e )
@@ -67,68 +68,28 @@ namespace TicTacToe
 
         private void toolStripButton1_Click( object sender, EventArgs e )
         {
-            // New Game
-        }
-
-        private void r1c1button_Click( object sender, EventArgs e )
-        {
-            button_Click( sender, e );
-        }
-
-        private void r1c2button_Click( object sender, EventArgs e )
-        {
-            button_Click( sender, e );
-        }
-
-        private void r1c3button_Click( object sender, EventArgs e )
-        {
-            button_Click( sender, e );
-        }
-
-        private void r2c1button_Click( object sender, EventArgs e )
-        {
-            button_Click( sender, e );
-        }
-
-        private void r2c2button_Click( object sender, EventArgs e )
-        {
-            button_Click( sender, e );
-        }
-
-        private void r2c3button_Click( object sender, EventArgs e )
-        {
-            button_Click( sender, e );
-        }
-
-        private void r3c1button_Click( object sender, EventArgs e )
-        {
-            button_Click( sender, e );
-        }
-
-        private void r3c2button_Click( object sender, EventArgs e )
-        {
-            button_Click( sender, e );
-        }
-
-        private void r3c3button_Click( object sender, EventArgs e )
-        {
-            button_Click( sender, e );
+            AllTiles.ForEach( tile => tile.Tag = Pieces.z );
         }
 
         private void button_Click( object sender, EventArgs e )
         {
             var button = sender as Button;
 
-            button.Tag = StartingPiece;
+            button.Tag = Piece;
 
             CheckGameProgress();
+        }
+
+        private void SubscribeClicks()
+        {
+            Controls.OfType< Button >().ToList().ForEach( button => button.Click += button_Click );
         }
 
         private void CheckGameProgress()
         {
             if( WinningRuns.Any( run => 
                 run.All( tile => 
-                    StartingPiece == ( tile.Tag != null
+                    Piece == ( tile.Tag != null
                         ? (Pieces) tile.Tag
                         : Pieces.z ) ) ) )
                 MessageBox.Show( "Win" );
@@ -170,12 +131,10 @@ namespace TicTacToe
 
         private void StartWith( Pieces piece )
         {
-            switch( piece )
-            {
-                case Pieces.x:
-                case Pieces.o: break;
-                default:       throw( new ArgumentException( "Piece must be x or o!", "piece" ) );
-            }
+            if( piece == Pieces.z )
+                throw ( new ArgumentException( "Piece must be x or o!", "piece" ) );
+            else
+                Piece = piece;
         }
     }
 }

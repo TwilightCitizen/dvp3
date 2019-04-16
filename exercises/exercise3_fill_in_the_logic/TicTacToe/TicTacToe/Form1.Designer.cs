@@ -190,7 +190,6 @@
             this.r1c1button.Size = new System.Drawing.Size(75, 78);
             this.r1c1button.TabIndex = 1;
             this.r1c1button.UseVisualStyleBackColor = true;
-            this.r1c1button.Click += new System.EventHandler(this.r1c1button_Click);
             // 
             // r1c2button
             // 
@@ -201,7 +200,6 @@
             this.r1c2button.Size = new System.Drawing.Size(75, 78);
             this.r1c2button.TabIndex = 2;
             this.r1c2button.UseVisualStyleBackColor = true;
-            this.r1c2button.Click += new System.EventHandler(this.r1c2button_Click);
             // 
             // r1c3button
             // 
@@ -212,7 +210,6 @@
             this.r1c3button.Size = new System.Drawing.Size(75, 78);
             this.r1c3button.TabIndex = 3;
             this.r1c3button.UseVisualStyleBackColor = true;
-            this.r1c3button.Click += new System.EventHandler(this.r1c3button_Click);
             // 
             // r2c1button
             // 
@@ -223,7 +220,6 @@
             this.r2c1button.Size = new System.Drawing.Size(75, 78);
             this.r2c1button.TabIndex = 4;
             this.r2c1button.UseVisualStyleBackColor = true;
-            this.r2c1button.Click += new System.EventHandler(this.r2c1button_Click);
             // 
             // r2c2button
             // 
@@ -234,7 +230,6 @@
             this.r2c2button.Size = new System.Drawing.Size(75, 78);
             this.r2c2button.TabIndex = 5;
             this.r2c2button.UseVisualStyleBackColor = true;
-            this.r2c2button.Click += new System.EventHandler(this.r2c2button_Click);
             // 
             // r2c3button
             // 
@@ -245,7 +240,6 @@
             this.r2c3button.Size = new System.Drawing.Size(75, 78);
             this.r2c3button.TabIndex = 6;
             this.r2c3button.UseVisualStyleBackColor = true;
-            this.r2c3button.Click += new System.EventHandler(this.r2c3button_Click);
             // 
             // r3c1button
             // 
@@ -256,7 +250,6 @@
             this.r3c1button.Size = new System.Drawing.Size(75, 78);
             this.r3c1button.TabIndex = 7;
             this.r3c1button.UseVisualStyleBackColor = true;
-            this.r3c1button.Click += new System.EventHandler(this.r3c1button_Click);
             // 
             // r3c2button
             // 
@@ -267,7 +260,6 @@
             this.r3c2button.Size = new System.Drawing.Size(75, 78);
             this.r3c2button.TabIndex = 8;
             this.r3c2button.UseVisualStyleBackColor = true;
-            this.r3c2button.Click += new System.EventHandler(this.r3c2button_Click);
             // 
             // r3c3button
             // 
@@ -278,7 +270,6 @@
             this.r3c3button.Size = new System.Drawing.Size(75, 78);
             this.r3c3button.TabIndex = 9;
             this.r3c3button.UseVisualStyleBackColor = true;
-            this.r3c3button.Click += new System.EventHandler(this.r3c3button_Click);
             // 
             // toolStrip1
             // 
