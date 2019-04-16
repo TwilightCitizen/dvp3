@@ -91,26 +91,26 @@
             // loadGameToolStripMenuItem
             // 
             this.loadGameToolStripMenuItem.Name = "loadGameToolStripMenuItem";
-            this.loadGameToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.loadGameToolStripMenuItem.Size = new System.Drawing.Size(134, 22);
             this.loadGameToolStripMenuItem.Text = "Load Game";
             this.loadGameToolStripMenuItem.Click += new System.EventHandler(this.loadGameToolStripMenuItem_Click);
             // 
             // saveGameToolStripMenuItem
             // 
             this.saveGameToolStripMenuItem.Name = "saveGameToolStripMenuItem";
-            this.saveGameToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.saveGameToolStripMenuItem.Size = new System.Drawing.Size(134, 22);
             this.saveGameToolStripMenuItem.Text = "Save Game";
             this.saveGameToolStripMenuItem.Click += new System.EventHandler(this.saveGameToolStripMenuItem_Click);
             // 
             // toolStripSeparator1
             // 
             this.toolStripSeparator1.Name = "toolStripSeparator1";
-            this.toolStripSeparator1.Size = new System.Drawing.Size(177, 6);
+            this.toolStripSeparator1.Size = new System.Drawing.Size(131, 6);
             // 
             // exitToolStripMenuItem
             // 
             this.exitToolStripMenuItem.Name = "exitToolStripMenuItem";
-            this.exitToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.exitToolStripMenuItem.Size = new System.Drawing.Size(134, 22);
             this.exitToolStripMenuItem.Text = "Exit";
             this.exitToolStripMenuItem.Click += new System.EventHandler(this.exitToolStripMenuItem_Click);
             // 
@@ -135,6 +135,7 @@
             // 
             // redToolStripMenuItem
             // 
+            this.redToolStripMenuItem.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
             this.redToolStripMenuItem.Name = "redToolStripMenuItem";
             this.redToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.redToolStripMenuItem.Text = "Red";
@@ -171,21 +172,21 @@
             // 
             this.redImages.ImageStream = ((System.Windows.Forms.ImageListStreamer)(resources.GetObject("redImages.ImageStream")));
             this.redImages.TransparentColor = System.Drawing.Color.Transparent;
-            this.redImages.Images.SetKeyName(0, "redO.png");
-            this.redImages.Images.SetKeyName(1, "redX.png");
+            this.redImages.Images.SetKeyName(0, "redX.png");
+            this.redImages.Images.SetKeyName(1, "redO.png");
             // 
             // blueImages
             // 
             this.blueImages.ImageStream = ((System.Windows.Forms.ImageListStreamer)(resources.GetObject("blueImages.ImageStream")));
             this.blueImages.TransparentColor = System.Drawing.Color.Transparent;
-            this.blueImages.Images.SetKeyName(0, "blueO.png");
-            this.blueImages.Images.SetKeyName(1, "blueX.png");
+            this.blueImages.Images.SetKeyName(0, "blueX.png");
+            this.blueImages.Images.SetKeyName(1, "blueO.png");
             // 
             // r1c1button
             // 
             this.r1c1button.ImageList = this.blueImages;
             this.r1c1button.Location = new System.Drawing.Point(6, 49);
-            this.r1c1button.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.r1c1button.Margin = new System.Windows.Forms.Padding(2);
             this.r1c1button.Name = "r1c1button";
             this.r1c1button.Size = new System.Drawing.Size(75, 78);
             this.r1c1button.TabIndex = 1;
@@ -195,7 +196,7 @@
             // 
             this.r1c2button.ImageList = this.blueImages;
             this.r1c2button.Location = new System.Drawing.Point(90, 49);
-            this.r1c2button.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.r1c2button.Margin = new System.Windows.Forms.Padding(2);
             this.r1c2button.Name = "r1c2button";
             this.r1c2button.Size = new System.Drawing.Size(75, 78);
             this.r1c2button.TabIndex = 2;
@@ -205,7 +206,7 @@
             // 
             this.r1c3button.ImageList = this.blueImages;
             this.r1c3button.Location = new System.Drawing.Point(172, 49);
-            this.r1c3button.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.r1c3button.Margin = new System.Windows.Forms.Padding(2);
             this.r1c3button.Name = "r1c3button";
             this.r1c3button.Size = new System.Drawing.Size(75, 78);
             this.r1c3button.TabIndex = 3;
@@ -215,7 +216,7 @@
             // 
             this.r2c1button.ImageList = this.blueImages;
             this.r2c1button.Location = new System.Drawing.Point(6, 135);
-            this.r2c1button.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.r2c1button.Margin = new System.Windows.Forms.Padding(2);
             this.r2c1button.Name = "r2c1button";
             this.r2c1button.Size = new System.Drawing.Size(75, 78);
             this.r2c1button.TabIndex = 4;
@@ -225,7 +226,7 @@
             // 
             this.r2c2button.ImageList = this.blueImages;
             this.r2c2button.Location = new System.Drawing.Point(90, 135);
-            this.r2c2button.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.r2c2button.Margin = new System.Windows.Forms.Padding(2);
             this.r2c2button.Name = "r2c2button";
             this.r2c2button.Size = new System.Drawing.Size(75, 78);
             this.r2c2button.TabIndex = 5;
@@ -235,7 +236,7 @@
             // 
             this.r2c3button.ImageList = this.blueImages;
             this.r2c3button.Location = new System.Drawing.Point(172, 135);
-            this.r2c3button.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.r2c3button.Margin = new System.Windows.Forms.Padding(2);
             this.r2c3button.Name = "r2c3button";
             this.r2c3button.Size = new System.Drawing.Size(75, 78);
             this.r2c3button.TabIndex = 6;
@@ -245,7 +246,7 @@
             // 
             this.r3c1button.ImageList = this.blueImages;
             this.r3c1button.Location = new System.Drawing.Point(6, 222);
-            this.r3c1button.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.r3c1button.Margin = new System.Windows.Forms.Padding(2);
             this.r3c1button.Name = "r3c1button";
             this.r3c1button.Size = new System.Drawing.Size(75, 78);
             this.r3c1button.TabIndex = 7;
@@ -255,7 +256,7 @@
             // 
             this.r3c2button.ImageList = this.blueImages;
             this.r3c2button.Location = new System.Drawing.Point(90, 222);
-            this.r3c2button.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.r3c2button.Margin = new System.Windows.Forms.Padding(2);
             this.r3c2button.Name = "r3c2button";
             this.r3c2button.Size = new System.Drawing.Size(75, 78);
             this.r3c2button.TabIndex = 8;
@@ -265,7 +266,7 @@
             // 
             this.r3c3button.ImageList = this.blueImages;
             this.r3c3button.Location = new System.Drawing.Point(172, 222);
-            this.r3c3button.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.r3c3button.Margin = new System.Windows.Forms.Padding(2);
             this.r3c3button.Name = "r3c3button";
             this.r3c3button.Size = new System.Drawing.Size(75, 78);
             this.r3c3button.TabIndex = 9;
@@ -278,7 +279,7 @@
             this.toolStripButton1});
             this.toolStrip1.Location = new System.Drawing.Point(0, 24);
             this.toolStrip1.Name = "toolStrip1";
-            this.toolStrip1.Padding = new System.Windows.Forms.Padding(0, 0, 0, 0);
+            this.toolStrip1.Padding = new System.Windows.Forms.Padding(0);
             this.toolStrip1.Size = new System.Drawing.Size(259, 25);
             this.toolStrip1.TabIndex = 10;
             this.toolStrip1.Text = "toolStrip1";
@@ -356,7 +357,7 @@
             this.Controls.Add(this.r1c1button);
             this.Controls.Add(this.menuStrip1);
             this.MainMenuStrip = this.menuStrip1;
-            this.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.Margin = new System.Windows.Forms.Padding(2);
             this.Name = "frmTicTacToe";
             this.Text = "Tic Tac Toe";
             this.menuStrip1.ResumeLayout(false);

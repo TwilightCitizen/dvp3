@@ -12,10 +12,10 @@ namespace TicTacToe
 {
     public partial class frmTicTacToe : Form
     {
+        private bool                    Running     = true;          
         private enum Pieces            { x, o, z }
 
         private Pieces                 Piece        = Pieces.x;
-
         private enum Colors            { blue, red }
 
         private Colors                 CurrentColor = Colors.blue;
@@ -28,6 +28,9 @@ namespace TicTacToe
         {
             InitializeComponent();
             CollectTiles();
+            CollectWinningRuns();
+            TagTiles();
+            ColorTiles();
             SubscribeClicks();
         }
 
@@ -48,71 +51,120 @@ namespace TicTacToe
 
         private void blueToolStripMenuItem_Click( object sender, EventArgs e )
         {
-            SwitchColors( Colors.blue );
+            blueToolStripMenuItem.Checked = true;
+            redToolStripMenuItem.Checked  = false;
+
+            ColorTiles( Colors.blue );
         }
 
         private void redToolStripMenuItem_Click( object sender, EventArgs e )
         {
-            SwitchColors( Colors.red );
+            redToolStripMenuItem.Checked = true;
+            blueToolStripMenuItem.Checked = false;
+
+            ColorTiles( Colors.red );
         }
 
         private void xToolStripMenuItem_Click( object sender, EventArgs e )
         {
+            xToolStripMenuItem.Checked = true;
+            oToolStripMenuItem.Checked = false;
             StartWith( Pieces.x );
         }
 
         private void oToolStripMenuItem_Click( object sender, EventArgs e )
         {
+            oToolStripMenuItem.Checked = true;
+            xToolStripMenuItem.Checked = false;
             StartWith( Pieces.o );
         }
 
         private void toolStripButton1_Click( object sender, EventArgs e )
         {
-            AllTiles.ForEach( tile => tile.Tag = Pieces.z );
+            TagTiles();
+
+            Running                         = true;
+            selectToolStripMenuItem.Enabled = true;
         }
 
         private void button_Click( object sender, EventArgs e )
         {
+            if( !Running ) return;
+
             var button = sender as Button;
 
-            button.Tag = Piece;
+            button.Tag                      = Piece;
+            button.ImageIndex               = (int) Piece;
+            selectToolStripMenuItem.Enabled = false;
 
             CheckGameProgress();
+
+            Piece = Piece == Pieces.x ? Pieces.o : Pieces.x;
         }
 
         private void SubscribeClicks()
         {
-            Controls.OfType< Button >().ToList().ForEach( button => button.Click += button_Click );
+            Controls.OfType< Button >().ToList().ForEach( button =>
+                button.Click += button_Click );
         }
 
         private void CheckGameProgress()
         {
             if( WinningRuns.Any( run => 
                 run.All( tile => 
-                    Piece == ( tile.Tag != null
-                        ? (Pieces) tile.Tag
-                        : Pieces.z ) ) ) )
-                MessageBox.Show( "Win" );
+                    Piece == (Pieces) tile.Tag ) ) )
+            {
+                MessageBox.Show((Piece == Pieces.x ? "X" : "O") + " Wins!");
+
+                Running = false;
+            }
+            else if( AllTiles.All( tile =>
+                    (Pieces) tile.Tag != Pieces.z ))
+            {
+                MessageBox.Show("Stalemate!");
+
+                Running = false;
+            }
+        }
+
+        private void TagTiles()
+        {
+            AllTiles.ForEach( tile => {
+                tile.Tag        = Pieces.z;
+                tile.ImageIndex = -1;
+            ; } );
+        }
+
+        private void ColorTiles( Colors color = Colors.blue )
+        {
+            CurrentColor = color;
+
+            AllTiles.ForEach( tile =>
+                tile.ImageList = CurrentColor == Colors.blue
+                    ? blueImages : redImages );
         }
 
         private void CollectTiles()
         {
-            var nums    = Enumerable.Range( 1, 3 );
-            var runs    = "rc";
+            AllTiles = Controls.OfType< Button >().ToList();
+        }
 
-            AllTiles    = Controls.OfType< Button >().ToList();
+        private void CollectWinningRuns()
+        {
+            var nums = Enumerable.Range(1, 3);
+            var runs = "rc";
 
-            WinningRuns = 
-                new List< List< Button > > (
-                from run in runs
-                from num in nums
-                select new List< Button > (
-                    from tl in AllTiles
-                    where tl.Name.Contains( $"{ run }{ num }" )
-                    select tl ) );
+            WinningRuns =
+               new List<List<Button>>(
+               from run in runs
+               from num in nums
+               select new List<Button>(
+                   from tl in AllTiles
+                   where tl.Name.Contains($"{ run }{ num }")
+                   select tl));
 
-            WinningRuns.Add( new List< Button >(){ r1c1button, r2c2button, r3c3button } );
-            WinningRuns.Add( new List< Button >(){ r1c3button, r2c2button, r3c1button } );
+            WinningRuns.Add(new List<Button>() { r1c1button, r2c2button, r3c3button });
+            WinningRuns.Add(new List<Button>() { r1c3button, r2c2button, r3c1button });
         }
 
         private void LoadGame()
@@ -120,11 +172,6 @@ namespace TicTacToe
         }
 
         private void SaveGame()
-        {
-
-        }
-
-        private void SwitchColors( Colors color )
         {
 
         }
