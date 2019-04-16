@@ -10,7 +10,7 @@ using System.Windows.Forms;
 
 namespace TicTacToe
 {
-    public partial class frmTicTacToe : Form
+    public partial class frmTicTacToe : iPhonify.iPhone
     {
         private bool                    Running     = true;          
         private enum Pieces            { x, o, z }
