@@ -50,7 +50,7 @@ namespace iPhonify
          * 
          * This probably needs some additional eyes on it. */
 
-        protected void ScaleToFitScreen( Form form, float percentage = 0.75f )
+        private void ScaleToFitScreen( Form form, float percentage = 0.75f )
         {
             /* Guard against scaling the form to same size or larger
              * which would be pointless. */
@@ -122,6 +122,15 @@ namespace iPhonify
         private void iPhone_MouseUp( object sender, MouseEventArgs e )
         {
             MoveForm = false;
+        }
+
+        /* This took a bit to figure out.  Calling ScaleToFitScreen from the
+         * constructor passing "this" does not work, and calling it from the
+         * derived forms' constructors nearly defeats the point. */
+
+        private void iPhoneBase_Load( object sender, EventArgs e )
+        {
+            ScaleToFitScreen( sender as Form );
         }
     }
 }

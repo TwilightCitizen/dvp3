@@ -40,8 +40,7 @@ namespace KeepnTabsClient
             // 
             // frmExport
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
-            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
             this.Name = "frmExport";
             this.Text = "frmExport";
             this.ResumeLayout(false);

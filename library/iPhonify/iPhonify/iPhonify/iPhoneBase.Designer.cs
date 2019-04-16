@@ -51,6 +51,7 @@
             this.Name = "iPhoneBase";
             this.Text = "iPhone";
             this.TransparencyKey = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(0)))), ((int)(((byte)(255)))));
+            this.Load += new System.EventHandler(this.iPhoneBase_Load);
             this.MouseDown += new System.Windows.Forms.MouseEventHandler(this.iPhone_MouseDown);
             this.MouseMove += new System.Windows.Forms.MouseEventHandler(this.iPhone_MouseMove);
             this.MouseUp += new System.Windows.Forms.MouseEventHandler(this.iPhone_MouseUp);

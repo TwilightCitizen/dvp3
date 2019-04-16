@@ -23,7 +23,6 @@ namespace KeepnTabsClient
         public frmTasks()
         {
             InitializeComponent();
-            ScaleToFitScreen( this );
         }
     }
 }

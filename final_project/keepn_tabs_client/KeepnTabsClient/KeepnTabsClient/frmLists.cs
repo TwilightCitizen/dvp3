@@ -23,7 +23,11 @@ namespace KeepnTabsClient
         public frmLists()
         {
             InitializeComponent();
-            ScaleToFitScreen( this );
+        }
+
+        private void BtnBack_Click( object sender, EventArgs e )
+        {
+            Close();
         }
     }
 }

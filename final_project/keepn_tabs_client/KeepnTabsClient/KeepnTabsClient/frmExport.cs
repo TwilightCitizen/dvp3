@@ -23,7 +23,6 @@ namespace KeepnTabsClient
         public frmExport()
         {
             InitializeComponent();
-            ScaleToFitScreen( this );
         }
     }
 }
