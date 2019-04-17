@@ -1,4 +1,11 @@
-﻿namespace TicTacToe
+﻿/* Name:     David A. Clark, Jr.
+ * Student:  0004796375
+ * Class:    Development Portfolio 3 (MDV239-O)
+ * Term:     C201904-01
+ * Exercise: TicTacToe
+ * Date:     April 16, 2019 */
+
+namespace TicTacToe
 {
     partial class frmTicTacToe
     {
@@ -76,7 +83,7 @@
             this.menuStrip1.Name = "menuStrip1";
             this.menuStrip1.Padding = new System.Windows.Forms.Padding(3, 1, 0, 1);
             this.menuStrip1.RenderMode = System.Windows.Forms.ToolStripRenderMode.System;
-            this.menuStrip1.Size = new System.Drawing.Size(391, 46);
+            this.menuStrip1.Size = new System.Drawing.Size(271, 46);
             this.menuStrip1.TabIndex = 0;
             this.menuStrip1.Text = "menuStrip1";
             // 
