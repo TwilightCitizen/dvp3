@@ -18,7 +18,9 @@ namespace TicTacToe
 {
     public partial class frmTicTacToe : iPhonify.iPhone
     {
-        private bool                    Running     = true;          
+        /* Game State */
+
+        private bool                   Running      = true;          
         private enum Pieces            { z = -1, x, o }
 
         private Pieces                 Piece        = Pieces.x;
@@ -28,8 +30,11 @@ namespace TicTacToe
 
         private List< Button >         AllTiles;
 
+        /* Runs to Check Game Board Against for Win */
+
         private List< List< Button > > WinningRuns;
 
+        /* Constructor */
         public frmTicTacToe()
         {
             InitializeComponent();
@@ -40,6 +45,7 @@ namespace TicTacToe
             SubscribeClicks();
         }
 
+        /* Event Handlers */
         private void loadGameToolStripMenuItem_Click( object sender, EventArgs e )
         {
             LoadGame();
@@ -93,6 +99,11 @@ namespace TicTacToe
             selectToolStripMenuItem.Enabled = true;
         }
 
+        /* Tag the clicked button (sender) with the game piece, also
+         * setting it's image index to the same.  Disable switching
+         * the active game piece at this point.  Report game progress
+         * and auto-switch the active game piece. */
+         
         private void button_Click( object sender, EventArgs e )
         {
             if( !Running ) return;
@@ -108,11 +119,17 @@ namespace TicTacToe
             Piece = Piece == Pieces.x ? Pieces.o : Pieces.x;
         }
 
+        /* Subscribe all the buttons to the above handler so we
+         * do not have to call it 9 separate times. */
+        
         private void SubscribeClicks()
         {
             Controls.OfType< Button >().ToList().ForEach( button =>
                 button.Click += button_Click );
         }
+
+        /* Check if there is a winning run or a stalemate, reporting
+         * either status and stopping game progess if so. */
 
         private void CheckGameProgress()
         {
@@ -133,6 +150,7 @@ namespace TicTacToe
             }
         }
 
+        /* Zero all the tiles with the Z game piece and no image. */
         private void TagTiles()
         {
             AllTiles.ForEach( tile => {
@@ -141,6 +159,8 @@ namespace TicTacToe
             ; } );
         }
 
+        /* Switch all the tiles from one image list to the other,
+         * be it red or blue. */
         private void ColorTiles( Colors color = Colors.blue )
         {
             CurrentColor = color;
@@ -150,10 +170,13 @@ namespace TicTacToe
                     ? blueImages : redImages );
         }
 
+        /* Grab all the game tiles into a list for easy manipulation. */
         private void CollectTiles()
         {
             AllTiles = Controls.OfType< Button >().ToList();
         }
+
+        /* Winning runs are 3 in a row horizontally, vertically, ... */
 
         private void CollectWinningRuns()
         {
@@ -169,10 +192,15 @@ namespace TicTacToe
                    where tl.Name.Contains($"{ run }{ num }")
                    select tl));
 
+            /* Or diagonally. */
+
             WinningRuns.Add(new List<Button>() { r1c1button, r2c2button, r3c3button });
             WinningRuns.Add(new List<Button>() { r1c3button, r2c2button, r3c1button });
         }
 
+        /* Present the user with a save file dialog.  Unless canceled, open the file
+         * for writing, serializing the game state (running, piece, and tiles) to 
+         * base64 encoded XML with MD5 sum check. */
         private void SaveGame()
         {
             var dlg = new SaveFileDialog();
@@ -204,6 +232,11 @@ namespace TicTacToe
                 }
             }
         }
+
+        /* Present the user with an open file dialog.  Unless canceled, op the file
+         * for reading, deserializing the game state from the base64 encoded XML, checking
+         * that the MD5 sum is intact.  If successful, start the game from the saved state.
+         * If not, report the horrible error to the user. */
 
         private void LoadGame()
         {
@@ -259,6 +292,7 @@ namespace TicTacToe
             }
         }
 
+        /* Set the game piece to start with. */
         private void StartWith( Pieces piece )
         {
             if( piece == Pieces.z )
