@@ -67,7 +67,7 @@ namespace FluentStateMachine
 					if( Triggers.TryDequeue( out trigger ) )
 					{
 						var exitAction  = State + "-->";
-						var nextState   = Transitions[ State + "<->" + trigger ];
+						ldvar nextState   = Transitions[ State + "<->" + trigger ];
 						var transAction = State + "-->" + nextState;
 						var entryAction = "-->" + nextState;
 						

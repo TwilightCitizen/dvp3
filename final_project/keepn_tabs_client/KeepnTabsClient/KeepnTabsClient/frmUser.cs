@@ -34,12 +34,15 @@ namespace KeepnTabsClient
 
         /* States and Triggers for User/Account State Machine */
 
-        enum State   { loggedOut,       emailProvided,  passwordProvided
-                     , bothProvided,    loggingIn,      logginFailed
-                     , loggedIn,        regUpdateing,   regUpdateFailed  }
+        enum State   { loggedOut,       emailLogin,     passwordLogin
+                     , canLogin,        loggingIn,      logginFailed
+                     , loggedIn,        registering,    regFailed
+                     , registered,      emailUpdate,    passwordUpdate
+                     , canUpdate,       updating,       cannotUpdate     }
         enum Trigger { emailEntered,    emailBlanked,   passwordEntered
                      , passwordBlanked, inOutClicked,   regUpdateClicked
-                     , listsClicked,    tokenReturned,  failureReturned  }
+                     , listsClicked,    tokenReturned,  failureReturned
+                     , successReturned                                   }
         
         /* User/Account State Machine */
 
@@ -103,7 +106,7 @@ namespace KeepnTabsClient
 
         private void BtnRegUpdate_Click( object sender, EventArgs e )
         {
-            
+            UserAccount.Trigger( Trigger.regUpdateClicked );
         }
 
         private void FrmUser_Load( object sender, EventArgs e )
@@ -116,34 +119,62 @@ namespace KeepnTabsClient
         {
             UserAccount = new StateMachine< State, Trigger >( State.loggedOut )
 
-                .For( State.loggedOut        ).On( Trigger.emailEntered,    null,     State.emailProvided    )
-                .For( State.loggedOut        ).On( Trigger.passwordEntered, null,     State.passwordProvided )
-                .For( State.loggedOut        ).On( Trigger.emailBlanked,    null,     State.loggedOut        )
-                .For( State.loggedOut        ).On( Trigger.passwordBlanked, null,     State.loggedOut        )
-
-                .For( State.emailProvided    ).On( Trigger.emailEntered,    null,     State.emailProvided    )
-                .For( State.emailProvided    ).On( Trigger.passwordEntered, null,     State.bothProvided     )
-                .For( State.emailProvided    ).On( Trigger.emailBlanked,    null,     State.loggedOut        )
-
-                .For( State.passwordProvided ).On( Trigger.passwordEntered, null,     State.passwordProvided )
-                .For( State.passwordProvided ).On( Trigger.emailEntered,    null,     State.bothProvided     )
-                .For( State.passwordProvided ).On( Trigger.passwordBlanked, null,     State.loggedOut        )
-
-                .For( State.bothProvided     ).On( Trigger.passwordEntered, null,     State.bothProvided     )
-                .For( State.bothProvided     ).On( Trigger.emailEntered,    null,     State.bothProvided     )
-                .For( State.bothProvided     ).On( Trigger.passwordBlanked, null,     State.emailProvided    )
-                .For( State.bothProvided     ).On( Trigger.emailBlanked,    null,     State.passwordProvided )
-                .For( State.bothProvided     ).On( Trigger.inOutClicked,    TryLogin, State.loggingIn        )
-
-                .For( State.bothProvided     ).OnEntry( OnBothProvided      )
-                .For( State.emailProvided    ).OnEntry( OnOneOrNoneProvided )
-                .For( State.passwordProvided ).OnEntry( OnOneOrNoneProvided )
-                .For( State.loggedOut        ).OnEntry( OnOneOrNoneProvided )
-
-                .For( State.loggingIn        ).On( Trigger.tokenReturned,   OnLogin,  State.loggedIn         )
-                .For( State.loggingIn        ).On( Trigger.failureReturned, NoLogin,  State.bothProvided     )
-
-                .For( State.loggedIn         ).On( Trigger.inOutClicked,    OnLogout, State.loggedOut        );
+                .For( State.loggedOut      ).On( Trigger.emailEntered,     null,      State.emailLogin     )
+                .For( State.loggedOut      ).On( Trigger.passwordEntered,  null,      State.passwordLogin  )
+                .For( State.loggedOut      ).On( Trigger.emailBlanked,     null,      State.loggedOut      )
+                .For( State.loggedOut      ).On( Trigger.passwordBlanked,  null,      State.loggedOut      )
+                                                                                                           
+                .For( State.emailLogin     ).On( Trigger.emailEntered,     null,      State.emailLogin     )
+                .For( State.emailLogin     ).On( Trigger.passwordEntered,  null,      State.canLogin       )
+                .For( State.emailLogin     ).On( Trigger.emailBlanked,     null,      State.loggedOut      )
+                                                                                                           
+                .For( State.passwordLogin  ).On( Trigger.passwordEntered,  null,      State.passwordLogin  )
+                .For( State.passwordLogin  ).On( Trigger.emailEntered,     null,      State.canLogin       )
+                .For( State.passwordLogin  ).On( Trigger.passwordBlanked,  null,      State.loggedOut      )
+                                                                                                           
+                .For( State.canLogin       ).On( Trigger.passwordEntered,  null,      State.canLogin       )
+                .For( State.canLogin       ).On( Trigger.emailEntered,     null,      State.canLogin       )
+                .For( State.canLogin       ).On( Trigger.passwordBlanked,  null,      State.emailLogin     )
+                .For( State.canLogin       ).On( Trigger.emailBlanked,     null,      State.passwordLogin  )
+                .For( State.canLogin       ).On( Trigger.inOutClicked,     TryLogin,  State.loggingIn      )
+                                                                                                           
+                .For( State.canLogin       ).OnEntry( CanLogin    )                                        
+                .For( State.emailLogin     ).OnEntry( CannotLogin )                                        
+                .For( State.passwordLogin  ).OnEntry( CannotLogin )                                        
+                .For( State.loggedOut      ).OnEntry( CannotLogin )                                        
+                                                                                                           
+                .For( State.loggingIn      ).On( Trigger.tokenReturned,    OnLogin,   State.loggedIn       )
+                .For( State.loggingIn      ).On( Trigger.failureReturned,  NoLogin,   State.canLogin       )
+                                                                                                           
+                .For( State.loggedIn       ).On( Trigger.inOutClicked,     OnLogout,  State.loggedOut      )
+                .For( State.loggedIn       ).On( Trigger.regUpdateClicked, CanUpdate, State.canUpdate      )
+                                                                                                           
+                .For( State.cannotUpdate   ).On( Trigger.emailEntered,     null,      State.emailUpdate    )
+                .For( State.cannotUpdate   ).On( Trigger.passwordEntered,  null,      State.passwordUpdate )
+                .For( State.cannotUpdate   ).On( Trigger.emailBlanked,     null,      State.cannotUpdate   )
+                .For( State.cannotUpdate   ).On( Trigger.passwordBlanked,  null,      State.cannotUpdate   )
+                                                                                                           
+                .For( State.emailUpdate    ).On( Trigger.emailEntered,     null,      State.emailUpdate    )
+                .For( State.emailUpdate    ).On( Trigger.passwordEntered,  null,      State.canUpdate      )
+                .For( State.emailUpdate    ).On( Trigger.emailBlanked,     null,      State.cannotUpdate   )
+                                                                                                           
+                .For( State.passwordUpdate ).On( Trigger.passwordEntered,  null,      State.passwordUpdate )
+                .For( State.passwordUpdate ).On( Trigger.emailEntered,     null,      State.canUpdate      )
+                .For( State.passwordUpdate ).On( Trigger.passwordBlanked,  null,      State.cannotUpdate   )
+                                                                                                           
+                .For( State.canUpdate      ).On( Trigger.emailEntered,     null,      State.canUpdate      )
+                .For( State.canUpdate      ).On( Trigger.passwordEntered,  null,      State.canUpdate      )
+                .For( State.canUpdate      ).On( Trigger.emailBlanked,     null,      State.passwordUpdate )
+                .For( State.canUpdate      ).On( Trigger.passwordBlanked,  null,      State.emailUpdate    )
+                .For( State.canUpdate      ).On( Trigger.regUpdateClicked, TryUpdate, State.updating       )
+                                                                                                           
+                .For( State.canUpdate      ).OnEntry( CanUpdate    )                                       
+                .For( State.emailUpdate    ).OnEntry( CannotUpdate )                                       
+                .For( State.passwordUpdate ).OnEntry( CannotUpdate )
+                .For( State.cannotUpdate   ).OnEntry( CannotUpdate )
+                                                                                                           
+                .For( State.updating       ).On( Trigger.successReturned,  OnUpdate,  State.loggedIn       )
+                .For( State.updating       ).On( Trigger.failureReturned,  NoUpdate,  State.canUpdate      );
 
             UserAccount.Start();
         }
@@ -162,7 +193,7 @@ namespace KeepnTabsClient
         }
 
         /* Email and Password Provided */
-        private void OnBothProvided()
+        private void CanLogin()
         {
             /* UI Changes Must Occur on UI Thread */
 
@@ -174,7 +205,7 @@ namespace KeepnTabsClient
         }
 
         /* Email, Password, or Both Not Provided */
-        private void OnOneOrNoneProvided()
+        private void CannotLogin()
         {
             /* UI Changes Must Occur on UI Thread */
 
@@ -269,6 +300,97 @@ namespace KeepnTabsClient
                     txtPassword.Text     = "";
                 } ) );
             }
+        }
+
+        /* Get the User's Credentials Update */
+
+        private void CanUpdate()
+        {
+            /* UI Changes Must Occur on UI Thread */
+
+            Invoke( new Action( () =>
+            {
+                txtMessage.Text      = "Change your email and password below and click done.";
+                txtEmail.Enabled     = true;
+                txtPassword.Enabled  = true;
+                btnLogInOut.Enabled  = false;
+                btnLists.Enabled     = false;
+                btnRegUpdate.Enabled = true;
+                btnRegUpdate.Text    = "Done";
+            } ) );
+        }
+
+
+        private void CannotUpdate()
+        {
+            /* UI Changes Must Occur on UI Thread */
+
+            Invoke( new Action( () =>
+            {
+                btnRegUpdate.Enabled = false;
+            } ) );
+        }
+
+        /* Try Updating the User's Credentials */
+
+        private async void TryUpdate()
+        {
+            /* UI Changes Must Occur on UI Thread */
+
+            Invoke( new Action( () =>
+            {
+                txtEmail.Enabled    = false;
+                txtPassword.Enabled = false;
+                btnLogInOut.Enabled = true;
+                btnLists.Enabled    = true;
+                btnRegUpdate.Text   = "Update";
+            } ) );
+
+            using( var client = new HttpClient() )
+            {
+                try
+                {
+                    HttpResponseMessage response = await client.GetAsync( 
+                        BaseApiUrl + $"user/update/{ LoginToken }/{ txtEmail.Text }/{ txtPassword.Text }" );
+
+                    if( response.IsSuccessStatusCode )
+                    {
+                        var reply = XDocument.Parse( await response.Content.ReadAsStringAsync() );
+
+                        if( reply.Descendants( "success" ).Any() )
+                            UserAccount.Trigger( Trigger.successReturned );
+                        else
+                            UserAccount.Trigger( Trigger.failureReturned );
+                    }
+                }
+                catch { UserAccount.Trigger( Trigger.failureReturned ); }
+            }
+        }
+
+        /* Notify of Updated Credentials */
+
+        private void OnUpdate()
+        {
+            /* UI Changes Must Occur on UI Thread */
+
+            Invoke( new Action( () =>
+            {
+                txtMessage.Text = "Login credentials updated.  "
+                                + "Use your new credentials at next login.";
+            } ) );
+        }
+
+        /* Notify of Failed Credential Update */
+
+        private void NoUpdate()
+        {
+            /* UI Changes Must Occur on UI Thread */
+
+            Invoke( new Action( () =>
+            {
+                txtMessage.Text = "Could not update your credentials.  "
+                                + "A user with that email already exists.";
+            } ) );
         }
     }
 }

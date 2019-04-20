@@ -7,7 +7,7 @@
 #
 # Host: 127.0.0.1 (MySQL 5.7.25)
 # Database: KeepnTabs
-# Generation Time: 2019-04-14 19:10:46 +0000
+# Generation Time: 2019-04-20 21:27:03 +0000
 # ************************************************************
 
 
@@ -92,8 +92,21 @@ LOCK TABLES `Tokens` WRITE;
 
 INSERT INTO `Tokens` (`ID`, `UserID`, `Expires`)
 VALUES
-	('3a273b86-5ee3-11e9-ad13-8dcf6690a175','1e832d68-5ee3-11e9-ad13-8dcf6690a175','2019-04-14 14:59:23'),
-	('57932f74-5ee1-11e9-ad13-8dcf6690a175','39c60dd6-5ee1-11e9-ad13-8dcf6690a175','2019-04-14 14:45:54');
+	('22093446-63b1-11e9-9bf7-bcb96df47fa0','1e832d68-5ee3-11e9-ad13-8dcf6690a175','2019-04-20 17:43:24'),
+	('3a273b86-5ee3-11e9-ad13-8dcf6690a175','1e832d68-5ee3-11e9-ad13-8dcf6690a175','2019-04-14 15:30:00'),
+	('3abfc7ba-63a3-11e9-9bf7-bcb96df47fa0','1e832d68-5ee3-11e9-ad13-8dcf6690a175','2019-04-20 16:03:52'),
+	('3bc7a8ee-63b2-11e9-9bf7-bcb96df47fa0','1e832d68-5ee3-11e9-ad13-8dcf6690a175','2019-04-20 17:51:16'),
+	('4b1004a0-63b1-11e9-9bf7-bcb96df47fa0','1e832d68-5ee3-11e9-ad13-8dcf6690a175','2019-04-20 17:44:33'),
+	('57932f74-5ee1-11e9-ad13-8dcf6690a175','39c60dd6-5ee1-11e9-ad13-8dcf6690a175','2019-04-14 14:45:54'),
+	('6ce327b4-63a3-11e9-9bf7-bcb96df47fa0','1e832d68-5ee3-11e9-ad13-8dcf6690a175','2019-04-20 16:05:16'),
+	('828baa14-63b2-11e9-9bf7-bcb96df47fa0','1e832d68-5ee3-11e9-ad13-8dcf6690a175','2019-04-20 17:53:15'),
+	('9af3c06a-63b1-11e9-9bf7-bcb96df47fa0','1e832d68-5ee3-11e9-ad13-8dcf6690a175','2019-04-20 17:46:47'),
+	('9b6142ca-63a2-11e9-9bf7-bcb96df47fa0','1e832d68-5ee3-11e9-ad13-8dcf6690a175','2019-04-20 15:59:25'),
+	('b6232882-63af-11e9-9bf7-bcb96df47fa0','1e832d68-5ee3-11e9-ad13-8dcf6690a175','2019-04-20 17:33:13'),
+	('d66b781e-63a1-11e9-9bf7-bcb96df47fa0','1e832d68-5ee3-11e9-ad13-8dcf6690a175','2019-04-20 15:53:54'),
+	('e573fe84-63b1-11e9-9bf7-bcb96df47fa0','1e832d68-5ee3-11e9-ad13-8dcf6690a175','2019-04-20 17:48:52'),
+	('ec2060c4-63ac-11e9-9bf7-bcb96df47fa0','1e832d68-5ee3-11e9-ad13-8dcf6690a175','2019-04-20 17:13:15'),
+	('f8fa149a-63a0-11e9-9bf7-bcb96df47fa0','1e832d68-5ee3-11e9-ad13-8dcf6690a175','2019-04-20 15:47:43');
 
 /*!40000 ALTER TABLE `Tokens` ENABLE KEYS */;
 UNLOCK TABLES;
@@ -572,10 +585,12 @@ end */;;
 /*!50003 CREATE*/ /*!50020 DEFINER=`root`@`localhost`*/ /*!50003 FUNCTION `UserUpdate`( tk varchar( 36 ), e varchar( 320 ), p varchar( 256 ) ) RETURNS tinyint(1)
 begin
 	declare u varchar( 36 );
+	declare c int;
 	
 	select TokenUser( tk ) into u;
+	select Count( ID ) from Users where Email = E into c;
 	
-	if u is not null then
+	if u is not null and c = 0 then
 		update Users set Email = e, Pass = p where ID = u;
 		
 		return( true );
