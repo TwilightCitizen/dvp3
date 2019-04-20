@@ -46,6 +46,7 @@ namespace KeepnTabsClient
             this.picLogo = new System.Windows.Forms.PictureBox();
             this.btnQuit = new System.Windows.Forms.Button();
             this.txtMessage = new System.Windows.Forms.TextBox();
+            this.btnDelete = new System.Windows.Forms.Button();
             this.tblNav.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.picLogo)).BeginInit();
             this.SuspendLayout();
@@ -56,29 +57,32 @@ namespace KeepnTabsClient
             this.tblNav.ColumnCount = 2;
             this.tblNav.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
             this.tblNav.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.tblNav.Controls.Add(this.btnDelete, 1, 3);
             this.tblNav.Controls.Add(this.btnRegUpdate, 1, 2);
-            this.tblNav.Controls.Add(this.btnLists, 0, 3);
+            this.tblNav.Controls.Add(this.btnQuit, 0, 3);
+            this.tblNav.Controls.Add(this.btnLists, 0, 4);
             this.tblNav.Controls.Add(this.txtPassword, 0, 1);
             this.tblNav.Controls.Add(this.btnLogInOut, 0, 2);
             this.tblNav.Controls.Add(this.txtEmail, 0, 0);
             this.tblNav.Location = new System.Drawing.Point(139, 775);
             this.tblNav.Name = "tblNav";
-            this.tblNav.RowCount = 4;
-            this.tblNav.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 25F));
-            this.tblNav.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 25F));
-            this.tblNav.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 25F));
-            this.tblNav.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 25F));
-            this.tblNav.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-            this.tblNav.Size = new System.Drawing.Size(421, 234);
+            this.tblNav.RowCount = 5;
+            this.tblNav.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 20F));
+            this.tblNav.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 20F));
+            this.tblNav.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 20F));
+            this.tblNav.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 20F));
+            this.tblNav.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 20F));
+            this.tblNav.Size = new System.Drawing.Size(421, 281);
             this.tblNav.TabIndex = 5;
             // 
             // btnRegUpdate
             // 
+            this.btnRegUpdate.Dock = System.Windows.Forms.DockStyle.Fill;
             this.btnRegUpdate.Enabled = false;
             this.btnRegUpdate.Font = new System.Drawing.Font("Microsoft Sans Serif", 21.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnRegUpdate.Location = new System.Drawing.Point(213, 119);
+            this.btnRegUpdate.Location = new System.Drawing.Point(213, 115);
             this.btnRegUpdate.Name = "btnRegUpdate";
-            this.btnRegUpdate.Size = new System.Drawing.Size(204, 47);
+            this.btnRegUpdate.Size = new System.Drawing.Size(205, 50);
             this.btnRegUpdate.TabIndex = 6;
             this.btnRegUpdate.Text = "Register";
             this.btnRegUpdate.UseVisualStyleBackColor = true;
@@ -90,9 +94,9 @@ namespace KeepnTabsClient
             this.btnLists.Dock = System.Windows.Forms.DockStyle.Fill;
             this.btnLists.Enabled = false;
             this.btnLists.Font = new System.Drawing.Font("Microsoft Sans Serif", 21.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnLists.Location = new System.Drawing.Point(3, 177);
+            this.btnLists.Location = new System.Drawing.Point(3, 227);
             this.btnLists.Name = "btnLists";
-            this.btnLists.Size = new System.Drawing.Size(415, 54);
+            this.btnLists.Size = new System.Drawing.Size(415, 51);
             this.btnLists.TabIndex = 5;
             this.btnLists.Text = "Go to My Lists ▶";
             this.btnLists.UseVisualStyleBackColor = true;
@@ -103,7 +107,7 @@ namespace KeepnTabsClient
             this.tblNav.SetColumnSpan(this.txtPassword, 2);
             this.txtPassword.Dock = System.Windows.Forms.DockStyle.Fill;
             this.txtPassword.Font = new System.Drawing.Font("Microsoft Sans Serif", 21.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.txtPassword.Location = new System.Drawing.Point(3, 61);
+            this.txtPassword.Location = new System.Drawing.Point(3, 59);
             this.txtPassword.Name = "txtPassword";
             this.txtPassword.PasswordChar = '•';
             this.txtPassword.Size = new System.Drawing.Size(415, 40);
@@ -112,11 +116,12 @@ namespace KeepnTabsClient
             // 
             // btnLogInOut
             // 
+            this.btnLogInOut.Dock = System.Windows.Forms.DockStyle.Fill;
             this.btnLogInOut.Enabled = false;
             this.btnLogInOut.Font = new System.Drawing.Font("Microsoft Sans Serif", 21.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnLogInOut.Location = new System.Drawing.Point(3, 119);
+            this.btnLogInOut.Location = new System.Drawing.Point(3, 115);
             this.btnLogInOut.Name = "btnLogInOut";
-            this.btnLogInOut.Size = new System.Drawing.Size(204, 47);
+            this.btnLogInOut.Size = new System.Drawing.Size(204, 50);
             this.btnLogInOut.TabIndex = 1;
             this.btnLogInOut.Text = "Log In";
             this.btnLogInOut.UseVisualStyleBackColor = true;
@@ -146,10 +151,11 @@ namespace KeepnTabsClient
             // 
             // btnQuit
             // 
+            this.btnQuit.Dock = System.Windows.Forms.DockStyle.Fill;
             this.btnQuit.Font = new System.Drawing.Font("Microsoft Sans Serif", 21.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnQuit.Location = new System.Drawing.Point(49, 1153);
+            this.btnQuit.Location = new System.Drawing.Point(3, 171);
             this.btnQuit.Name = "btnQuit";
-            this.btnQuit.Size = new System.Drawing.Size(204, 52);
+            this.btnQuit.Size = new System.Drawing.Size(204, 50);
             this.btnQuit.TabIndex = 6;
             this.btnQuit.Text = "Quit";
             this.btnQuit.UseVisualStyleBackColor = true;
@@ -168,12 +174,25 @@ namespace KeepnTabsClient
             this.txtMessage.TabIndex = 7;
             this.txtMessage.Text = "Login or register below.";
             this.txtMessage.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            this.txtMessage.TextChanged += new System.EventHandler(this.TxtMessage_TextChanged);
+            // 
+            // btnDelete
+            // 
+            this.btnDelete.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.btnDelete.Enabled = false;
+            this.btnDelete.Font = new System.Drawing.Font("Microsoft Sans Serif", 21.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnDelete.Location = new System.Drawing.Point(213, 171);
+            this.btnDelete.Name = "btnDelete";
+            this.btnDelete.Size = new System.Drawing.Size(205, 50);
+            this.btnDelete.TabIndex = 7;
+            this.btnDelete.Text = "Delete";
+            this.btnDelete.UseVisualStyleBackColor = true;
+            this.btnDelete.Click += new System.EventHandler(this.BtnDelete_Click);
             // 
             // frmUser
             // 
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
             this.Controls.Add(this.txtMessage);
-            this.Controls.Add(this.btnQuit);
             this.Controls.Add(this.tblNav);
             this.Controls.Add(this.picLogo);
             this.Name = "frmUser";
@@ -198,6 +217,7 @@ namespace KeepnTabsClient
         private System.Windows.Forms.Button btnQuit;
         private System.Windows.Forms.Button btnRegUpdate;
         private System.Windows.Forms.TextBox txtMessage;
+        private System.Windows.Forms.Button btnDelete;
     }
 }
 
