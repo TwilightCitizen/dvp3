@@ -38,7 +38,7 @@ namespace KeepnTabsClient
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(frmUser));
             this.tblNav = new System.Windows.Forms.TableLayoutPanel();
-            this.btnRegister = new System.Windows.Forms.Button();
+            this.btnRegUpdate = new System.Windows.Forms.Button();
             this.btnLists = new System.Windows.Forms.Button();
             this.txtPassword = new System.Windows.Forms.TextBox();
             this.btnLogInOut = new System.Windows.Forms.Button();
@@ -56,12 +56,12 @@ namespace KeepnTabsClient
             this.tblNav.ColumnCount = 2;
             this.tblNav.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
             this.tblNav.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.tblNav.Controls.Add(this.btnRegister, 1, 2);
+            this.tblNav.Controls.Add(this.btnRegUpdate, 1, 2);
             this.tblNav.Controls.Add(this.btnLists, 0, 3);
             this.tblNav.Controls.Add(this.txtPassword, 0, 1);
             this.tblNav.Controls.Add(this.btnLogInOut, 0, 2);
             this.tblNav.Controls.Add(this.txtEmail, 0, 0);
-            this.tblNav.Location = new System.Drawing.Point(133, 774);
+            this.tblNav.Location = new System.Drawing.Point(139, 775);
             this.tblNav.Name = "tblNav";
             this.tblNav.RowCount = 4;
             this.tblNav.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 25F));
@@ -72,17 +72,17 @@ namespace KeepnTabsClient
             this.tblNav.Size = new System.Drawing.Size(421, 234);
             this.tblNav.TabIndex = 5;
             // 
-            // btnRegister
+            // btnRegUpdate
             // 
-            this.btnRegister.Enabled = false;
-            this.btnRegister.Font = new System.Drawing.Font("Microsoft Sans Serif", 21.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnRegister.Location = new System.Drawing.Point(213, 119);
-            this.btnRegister.Name = "btnRegister";
-            this.btnRegister.Size = new System.Drawing.Size(204, 47);
-            this.btnRegister.TabIndex = 6;
-            this.btnRegister.Text = "Register";
-            this.btnRegister.UseVisualStyleBackColor = true;
-            this.btnRegister.Click += new System.EventHandler(this.BtnRegister_Click);
+            this.btnRegUpdate.Enabled = false;
+            this.btnRegUpdate.Font = new System.Drawing.Font("Microsoft Sans Serif", 21.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnRegUpdate.Location = new System.Drawing.Point(213, 119);
+            this.btnRegUpdate.Name = "btnRegUpdate";
+            this.btnRegUpdate.Size = new System.Drawing.Size(204, 47);
+            this.btnRegUpdate.TabIndex = 6;
+            this.btnRegUpdate.Text = "Register";
+            this.btnRegUpdate.UseVisualStyleBackColor = true;
+            this.btnRegUpdate.Click += new System.EventHandler(this.BtnRegUpdate_Click);
             // 
             // btnLists
             // 
@@ -94,7 +94,7 @@ namespace KeepnTabsClient
             this.btnLists.Name = "btnLists";
             this.btnLists.Size = new System.Drawing.Size(415, 54);
             this.btnLists.TabIndex = 5;
-            this.btnLists.Text = "Lists";
+            this.btnLists.Text = "Go to My Lists ▶";
             this.btnLists.UseVisualStyleBackColor = true;
             this.btnLists.Click += new System.EventHandler(this.BtnLists_Click);
             // 
@@ -105,7 +105,7 @@ namespace KeepnTabsClient
             this.txtPassword.Font = new System.Drawing.Font("Microsoft Sans Serif", 21.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.txtPassword.Location = new System.Drawing.Point(3, 61);
             this.txtPassword.Name = "txtPassword";
-            this.txtPassword.PasswordChar = 'X';
+            this.txtPassword.PasswordChar = '•';
             this.txtPassword.Size = new System.Drawing.Size(415, 40);
             this.txtPassword.TabIndex = 4;
             this.txtPassword.TextChanged += new System.EventHandler(this.TxtPassword_TextChanged);
@@ -138,7 +138,7 @@ namespace KeepnTabsClient
             this.picLogo.BackColor = System.Drawing.Color.Transparent;
             this.picLogo.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("picLogo.BackgroundImage")));
             this.picLogo.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
-            this.picLogo.Location = new System.Drawing.Point(133, 244);
+            this.picLogo.Location = new System.Drawing.Point(139, 245);
             this.picLogo.Name = "picLogo";
             this.picLogo.Size = new System.Drawing.Size(421, 275);
             this.picLogo.TabIndex = 4;
@@ -160,7 +160,7 @@ namespace KeepnTabsClient
             this.txtMessage.BackColor = System.Drawing.Color.White;
             this.txtMessage.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.txtMessage.Font = new System.Drawing.Font("Microsoft Sans Serif", 20.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.txtMessage.Location = new System.Drawing.Point(133, 583);
+            this.txtMessage.Location = new System.Drawing.Point(139, 584);
             this.txtMessage.Multiline = true;
             this.txtMessage.Name = "txtMessage";
             this.txtMessage.ReadOnly = true;
@@ -196,7 +196,7 @@ namespace KeepnTabsClient
         private System.Windows.Forms.PictureBox picLogo;
         private System.Windows.Forms.Button btnLists;
         private System.Windows.Forms.Button btnQuit;
-        private System.Windows.Forms.Button btnRegister;
+        private System.Windows.Forms.Button btnRegUpdate;
         private System.Windows.Forms.TextBox txtMessage;
     }
 }

@@ -33,6 +33,10 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="FluentStateMachine, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\library\FluentStateMachine\FluentStateMachine\FluentStateMachine\FluentStateMachine\bin\Debug\netstandard2.0\FluentStateMachine.dll</HintPath>
+    </Reference>
     <Reference Include="iPhonify, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\..\library\iPhonify\iPhonify\iPhonify\bin\Debug\iPhonify.dll</HintPath>
