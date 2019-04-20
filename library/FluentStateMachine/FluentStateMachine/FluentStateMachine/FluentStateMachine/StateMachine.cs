@@ -71,14 +71,14 @@ namespace FluentStateMachine
 						var transAction = State + "-->" + nextState;
 						var entryAction = "-->" + nextState;
 						
-						if( TransitionActions.ContainsKey( exitAction  ) ) TransitionActions[ exitAction  ].Invoke();
-						if( TransitionActions.ContainsKey( transAction ) ) TransitionActions[ transAction ].Invoke();
-						if( TransitionActions.ContainsKey( entryAction ) ) TransitionActions[ entryAction ].Invoke();
+						if( TransitionActions.ContainsKey( exitAction  ) ) TransitionActions[ exitAction  ]?.Invoke();
+						if( TransitionActions.ContainsKey( transAction ) ) TransitionActions[ transAction ]?.Invoke();
+						if( TransitionActions.ContainsKey( entryAction ) ) TransitionActions[ entryAction ]?.Invoke();
 						
 						State = nextState;
 					}
-					
-					Thread.Sleep( 0 );
+                    
+					// Thread.Sleep( 0 );
 				}
 			} );
 		}

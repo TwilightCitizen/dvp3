@@ -1,0 +1,8 @@
+\\vmware-host\Shared Folders\Desktop\dvp3\library\FluentStateMachine\FluentStateMachine\FluentStateMachine\FluentStateMachine\bin\Debug\netstandard1.6\FluentStateMachine.deps.json
+\\vmware-host\Shared Folders\Desktop\dvp3\library\FluentStateMachine\FluentStateMachine\FluentStateMachine\FluentStateMachine\obj\Debug\netstandard1.6\FluentStateMachine.csprojAssemblyReference.cache
+\\vmware-host\Shared Folders\Desktop\dvp3\library\FluentStateMachine\FluentStateMachine\FluentStateMachine\FluentStateMachine\obj\Debug\netstandard1.6\FluentStateMachine.csproj.CoreCompileInputs.cache
+\\vmware-host\Shared Folders\Desktop\dvp3\library\FluentStateMachine\FluentStateMachine\FluentStateMachine\FluentStateMachine\obj\Debug\netstandard1.6\FluentStateMachine.AssemblyInfo.cs
+\\vmware-host\Shared Folders\Desktop\dvp3\library\FluentStateMachine\FluentStateMachine\FluentStateMachine\FluentStateMachine\bin\Debug\netstandard1.6\FluentStateMachine.dll
+\\vmware-host\Shared Folders\Desktop\dvp3\library\FluentStateMachine\FluentStateMachine\FluentStateMachine\FluentStateMachine\bin\Debug\netstandard1.6\FluentStateMachine.pdb
+\\vmware-host\Shared Folders\Desktop\dvp3\library\FluentStateMachine\FluentStateMachine\FluentStateMachine\FluentStateMachine\obj\Debug\netstandard1.6\FluentStateMachine.dll
+\\vmware-host\Shared Folders\Desktop\dvp3\library\FluentStateMachine\FluentStateMachine\FluentStateMachine\FluentStateMachine\obj\Debug\netstandard1.6\FluentStateMachine.pdb
