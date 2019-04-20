@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.28803.202
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestDriverFSMClient", "TestDriverFSMClient\TestDriverFSMClient.csproj", "{ADA0A324-D83C-44BD-84BB-4391C275F711}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{ADA0A324-D83C-44BD-84BB-4391C275F711}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{ADA0A324-D83C-44BD-84BB-4391C275F711}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{ADA0A324-D83C-44BD-84BB-4391C275F711}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{ADA0A324-D83C-44BD-84BB-4391C275F711}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {6E1AE346-433E-4091-AFBE-06BD75E916EE}
+	EndGlobalSection
+EndGlobal

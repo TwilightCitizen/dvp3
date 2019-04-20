@@ -1,0 +1,10 @@
+\\vmware-host\Shared Folders\Desktop\dvp3\library\FluentStateMachine\FluentStateMachine\TestDriverFSMClient\TestDriverFSMClient\bin\Debug\TestDriverFSMClient.exe.config
+\\vmware-host\Shared Folders\Desktop\dvp3\library\FluentStateMachine\FluentStateMachine\TestDriverFSMClient\TestDriverFSMClient\bin\Debug\TestDriverFSMClient.exe
+\\vmware-host\Shared Folders\Desktop\dvp3\library\FluentStateMachine\FluentStateMachine\TestDriverFSMClient\TestDriverFSMClient\bin\Debug\TestDriverFSMClient.pdb
+\\vmware-host\Shared Folders\Desktop\dvp3\library\FluentStateMachine\FluentStateMachine\TestDriverFSMClient\TestDriverFSMClient\bin\Debug\FluentStateMachine.dll
+\\vmware-host\Shared Folders\Desktop\dvp3\library\FluentStateMachine\FluentStateMachine\TestDriverFSMClient\TestDriverFSMClient\bin\Debug\FluentStateMachine.pdb
+\\vmware-host\Shared Folders\Desktop\dvp3\library\FluentStateMachine\FluentStateMachine\TestDriverFSMClient\TestDriverFSMClient\obj\Debug\TestDriverFSMClient.csprojAssemblyReference.cache
+\\vmware-host\Shared Folders\Desktop\dvp3\library\FluentStateMachine\FluentStateMachine\TestDriverFSMClient\TestDriverFSMClient\obj\Debug\TestDriverFSMClient.csproj.CoreCompileInputs.cache
+\\vmware-host\Shared Folders\Desktop\dvp3\library\FluentStateMachine\FluentStateMachine\TestDriverFSMClient\TestDriverFSMClient\obj\Debug\TestDriverFSMClient.csproj.CopyComplete
+\\vmware-host\Shared Folders\Desktop\dvp3\library\FluentStateMachine\FluentStateMachine\TestDriverFSMClient\TestDriverFSMClient\obj\Debug\TestDriverFSMClient.exe
+\\vmware-host\Shared Folders\Desktop\dvp3\library\FluentStateMachine\FluentStateMachine\TestDriverFSMClient\TestDriverFSMClient\obj\Debug\TestDriverFSMClient.pdb
