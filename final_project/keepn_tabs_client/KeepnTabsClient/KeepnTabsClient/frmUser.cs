@@ -481,33 +481,83 @@ namespace KeepnTabsClient
         private void OnDelete()
         {
             Invoke( new Action( () =>
-                {
-                    txtMessage.Text      = "Account was successfully deleted.  Login or register below.";
-                    btnLogInOut.Text     = "Login";
-                    btnRegUpdate.Text    = "Register";
-                    btnRegUpdate.Enabled = false;
-                    btnDelete.Enabled    = false;
-                    btnLists.Enabled     = false;
-                    txtEmail.Enabled     = true;
-                    txtEmail.Text        = "";
-                    txtPassword.Enabled  = true;
-                    txtPassword.Text     = "";
-                } ) );
+            {
+                txtMessage.Text      = "Account was successfully deleted.  Login or register below.";
+                btnLogInOut.Text     = "Login";
+                btnRegUpdate.Text    = "Register";
+                btnRegUpdate.Enabled = false;
+                btnDelete.Enabled    = false;
+                btnLists.Enabled     = false;
+                txtEmail.Enabled     = true;
+                txtEmail.Text        = "";
+                txtPassword.Enabled  = true;
+                txtPassword.Text     = "";
+            } ) );
         }
 
-        private void TryRegister()
+        /* Try Registering a New Account with the Credentials Provided */
+
+        private async void TryRegister()
         {
+            /* UI Changes Must Occur on UI Thread */
 
+            Invoke( new Action( () =>
+            {
+                txtEmail.Enabled     = false;
+                txtPassword.Enabled  = false;
+                btnRegUpdate.Enabled = false;
+            } ) );
+
+            using( var client = new HttpClient() )
+            {
+                try
+                {
+                    HttpResponseMessage response = await client.GetAsync( 
+                        BaseApiUrl + $"user/add/{ txtEmail.Text }/{ txtPassword.Text }" );
+
+                    if( response.IsSuccessStatusCode )
+                    {
+                        var reply = XDocument.Parse( await response.Content.ReadAsStringAsync() );
+
+                        if( reply.Descendants( "success" ).Any() )
+                            UserAccount.Trigger( Trigger.successReturned );
+                        else
+                            UserAccount.Trigger( Trigger.failureReturned );
+                    }
+                }
+                catch { UserAccount.Trigger( Trigger.failureReturned ); }
+            }
         }
 
+        /* Notify User of Successful Registration */
         private void OnRegister()
         {
+            /* UI Changes Must Occur on UI Thread */
 
+            Invoke( new Action( () =>
+            {
+                txtMessage.Text      = "Your account was created.  "
+                                     + "You must confirm your account before logging in.  "
+                                     + "Check your email for a message from Keep'n Tabs.";
+                txtEmail.Text        = "";
+                txtEmail.Enabled     = true;
+                txtPassword.Text     = "";
+                txtPassword.Enabled  = true;
+                btnRegUpdate.Enabled = false;
+            } ) );
         }
 
+        /* Notify User of Unsuccessful Registration */
         private void NoRegister()
         {
+            /* UI Changes Must Occur on UI Thread */
 
+            Invoke( new Action( () =>
+            {
+                txtMessage.Text     = "A new account could not be registered with those credentials.";
+                txtEmail.Enabled    = true;
+                txtPassword.Enabled = true;
+            } ) );
         }
     }
 }
