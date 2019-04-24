@@ -38,15 +38,15 @@ namespace KeepnTabsClient
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(frmUser));
             this.tblNav = new System.Windows.Forms.TableLayoutPanel();
+            this.btnDelete = new System.Windows.Forms.Button();
             this.btnRegUpdate = new System.Windows.Forms.Button();
+            this.btnQuit = new System.Windows.Forms.Button();
             this.btnLists = new System.Windows.Forms.Button();
             this.txtPassword = new System.Windows.Forms.TextBox();
             this.btnLogInOut = new System.Windows.Forms.Button();
             this.txtEmail = new System.Windows.Forms.TextBox();
             this.picLogo = new System.Windows.Forms.PictureBox();
-            this.btnQuit = new System.Windows.Forms.Button();
             this.txtMessage = new System.Windows.Forms.TextBox();
-            this.btnDelete = new System.Windows.Forms.Button();
             this.tblNav.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.picLogo)).BeginInit();
             this.SuspendLayout();
@@ -75,6 +75,19 @@ namespace KeepnTabsClient
             this.tblNav.Size = new System.Drawing.Size(421, 281);
             this.tblNav.TabIndex = 5;
             // 
+            // btnDelete
+            // 
+            this.btnDelete.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.btnDelete.Enabled = false;
+            this.btnDelete.Font = new System.Drawing.Font("Microsoft Sans Serif", 21.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnDelete.Location = new System.Drawing.Point(213, 171);
+            this.btnDelete.Name = "btnDelete";
+            this.btnDelete.Size = new System.Drawing.Size(205, 50);
+            this.btnDelete.TabIndex = 7;
+            this.btnDelete.Text = "Delete";
+            this.btnDelete.UseVisualStyleBackColor = true;
+            this.btnDelete.Click += new System.EventHandler(this.BtnDelete_Click);
+            // 
             // btnRegUpdate
             // 
             this.btnRegUpdate.Dock = System.Windows.Forms.DockStyle.Fill;
@@ -87,6 +100,18 @@ namespace KeepnTabsClient
             this.btnRegUpdate.Text = "Register";
             this.btnRegUpdate.UseVisualStyleBackColor = true;
             this.btnRegUpdate.Click += new System.EventHandler(this.BtnRegUpdate_Click);
+            // 
+            // btnQuit
+            // 
+            this.btnQuit.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.btnQuit.Font = new System.Drawing.Font("Microsoft Sans Serif", 21.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnQuit.Location = new System.Drawing.Point(3, 171);
+            this.btnQuit.Name = "btnQuit";
+            this.btnQuit.Size = new System.Drawing.Size(204, 50);
+            this.btnQuit.TabIndex = 6;
+            this.btnQuit.Text = "Quit";
+            this.btnQuit.UseVisualStyleBackColor = true;
+            this.btnQuit.Click += new System.EventHandler(this.BtnQuit_Click);
             // 
             // btnLists
             // 
@@ -149,18 +174,6 @@ namespace KeepnTabsClient
             this.picLogo.TabIndex = 4;
             this.picLogo.TabStop = false;
             // 
-            // btnQuit
-            // 
-            this.btnQuit.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.btnQuit.Font = new System.Drawing.Font("Microsoft Sans Serif", 21.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnQuit.Location = new System.Drawing.Point(3, 171);
-            this.btnQuit.Name = "btnQuit";
-            this.btnQuit.Size = new System.Drawing.Size(204, 50);
-            this.btnQuit.TabIndex = 6;
-            this.btnQuit.Text = "Quit";
-            this.btnQuit.UseVisualStyleBackColor = true;
-            this.btnQuit.Click += new System.EventHandler(this.BtnQuit_Click);
-            // 
             // txtMessage
             // 
             this.txtMessage.BackColor = System.Drawing.Color.White;
@@ -175,19 +188,6 @@ namespace KeepnTabsClient
             this.txtMessage.Text = "Login or register below.";
             this.txtMessage.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             this.txtMessage.TextChanged += new System.EventHandler(this.TxtMessage_TextChanged);
-            // 
-            // btnDelete
-            // 
-            this.btnDelete.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.btnDelete.Enabled = false;
-            this.btnDelete.Font = new System.Drawing.Font("Microsoft Sans Serif", 21.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnDelete.Location = new System.Drawing.Point(213, 171);
-            this.btnDelete.Name = "btnDelete";
-            this.btnDelete.Size = new System.Drawing.Size(205, 50);
-            this.btnDelete.TabIndex = 7;
-            this.btnDelete.Text = "Delete";
-            this.btnDelete.UseVisualStyleBackColor = true;
-            this.btnDelete.Click += new System.EventHandler(this.BtnDelete_Click);
             // 
             // frmUser
             // 

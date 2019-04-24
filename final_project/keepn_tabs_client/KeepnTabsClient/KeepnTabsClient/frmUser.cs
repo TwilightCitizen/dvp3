@@ -71,7 +71,7 @@ namespace KeepnTabsClient
 
         private void BtnLists_Click( object sender, EventArgs e )
         {
-            
+            ViewLists();
         }
 
         /* Trigger Email Blanked/Provided */
@@ -558,6 +558,19 @@ namespace KeepnTabsClient
                 txtEmail.Enabled    = true;
                 txtPassword.Enabled = true;
             } ) );
+        }
+
+            /* Show the User's Lists, If Any */
+    
+        private void ViewLists()
+        {
+            var view = new frmLists();
+
+            Hide();
+
+            view.ShowDialog( this );
+
+            Show();
         }
     }
 }
