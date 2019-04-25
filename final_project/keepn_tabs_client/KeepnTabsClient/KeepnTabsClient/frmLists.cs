@@ -15,15 +15,35 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.Net.Http;
+using System.Xml.Linq;
 
 namespace KeepnTabsClient
 {
     public partial class frmLists : Form // : iPhonify.iPhone
     {
+        /* Token for the logged in user. */
+
+        private string LoginToken { get; set; }
+
+        /* Base API URL:  Get From File or Fail Gracefully with Blank */
+
+        private string BaseApiUrl { get; set; }
+
+        /* Constructors */
+
         public frmLists()
         {
             InitializeComponent();
-            Test();
+        }
+
+        public frmLists( string loginToken, string baseApiUrl )
+        {
+            InitializeComponent();
+
+            LoginToken = loginToken; BaseApiUrl = baseApiUrl;
+            
+            GetLists();
         }
 
         private void BtnBack_Click( object sender, EventArgs e )
@@ -31,16 +51,33 @@ namespace KeepnTabsClient
             Close();
         }
 
-        private void Test()
+        private async void GetLists()
         {
-            for( var i = 0; i < 5; i++ )
+            using( var client = new HttpClient() )
             {
-                var item = new SlideItem.SlideItem( "Mark", "Delete", "Item " + i.ToString() );
+                try
+                {
+                    HttpResponseMessage response = await client.GetAsync( 
+                        BaseApiUrl + $"user/lists/{ LoginToken }" );
 
-                item.SlideLeft  += Item_SlideLeft;
-                item.SlideRight += Item_SlideRight;
+                    if( response.IsSuccessStatusCode )
+                    {
+                        var reply = XDocument.Parse( await response.Content.ReadAsStringAsync() );
 
-                flowLayoutPanel.Controls.Add( item );
+                        if( reply.Descendants( "success" ).Any() )
+                        foreach( XElement list in reply.Descendants( "list" ) )
+                        {
+                            var item         = new SlideItem.SlideItem( "Mark", "Delete", list.Element( "title" ).Value );
+
+                            item.Tag         = list.Element( "id" );
+                            item.SlideLeft  += Item_SlideLeft;
+                            item.SlideRight += Item_SlideRight;
+
+                            flowLayoutPanel.Controls.Add( item );
+                        }
+                    }
+                }
+                catch { }
             }
         }
 

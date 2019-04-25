@@ -43,11 +43,11 @@ namespace KeepnTabsClient
         
         /* User/Account State Machine */
 
-        private StateMachine< State, Trigger > UserAccount;
+        private StateMachine< State, Trigger > UserAccount { get; set; }
 
         /* User/Account Login Token */
 
-        private string LoginToken;
+        private string LoginToken { get; set; }
 
         public frmUser()
         {
@@ -565,7 +565,7 @@ namespace KeepnTabsClient
     
         private void ViewLists()
         {
-            var view = new frmLists();
+            var view = new frmLists( LoginToken, BaseApiUrl );
 
             Hide();
 
