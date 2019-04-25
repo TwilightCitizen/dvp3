@@ -13,10 +13,11 @@ using System.Net.Http;
 using System.Xml.Linq;
 using FluentStateMachine;
 using Microsoft.VisualBasic;
+using System.Windows.Forms;
 
 namespace KeepnTabsClient
 {
-    public partial class frmUser : iPhonify.iPhone
+    public partial class frmUser : Form // : iPhonify.iPhone
     {
         /* Base Server File Path */
 

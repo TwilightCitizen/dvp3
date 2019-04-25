@@ -18,7 +18,7 @@ using System.Windows.Forms;
 
 namespace KeepnTabsClient
 {
-    public partial class frmTasks : iPhonify.iPhone
+    public partial class frmTasks : Form // : iPhonify.iPhone
     {
         public frmTasks()
         {

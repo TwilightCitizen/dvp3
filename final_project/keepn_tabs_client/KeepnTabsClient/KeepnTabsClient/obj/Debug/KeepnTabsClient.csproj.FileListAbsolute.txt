@@ -1,8 +1,6 @@
 \\vmware-host\Shared Folders\Desktop\dvp3\final_project\keepn_tabs_client\KeepnTabsClient\KeepnTabsClient\bin\Debug\KeepnTabsClient.exe.config
 \\vmware-host\Shared Folders\Desktop\dvp3\final_project\keepn_tabs_client\KeepnTabsClient\KeepnTabsClient\bin\Debug\KeepnTabsClient.exe
 \\vmware-host\Shared Folders\Desktop\dvp3\final_project\keepn_tabs_client\KeepnTabsClient\KeepnTabsClient\bin\Debug\KeepnTabsClient.pdb
-\\vmware-host\Shared Folders\Desktop\dvp3\final_project\keepn_tabs_client\KeepnTabsClient\KeepnTabsClient\bin\Debug\iPhonify.dll
-\\vmware-host\Shared Folders\Desktop\dvp3\final_project\keepn_tabs_client\KeepnTabsClient\KeepnTabsClient\bin\Debug\iPhonify.pdb
 \\vmware-host\Shared Folders\Desktop\dvp3\final_project\keepn_tabs_client\KeepnTabsClient\KeepnTabsClient\obj\Debug\KeepnTabsClient.csprojAssemblyReference.cache
 \\vmware-host\Shared Folders\Desktop\dvp3\final_project\keepn_tabs_client\KeepnTabsClient\KeepnTabsClient\obj\Debug\KeepnTabsClient.frmExport.resources
 \\vmware-host\Shared Folders\Desktop\dvp3\final_project\keepn_tabs_client\KeepnTabsClient\KeepnTabsClient\obj\Debug\KeepnTabsClient.frmLists.resources
@@ -16,3 +14,5 @@
 \\vmware-host\Shared Folders\Desktop\dvp3\final_project\keepn_tabs_client\KeepnTabsClient\KeepnTabsClient\obj\Debug\KeepnTabsClient.pdb
 \\vmware-host\Shared Folders\Desktop\dvp3\final_project\keepn_tabs_client\KeepnTabsClient\KeepnTabsClient\bin\Debug\FluentStateMachine.dll
 \\vmware-host\Shared Folders\Desktop\dvp3\final_project\keepn_tabs_client\KeepnTabsClient\KeepnTabsClient\bin\Debug\FluentStateMachine.pdb
+\\vmware-host\Shared Folders\Desktop\dvp3\final_project\keepn_tabs_client\KeepnTabsClient\KeepnTabsClient\bin\Debug\SlideItem.dll
+\\vmware-host\Shared Folders\Desktop\dvp3\final_project\keepn_tabs_client\KeepnTabsClient\KeepnTabsClient\bin\Debug\SlideItem.pdb

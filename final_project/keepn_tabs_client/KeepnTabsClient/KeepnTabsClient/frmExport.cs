@@ -18,7 +18,7 @@ using System.Windows.Forms;
 
 namespace KeepnTabsClient
 {
-    public partial class frmExport : iPhonify.iPhone
+    public partial class frmExport : Form // : iPhonify.iPhone
     {
         public frmExport()
         {

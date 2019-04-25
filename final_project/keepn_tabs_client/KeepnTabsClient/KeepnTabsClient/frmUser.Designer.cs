@@ -192,11 +192,15 @@ namespace KeepnTabsClient
             // frmUser
             // 
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
+            this.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("$this.BackgroundImage")));
+            this.ClientSize = new System.Drawing.Size(687, 1351);
             this.Controls.Add(this.txtMessage);
             this.Controls.Add(this.tblNav);
             this.Controls.Add(this.picLogo);
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
             this.Name = "frmUser";
-            this.Text = "";
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
+            this.TransparencyKey = System.Drawing.Color.Fuchsia;
             this.Load += new System.EventHandler(this.FrmUser_Load);
             this.tblNav.ResumeLayout(false);
             this.tblNav.PerformLayout();
