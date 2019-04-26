@@ -11,4 +11,3 @@
 \\vmware-host\Shared Folders\Desktop\dvp3\final_project\keepn_tabs_api\KeepnTabsAPI\KeepnTabsAPI\obj\Debug\KeepnTabsAPI.csproj.CopyComplete
 \\vmware-host\Shared Folders\Desktop\dvp3\final_project\keepn_tabs_api\KeepnTabsAPI\KeepnTabsAPI\obj\Debug\KeepnTabsAPI.exe
 \\vmware-host\Shared Folders\Desktop\dvp3\final_project\keepn_tabs_api\KeepnTabsAPI\KeepnTabsAPI\obj\Debug\KeepnTabsAPI.pdb
-\\vmware-host\Shared Folders\Desktop\dvp3\final_project\keepn_tabs_api\KeepnTabsAPI\KeepnTabsAPI\bin\Debug\MySql.Data.dll

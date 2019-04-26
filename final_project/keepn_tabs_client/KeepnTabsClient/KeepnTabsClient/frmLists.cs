@@ -17,6 +17,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Net.Http;
 using System.Xml.Linq;
+using Microsoft.VisualBasic;
 
 namespace KeepnTabsClient
 {
@@ -43,7 +44,7 @@ namespace KeepnTabsClient
 
             LoginToken = loginToken; BaseApiUrl = baseApiUrl;
             
-            GetLists();
+            TryGetLists();
         }
 
         private void BtnBack_Click( object sender, EventArgs e )
@@ -51,7 +52,26 @@ namespace KeepnTabsClient
             Close();
         }
 
-        private async void GetLists()
+        private void Item_SlideLeft( object sender, EventArgs e )
+        {
+            SlideItem.SlideItem item = (SlideItem.SlideItem) sender;
+
+            TryDelete( item );
+        }
+
+        private void Item_SlideRight( object sender, EventArgs e )
+        {
+            SlideItem.SlideItem item = (SlideItem.SlideItem) sender;
+
+            TryRename( item );
+        }
+
+        private void BtnAdd_Click( object sender, EventArgs e )
+        {
+            TryAdd();
+        }
+
+        private async void TryGetLists()
         {
             using( var client = new HttpClient() )
             {
@@ -67,32 +87,97 @@ namespace KeepnTabsClient
                         if( reply.Descendants( "success" ).Any() )
                         foreach( XElement list in reply.Descendants( "list" ) )
                         {
-                            var item         = new SlideItem.SlideItem( "Mark", "Delete", list.Element( "title" ).Value );
+                            var item         = new SlideItem.SlideItem( "Rename", "Delete", list.Element( "title" ).Value );
 
-                            item.Tag         = list.Element( "id" );
+                            item.Tag         = list.Element( "id" ).Value;
                             item.SlideLeft  += Item_SlideLeft;
                             item.SlideRight += Item_SlideRight;
 
                             flowLayoutPanel.Controls.Add( item );
                         }
                     }
-                }
-                catch { }
+                } catch { }
             }
         }
 
-        private void Item_SlideLeft( object sender, EventArgs e )
+        private async void TryDelete( SlideItem.SlideItem item )
         {
-            SlideItem.SlideItem item = (SlideItem.SlideItem) sender;
+            using( var client = new HttpClient() )
+            {
+                try
+                {
+                    HttpResponseMessage response = await client.GetAsync( 
+                        BaseApiUrl + $"list/delete/{ LoginToken }/{ item.Tag }" );
 
-            flowLayoutPanel.Controls.Remove( item );
+                    if( response.IsSuccessStatusCode )
+                    {
+                        var reply = XDocument.Parse( await response.Content.ReadAsStringAsync() );
+
+                        if( reply.Descendants( "success" ).Any() )
+                            flowLayoutPanel.Controls.Remove( item );
+                    }
+                } catch { }
+            }
         }
 
-        private void Item_SlideRight( object sender, EventArgs e )
+        private async void TryRename( SlideItem.SlideItem item )
         {
-            SlideItem.SlideItem item = (SlideItem.SlideItem) sender;
+            var title = Interaction.InputBox(
+                "To what title would you like to rename this list?  "
+            +   "Leave it blank to cancel renaming the list."
+            );
 
-            item.LeftText = item.LeftText == "Mark" ? "Unmark" : "Mark"; 
+            if( !string.IsNullOrEmpty( title ) )
+            using( var client = new HttpClient() )
+            {
+                try
+                {
+                    HttpResponseMessage response = await client.GetAsync( 
+                        BaseApiUrl + $"list/update/{ LoginToken }/{ item.Tag }/{ title }" );
+
+                    if( response.IsSuccessStatusCode )
+                    {
+                        var reply = XDocument.Parse( await response.Content.ReadAsStringAsync() );
+
+                        if( reply.Descendants( "success" ).Any() )
+                            item.Controls[ 1 ].Text = title;
+                    }
+                } catch { }
+            }
+        }
+
+        private async void TryAdd()
+        {
+            var title = Interaction.InputBox(
+                "What title would you like for this list?  "
+            +   "Leave it blank to cancel adding the list."
+            );
+
+            if( !string.IsNullOrEmpty( title ) )
+            using( var client = new HttpClient() )
+            {
+                try
+                {
+                    HttpResponseMessage response = await client.GetAsync( 
+                        BaseApiUrl + $"list/add/{ LoginToken }/{ title }" );
+
+                    if( response.IsSuccessStatusCode )
+                    {
+                        var reply = XDocument.Parse( await response.Content.ReadAsStringAsync() );
+
+                        if( reply.Descendants( "success" ).Any() )
+                        {
+                            var item         = new SlideItem.SlideItem( "Rename", "Delete", title );
+
+                            item.Tag         = reply.Descendants( "listid" ).FirstOrDefault().Value;
+                            item.SlideLeft  += Item_SlideLeft;
+                            item.SlideRight += Item_SlideRight;
+
+                            flowLayoutPanel.Controls.Add( item );
+                        }
+                    }
+                } catch { }
+            }
         }
     }
 }

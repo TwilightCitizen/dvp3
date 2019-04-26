@@ -55,6 +55,7 @@ namespace KeepnTabsClient
             // 
             // flowLayoutPanel
             // 
+            this.flowLayoutPanel.FlowDirection = System.Windows.Forms.FlowDirection.TopDown;
             this.flowLayoutPanel.Location = new System.Drawing.Point(60, 237);
             this.flowLayoutPanel.Name = "flowLayoutPanel";
             this.flowLayoutPanel.Size = new System.Drawing.Size(573, 905);
@@ -62,7 +63,6 @@ namespace KeepnTabsClient
             // 
             // btnAdd
             // 
-            this.btnAdd.Enabled = false;
             this.btnAdd.Font = new System.Drawing.Font("Microsoft Sans Serif", 21.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnAdd.Location = new System.Drawing.Point(60, 1148);
             this.btnAdd.Name = "btnAdd";
@@ -70,6 +70,7 @@ namespace KeepnTabsClient
             this.btnAdd.TabIndex = 6;
             this.btnAdd.Text = "Add New List";
             this.btnAdd.UseVisualStyleBackColor = true;
+            this.btnAdd.Click += new System.EventHandler(this.BtnAdd_Click);
             // 
             // frmLists
             // 
