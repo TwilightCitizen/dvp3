@@ -54,12 +54,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="frmExport.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="frmExport.Designer.cs">
-      <DependentUpon>frmExport.cs</DependentUpon>
-    </Compile>
     <Compile Include="frmLists.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -80,9 +74,6 @@
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <EmbeddedResource Include="frmExport.resx">
-      <DependentUpon>frmExport.cs</DependentUpon>
-    </EmbeddedResource>
     <EmbeddedResource Include="frmLists.resx">
       <DependentUpon>frmLists.cs</DependentUpon>
     </EmbeddedResource>

@@ -41,6 +41,7 @@ namespace KeepnTabsClient
             this.flowLayoutPanel = new System.Windows.Forms.FlowLayoutPanel();
             this.btnBack = new System.Windows.Forms.Button();
             this.lblList = new System.Windows.Forms.Label();
+            this.btnExport = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // btnAdd
@@ -48,7 +49,7 @@ namespace KeepnTabsClient
             this.btnAdd.Font = new System.Drawing.Font("Microsoft Sans Serif", 21.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnAdd.Location = new System.Drawing.Point(61, 1147);
             this.btnAdd.Name = "btnAdd";
-            this.btnAdd.Size = new System.Drawing.Size(573, 51);
+            this.btnAdd.Size = new System.Drawing.Size(280, 51);
             this.btnAdd.TabIndex = 9;
             this.btnAdd.Text = "Add New Task";
             this.btnAdd.UseVisualStyleBackColor = true;
@@ -85,11 +86,23 @@ namespace KeepnTabsClient
             this.lblList.TabIndex = 10;
             this.lblList.Text = "Lists";
             // 
+            // btnExport
+            // 
+            this.btnExport.Font = new System.Drawing.Font("Microsoft Sans Serif", 21.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnExport.Location = new System.Drawing.Point(354, 1147);
+            this.btnExport.Name = "btnExport";
+            this.btnExport.Size = new System.Drawing.Size(280, 51);
+            this.btnExport.TabIndex = 11;
+            this.btnExport.Text = "Export Tasks";
+            this.btnExport.UseVisualStyleBackColor = true;
+            this.btnExport.Click += new System.EventHandler(this.BtnExport_Click);
+            // 
             // frmTasks
             // 
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
             this.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("$this.BackgroundImage")));
             this.ClientSize = new System.Drawing.Size(687, 1351);
+            this.Controls.Add(this.btnExport);
             this.Controls.Add(this.lblList);
             this.Controls.Add(this.btnAdd);
             this.Controls.Add(this.flowLayoutPanel);
@@ -110,5 +123,6 @@ namespace KeepnTabsClient
         private System.Windows.Forms.FlowLayoutPanel flowLayoutPanel;
         private System.Windows.Forms.Button btnBack;
         private System.Windows.Forms.Label lblList;
+        private System.Windows.Forms.Button btnExport;
     }
 }

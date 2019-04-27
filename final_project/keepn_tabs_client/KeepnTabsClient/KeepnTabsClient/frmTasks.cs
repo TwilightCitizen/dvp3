@@ -7,17 +7,14 @@
  * Date:     April 14, 2019 */
 
 using System;
-using System.Collections.Generic;
-using System.ComponentModel;
 using System.Data;
 using System.Drawing;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Net;
 using System.Net.Http;
 using System.Xml.Linq;
 using System.Windows.Forms;
+using System.IO;
 using Microsoft.VisualBasic;
 
 namespace KeepnTabsClient
@@ -84,6 +81,11 @@ namespace KeepnTabsClient
             SlideItem.SlideItem item = (SlideItem.SlideItem) sender;
 
             TryRename( item );
+        }
+
+        private void BtnExport_Click( object sender, EventArgs e )
+        {
+            ExportTasks();
         }
 
         /* Implementation Methods. */
@@ -238,6 +240,35 @@ namespace KeepnTabsClient
                             item.Controls[ "btnMain" ].Text = title;
                     }
                 } catch { }
+            }
+        }
+
+        private async void ExportTasks()
+        {
+            var dlg = new SaveFileDialog();
+
+            // Filter for TicTacToe files.
+            dlg.Filter = "XML Files (*.xml)|*.xml";
+
+            if( dlg.ShowDialog() == DialogResult.OK )
+            {
+                using( StreamWriter sw = new StreamWriter( dlg.OpenFile() ) )
+                {
+                    // Convert the game to XML.
+                    var xml = new XElement( "list",
+                        new XElement( "title",
+                            new XText( lblList.Text ) )
+                    ,   new XElement( "tasks",
+                            flowLayoutPanel.Controls.OfType< SlideItem.SlideItem >().ToList().Select( item =>
+                                new XElement( "task",
+                                    new XElement( "title",
+                                        new XText( item.Controls[ "btnMain" ].Text ) )
+                                ,   new XElement( "done",
+                                        new XText( ( (bool) item.Controls[ "btnLeft" ].Tag ).ToString() ) ) ) ) ) );
+
+                    /* Write the file. */
+                    await sw.WriteAsync( xml.ToString() );
+                }
             }
         }
     }
