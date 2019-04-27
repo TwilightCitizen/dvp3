@@ -13,6 +13,7 @@ using System.Net.Http;
 using System.Net;
 using System.Xml.Linq;
 using Microsoft.VisualBasic;
+using System.Drawing;
 
 namespace KeepnTabsClient
 {
@@ -73,6 +74,11 @@ namespace KeepnTabsClient
         private void BtnAdd_Click( object sender, EventArgs e )
         {
             TryAdd();
+        }
+
+        private void BtnRotate_Click(object sender, EventArgs e)
+        {
+            SimulateRotation();
         }
 
         /* Implementation Methods */
@@ -201,6 +207,35 @@ namespace KeepnTabsClient
             view.ShowDialog( this );
 
             Show();
+        }
+
+        /* Simulate Rotating the Phone */
+
+        private void SimulateRotation()
+        {
+            using( var bmp = new Bitmap( Width, Height  ) )
+            {
+                DrawToBitmap( bmp, new Rectangle( 0, 0, Width, Height ) );
+                bmp.RotateFlip( RotateFlipType.Rotate270FlipNone );
+
+                var sim             = new Form();
+
+                sim.Width           = bmp.Width;
+                sim.Height          = bmp.Height;
+                sim.FormBorderStyle = FormBorderStyle.None;
+                sim.BackgroundImage = bmp;
+                sim.TransparencyKey = Color.Fuchsia;
+
+                void Sim_Click( object sender, EventArgs e) => sim.Close();
+
+                sim.Click           += Sim_Click;
+
+                Hide();
+
+                sim.ShowDialog( this );
+
+                Show();
+            }
         }
     }
 }

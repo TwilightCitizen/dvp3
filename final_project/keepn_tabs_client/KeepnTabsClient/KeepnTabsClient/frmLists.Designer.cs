@@ -41,6 +41,7 @@ namespace KeepnTabsClient
             this.flowLayoutPanel = new System.Windows.Forms.FlowLayoutPanel();
             this.btnAdd = new System.Windows.Forms.Button();
             this.label1 = new System.Windows.Forms.Label();
+            this.btnRotate = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // btnBack
@@ -85,11 +86,23 @@ namespace KeepnTabsClient
             this.label1.TabIndex = 7;
             this.label1.Text = "Lists";
             // 
+            // btnRotate
+            // 
+            this.btnRotate.BackColor = System.Drawing.Color.Black;
+            this.btnRotate.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnRotate.Location = new System.Drawing.Point(320, 1252);
+            this.btnRotate.Name = "btnRotate";
+            this.btnRotate.Size = new System.Drawing.Size(53, 50);
+            this.btnRotate.TabIndex = 9;
+            this.btnRotate.UseVisualStyleBackColor = false;
+            this.btnRotate.Click += new System.EventHandler(this.BtnRotate_Click);
+            // 
             // frmLists
             // 
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
             this.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("$this.BackgroundImage")));
             this.ClientSize = new System.Drawing.Size(687, 1351);
+            this.Controls.Add(this.btnRotate);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.btnAdd);
             this.Controls.Add(this.flowLayoutPanel);
@@ -110,5 +123,6 @@ namespace KeepnTabsClient
         private System.Windows.Forms.FlowLayoutPanel flowLayoutPanel;
         private System.Windows.Forms.Button btnAdd;
         private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.Button btnRotate;
     }
 }

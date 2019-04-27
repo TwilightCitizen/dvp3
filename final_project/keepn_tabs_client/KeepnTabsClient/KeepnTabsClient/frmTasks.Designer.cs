@@ -42,6 +42,7 @@ namespace KeepnTabsClient
             this.btnBack = new System.Windows.Forms.Button();
             this.lblList = new System.Windows.Forms.Label();
             this.btnExport = new System.Windows.Forms.Button();
+            this.btnRotate = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // btnAdd
@@ -97,11 +98,23 @@ namespace KeepnTabsClient
             this.btnExport.UseVisualStyleBackColor = true;
             this.btnExport.Click += new System.EventHandler(this.BtnExport_Click);
             // 
+            // btnRotate
+            // 
+            this.btnRotate.BackColor = System.Drawing.Color.Black;
+            this.btnRotate.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnRotate.Location = new System.Drawing.Point(320, 1250);
+            this.btnRotate.Name = "btnRotate";
+            this.btnRotate.Size = new System.Drawing.Size(53, 50);
+            this.btnRotate.TabIndex = 12;
+            this.btnRotate.UseVisualStyleBackColor = false;
+            this.btnRotate.Click += new System.EventHandler(this.BtnRotate_Click);
+            // 
             // frmTasks
             // 
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
             this.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("$this.BackgroundImage")));
             this.ClientSize = new System.Drawing.Size(687, 1351);
+            this.Controls.Add(this.btnRotate);
             this.Controls.Add(this.btnExport);
             this.Controls.Add(this.lblList);
             this.Controls.Add(this.btnAdd);
@@ -124,5 +137,6 @@ namespace KeepnTabsClient
         private System.Windows.Forms.Button btnBack;
         private System.Windows.Forms.Label lblList;
         private System.Windows.Forms.Button btnExport;
+        private System.Windows.Forms.Button btnRotate;
     }
 }

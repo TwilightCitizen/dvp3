@@ -47,6 +47,7 @@ namespace KeepnTabsClient
             this.txtEmail = new System.Windows.Forms.TextBox();
             this.picLogo = new System.Windows.Forms.PictureBox();
             this.txtMessage = new System.Windows.Forms.TextBox();
+            this.btnRotate = new System.Windows.Forms.Button();
             this.tblNav.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.picLogo)).BeginInit();
             this.SuspendLayout();
@@ -189,11 +190,23 @@ namespace KeepnTabsClient
             this.txtMessage.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             this.txtMessage.TextChanged += new System.EventHandler(this.TxtMessage_TextChanged);
             // 
+            // btnRotate
+            // 
+            this.btnRotate.BackColor = System.Drawing.Color.Black;
+            this.btnRotate.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnRotate.Location = new System.Drawing.Point(321, 1252);
+            this.btnRotate.Name = "btnRotate";
+            this.btnRotate.Size = new System.Drawing.Size(53, 50);
+            this.btnRotate.TabIndex = 8;
+            this.btnRotate.UseVisualStyleBackColor = false;
+            this.btnRotate.Click += new System.EventHandler(this.BtnRotate_Click);
+            // 
             // frmUser
             // 
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
             this.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("$this.BackgroundImage")));
             this.ClientSize = new System.Drawing.Size(687, 1351);
+            this.Controls.Add(this.btnRotate);
             this.Controls.Add(this.txtMessage);
             this.Controls.Add(this.tblNav);
             this.Controls.Add(this.picLogo);
@@ -222,6 +235,7 @@ namespace KeepnTabsClient
         private System.Windows.Forms.Button btnRegUpdate;
         private System.Windows.Forms.TextBox txtMessage;
         private System.Windows.Forms.Button btnDelete;
+        private System.Windows.Forms.Button btnRotate;
     }
 }
 

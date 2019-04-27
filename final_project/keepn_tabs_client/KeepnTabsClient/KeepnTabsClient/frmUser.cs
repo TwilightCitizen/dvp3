@@ -14,6 +14,7 @@ using System.Xml.Linq;
 using FluentStateMachine;
 using Microsoft.VisualBasic;
 using System.Windows.Forms;
+using System.Drawing;
 
 namespace KeepnTabsClient
 {
@@ -121,6 +122,11 @@ namespace KeepnTabsClient
         private void TxtMessage_TextChanged( object sender, EventArgs e )
         {
             SizeAndPositionMessage();
+        }
+
+        private void BtnRotate_Click( object sender, EventArgs e )
+        {
+            SimulateRotation();
         }
 
         /* Setup Appropriate States, Triggers, and Transitions for User/Account */
@@ -564,7 +570,7 @@ namespace KeepnTabsClient
             } ) );
         }
 
-            /* Show the User's Lists, If Any */
+        /* Show the User's Lists, If Any */
     
         private void ViewLists()
         {
@@ -575,6 +581,35 @@ namespace KeepnTabsClient
             view.ShowDialog( this );
 
             Show();
+        }
+
+        /* Simulate Rotating the Phone */
+
+        private void SimulateRotation()
+        {
+            using( var bmp = new Bitmap( Width, Height  ) )
+            {
+                DrawToBitmap( bmp, new Rectangle( 0, 0, Width, Height ) );
+                bmp.RotateFlip( RotateFlipType.Rotate270FlipNone );
+
+                var sim             = new Form();
+
+                sim.Width           = bmp.Width;
+                sim.Height          = bmp.Height;
+                sim.FormBorderStyle = FormBorderStyle.None;
+                sim.BackgroundImage = bmp;
+                sim.TransparencyKey = Color.Fuchsia;
+
+                void Sim_Click( object sender, EventArgs e) => sim.Close();
+
+                sim.Click           += Sim_Click;
+
+                Hide();
+
+                sim.ShowDialog( this );
+
+                Show();
+            }
         }
     }
 }
