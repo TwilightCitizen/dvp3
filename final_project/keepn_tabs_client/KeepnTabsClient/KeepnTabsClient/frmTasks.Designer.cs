@@ -37,22 +37,78 @@ namespace KeepnTabsClient
         private void InitializeComponent()
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(frmTasks));
+            this.btnAdd = new System.Windows.Forms.Button();
+            this.flowLayoutPanel = new System.Windows.Forms.FlowLayoutPanel();
+            this.btnBack = new System.Windows.Forms.Button();
+            this.lblList = new System.Windows.Forms.Label();
             this.SuspendLayout();
+            // 
+            // btnAdd
+            // 
+            this.btnAdd.Font = new System.Drawing.Font("Microsoft Sans Serif", 21.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnAdd.Location = new System.Drawing.Point(61, 1147);
+            this.btnAdd.Name = "btnAdd";
+            this.btnAdd.Size = new System.Drawing.Size(573, 51);
+            this.btnAdd.TabIndex = 9;
+            this.btnAdd.Text = "Add New Task";
+            this.btnAdd.UseVisualStyleBackColor = true;
+            this.btnAdd.Click += new System.EventHandler(this.BtnAdd_Click);
+            // 
+            // flowLayoutPanel
+            // 
+            this.flowLayoutPanel.BackColor = System.Drawing.Color.Transparent;
+            this.flowLayoutPanel.FlowDirection = System.Windows.Forms.FlowDirection.TopDown;
+            this.flowLayoutPanel.Location = new System.Drawing.Point(61, 236);
+            this.flowLayoutPanel.Name = "flowLayoutPanel";
+            this.flowLayoutPanel.Size = new System.Drawing.Size(573, 905);
+            this.flowLayoutPanel.TabIndex = 8;
+            // 
+            // btnBack
+            // 
+            this.btnBack.Font = new System.Drawing.Font("Microsoft Sans Serif", 21.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnBack.Location = new System.Drawing.Point(61, 182);
+            this.btnBack.Name = "btnBack";
+            this.btnBack.Size = new System.Drawing.Size(51, 48);
+            this.btnBack.TabIndex = 7;
+            this.btnBack.Text = "◀";
+            this.btnBack.UseVisualStyleBackColor = true;
+            this.btnBack.Click += new System.EventHandler(this.BtnBack_Click);
+            // 
+            // lblList
+            // 
+            this.lblList.AutoSize = true;
+            this.lblList.BackColor = System.Drawing.Color.Transparent;
+            this.lblList.Font = new System.Drawing.Font("Microsoft Sans Serif", 21.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblList.Location = new System.Drawing.Point(118, 190);
+            this.lblList.Name = "lblList";
+            this.lblList.Size = new System.Drawing.Size(76, 33);
+            this.lblList.TabIndex = 10;
+            this.lblList.Text = "Lists";
             // 
             // frmTasks
             // 
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
             this.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("$this.BackgroundImage")));
             this.ClientSize = new System.Drawing.Size(687, 1351);
+            this.Controls.Add(this.lblList);
+            this.Controls.Add(this.btnAdd);
+            this.Controls.Add(this.flowLayoutPanel);
+            this.Controls.Add(this.btnBack);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
             this.Name = "frmTasks";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "frmTasks";
             this.TransparencyKey = System.Drawing.Color.Fuchsia;
             this.ResumeLayout(false);
+            this.PerformLayout();
 
         }
 
         #endregion
+
+        private System.Windows.Forms.Button btnAdd;
+        private System.Windows.Forms.FlowLayoutPanel flowLayoutPanel;
+        private System.Windows.Forms.Button btnBack;
+        private System.Windows.Forms.Label lblList;
     }
 }

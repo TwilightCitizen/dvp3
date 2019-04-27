@@ -16,6 +16,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Net.Http;
+using System.Net;
 using System.Xml.Linq;
 using Microsoft.VisualBasic;
 
@@ -47,6 +48,8 @@ namespace KeepnTabsClient
             TryGetLists();
         }
 
+        /* Event Handlers */
+
         private void BtnBack_Click( object sender, EventArgs e )
         {
             Close();
@@ -66,10 +69,19 @@ namespace KeepnTabsClient
             TryRename( item );
         }
 
+        private void Item_Click( object sender, EventArgs e)
+        {
+            SlideItem.SlideItem item = (SlideItem.SlideItem) sender;
+
+            ViewTasks( item );
+        }
+
         private void BtnAdd_Click( object sender, EventArgs e )
         {
             TryAdd();
         }
+
+        /* Implementation Methods */
 
         private async void TryGetLists()
         {
@@ -87,9 +99,13 @@ namespace KeepnTabsClient
                         if( reply.Descendants( "success" ).Any() )
                         foreach( XElement list in reply.Descendants( "list" ) )
                         {
-                            var item         = new SlideItem.SlideItem( "Rename", "Delete", list.Element( "title" ).Value );
+                            var item         = new SlideItem.SlideItem(
+                                "Rename", "Delete"
+                            ,   WebUtility.UrlDecode( list.Element( "title" ).Value )
+                            );
 
                             item.Tag         = list.Element( "id" ).Value;
+                            item.Click      += Item_Click;
                             item.SlideLeft  += Item_SlideLeft;
                             item.SlideRight += Item_SlideRight;
 
@@ -140,7 +156,7 @@ namespace KeepnTabsClient
                         var reply = XDocument.Parse( await response.Content.ReadAsStringAsync() );
 
                         if( reply.Descendants( "success" ).Any() )
-                            item.Controls[ 1 ].Text = title;
+                            item.Controls[ "btnMain" ].Text = title;
                     }
                 } catch { }
             }
@@ -178,6 +194,19 @@ namespace KeepnTabsClient
                     }
                 } catch { }
             }
+        }
+
+        private void ViewTasks( SlideItem.SlideItem item )
+        {
+            var view = new frmTasks(
+                LoginToken, BaseApiUrl
+            ,   (string) item.Tag, item.Controls[ "btnMain" ].Text );
+
+            Hide();
+
+            view.ShowDialog( this );
+
+            Show();
         }
     }
 }

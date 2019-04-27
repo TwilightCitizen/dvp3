@@ -101,6 +101,8 @@ namespace KeepnTabsClient
             Close();
         }
 
+        /* Translate Events as State Machine Triggers */
+
         private void BtnRegUpdate_Click( object sender, EventArgs e )
         {
             UserAccount.Trigger( Trigger.regUpdateClicked );
@@ -341,6 +343,7 @@ namespace KeepnTabsClient
             } ) );
         }
 
+        /* Notify of Failed Update */
 
         private void CannotUpdate()
         {

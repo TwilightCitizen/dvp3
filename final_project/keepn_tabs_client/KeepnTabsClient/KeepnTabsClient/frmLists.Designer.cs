@@ -40,6 +40,7 @@ namespace KeepnTabsClient
             this.btnBack = new System.Windows.Forms.Button();
             this.flowLayoutPanel = new System.Windows.Forms.FlowLayoutPanel();
             this.btnAdd = new System.Windows.Forms.Button();
+            this.label1 = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
             // btnBack
@@ -49,12 +50,13 @@ namespace KeepnTabsClient
             this.btnBack.Name = "btnBack";
             this.btnBack.Size = new System.Drawing.Size(51, 48);
             this.btnBack.TabIndex = 0;
-            this.btnBack.Text = "<";
+            this.btnBack.Text = "◀";
             this.btnBack.UseVisualStyleBackColor = true;
             this.btnBack.Click += new System.EventHandler(this.BtnBack_Click);
             // 
             // flowLayoutPanel
             // 
+            this.flowLayoutPanel.BackColor = System.Drawing.Color.Transparent;
             this.flowLayoutPanel.FlowDirection = System.Windows.Forms.FlowDirection.TopDown;
             this.flowLayoutPanel.Location = new System.Drawing.Point(60, 237);
             this.flowLayoutPanel.Name = "flowLayoutPanel";
@@ -72,11 +74,23 @@ namespace KeepnTabsClient
             this.btnAdd.UseVisualStyleBackColor = true;
             this.btnAdd.Click += new System.EventHandler(this.BtnAdd_Click);
             // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.BackColor = System.Drawing.Color.Transparent;
+            this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 21.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label1.Location = new System.Drawing.Point(117, 191);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(76, 33);
+            this.label1.TabIndex = 7;
+            this.label1.Text = "Lists";
+            // 
             // frmLists
             // 
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
             this.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("$this.BackgroundImage")));
             this.ClientSize = new System.Drawing.Size(687, 1351);
+            this.Controls.Add(this.label1);
             this.Controls.Add(this.btnAdd);
             this.Controls.Add(this.flowLayoutPanel);
             this.Controls.Add(this.btnBack);
@@ -86,6 +100,7 @@ namespace KeepnTabsClient
             this.Text = "frmLists";
             this.TransparencyKey = System.Drawing.Color.Fuchsia;
             this.ResumeLayout(false);
+            this.PerformLayout();
 
         }
 
@@ -94,5 +109,6 @@ namespace KeepnTabsClient
         private System.Windows.Forms.Button btnBack;
         private System.Windows.Forms.FlowLayoutPanel flowLayoutPanel;
         private System.Windows.Forms.Button btnAdd;
+        private System.Windows.Forms.Label label1;
     }
 }
