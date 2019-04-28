@@ -7,7 +7,7 @@
 #
 # Host: 127.0.0.1 (MySQL 5.7.25)
 # Database: KeepnTabs
-# Generation Time: 2019-04-20 21:27:03 +0000
+# Generation Time: 2019-04-28 18:20:08 +0000
 # ************************************************************
 
 
@@ -34,17 +34,6 @@ CREATE TABLE `Lists` (
   CONSTRAINT `lists_ibfk_1` FOREIGN KEY (`UserID`) REFERENCES `Users` (`ID`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-LOCK TABLES `Lists` WRITE;
-/*!40000 ALTER TABLE `Lists` DISABLE KEYS */;
-
-INSERT INTO `Lists` (`ID`, `Title`, `UserID`)
-VALUES
-	('6b95c0e0-5ee1-11e9-ad13-8dcf6690a175','A%20New%20List','39c60dd6-5ee1-11e9-ad13-8dcf6690a175'),
-	('724ba0ba-5ee3-11e9-ad13-8dcf6690a175','List%20Name','1e832d68-5ee3-11e9-ad13-8dcf6690a175'),
-	('7cbfc5e6-5ee1-11e9-ad13-8dcf6690a175','A%20Newer%20List','39c60dd6-5ee1-11e9-ad13-8dcf6690a175');
-
-/*!40000 ALTER TABLE `Lists` ENABLE KEYS */;
-UNLOCK TABLES;
 
 
 # Dump of table Tasks
@@ -62,15 +51,6 @@ CREATE TABLE `Tasks` (
   CONSTRAINT `tasks_ibfk_1` FOREIGN KEY (`ListID`) REFERENCES `Lists` (`ID`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-LOCK TABLES `Tasks` WRITE;
-/*!40000 ALTER TABLE `Tasks` DISABLE KEYS */;
-
-INSERT INTO `Tasks` (`ID`, `Title`, `Done`, `ListID`)
-VALUES
-	('993b936a-5ee3-11e9-ad13-8dcf6690a175','A%20Task',0,'724ba0ba-5ee3-11e9-ad13-8dcf6690a175');
-
-/*!40000 ALTER TABLE `Tasks` ENABLE KEYS */;
-UNLOCK TABLES;
 
 
 # Dump of table Tokens
@@ -87,29 +67,6 @@ CREATE TABLE `Tokens` (
   CONSTRAINT `tokens_ibfk_1` FOREIGN KEY (`UserID`) REFERENCES `Users` (`ID`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-LOCK TABLES `Tokens` WRITE;
-/*!40000 ALTER TABLE `Tokens` DISABLE KEYS */;
-
-INSERT INTO `Tokens` (`ID`, `UserID`, `Expires`)
-VALUES
-	('22093446-63b1-11e9-9bf7-bcb96df47fa0','1e832d68-5ee3-11e9-ad13-8dcf6690a175','2019-04-20 17:43:24'),
-	('3a273b86-5ee3-11e9-ad13-8dcf6690a175','1e832d68-5ee3-11e9-ad13-8dcf6690a175','2019-04-14 15:30:00'),
-	('3abfc7ba-63a3-11e9-9bf7-bcb96df47fa0','1e832d68-5ee3-11e9-ad13-8dcf6690a175','2019-04-20 16:03:52'),
-	('3bc7a8ee-63b2-11e9-9bf7-bcb96df47fa0','1e832d68-5ee3-11e9-ad13-8dcf6690a175','2019-04-20 17:51:16'),
-	('4b1004a0-63b1-11e9-9bf7-bcb96df47fa0','1e832d68-5ee3-11e9-ad13-8dcf6690a175','2019-04-20 17:44:33'),
-	('57932f74-5ee1-11e9-ad13-8dcf6690a175','39c60dd6-5ee1-11e9-ad13-8dcf6690a175','2019-04-14 14:45:54'),
-	('6ce327b4-63a3-11e9-9bf7-bcb96df47fa0','1e832d68-5ee3-11e9-ad13-8dcf6690a175','2019-04-20 16:05:16'),
-	('828baa14-63b2-11e9-9bf7-bcb96df47fa0','1e832d68-5ee3-11e9-ad13-8dcf6690a175','2019-04-20 17:53:15'),
-	('9af3c06a-63b1-11e9-9bf7-bcb96df47fa0','1e832d68-5ee3-11e9-ad13-8dcf6690a175','2019-04-20 17:46:47'),
-	('9b6142ca-63a2-11e9-9bf7-bcb96df47fa0','1e832d68-5ee3-11e9-ad13-8dcf6690a175','2019-04-20 15:59:25'),
-	('b6232882-63af-11e9-9bf7-bcb96df47fa0','1e832d68-5ee3-11e9-ad13-8dcf6690a175','2019-04-20 17:33:13'),
-	('d66b781e-63a1-11e9-9bf7-bcb96df47fa0','1e832d68-5ee3-11e9-ad13-8dcf6690a175','2019-04-20 15:53:54'),
-	('e573fe84-63b1-11e9-9bf7-bcb96df47fa0','1e832d68-5ee3-11e9-ad13-8dcf6690a175','2019-04-20 17:48:52'),
-	('ec2060c4-63ac-11e9-9bf7-bcb96df47fa0','1e832d68-5ee3-11e9-ad13-8dcf6690a175','2019-04-20 17:13:15'),
-	('f8fa149a-63a0-11e9-9bf7-bcb96df47fa0','1e832d68-5ee3-11e9-ad13-8dcf6690a175','2019-04-20 15:47:43');
-
-/*!40000 ALTER TABLE `Tokens` ENABLE KEYS */;
-UNLOCK TABLES;
 
 
 # Dump of table Users
@@ -126,18 +83,6 @@ CREATE TABLE `Users` (
   UNIQUE KEY `UniqueEmail` (`Email`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-LOCK TABLES `Users` WRITE;
-/*!40000 ALTER TABLE `Users` DISABLE KEYS */;
-
-INSERT INTO `Users` (`ID`, `Email`, `Pass`, `Confirmed`)
-VALUES
-	('1e832d68-5ee3-11e9-ad13-8dcf6690a175','new@gmail.com','password',1),
-	('2692094a-5ee1-11e9-ad13-8dcf6690a175','test@test.com','password',0),
-	('39c60dd6-5ee1-11e9-ad13-8dcf6690a175','test3@test.com','password',1),
-	('e112b39a-5e6f-11e9-ad13-8dcf6690a175','test2@test.com','password',0);
-
-/*!40000 ALTER TABLE `Users` ENABLE KEYS */;
-UNLOCK TABLES;
 
 
 
