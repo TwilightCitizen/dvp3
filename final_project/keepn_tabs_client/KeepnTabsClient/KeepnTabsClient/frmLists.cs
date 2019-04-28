@@ -118,22 +118,31 @@ namespace KeepnTabsClient
 
         private async void TryDelete( SlideItem.SlideItem item )
         {
-            using( var client = new HttpClient() )
+            var frm = new frmDelete( 5, "your list and all tasks in it" );
+
+            Hide();
+
+            if( frm.ShowDialog( this ) == DialogResult.Yes )
             {
-                try
+                Show();
+
+                using ( var client = new HttpClient() )
                 {
-                    HttpResponseMessage response = await client.GetAsync( 
-                        BaseApiUrl + $"list/delete/{ LoginToken }/{ item.Tag }" );
-
-                    if( response.IsSuccessStatusCode )
+                    try
                     {
-                        var reply = XDocument.Parse( await response.Content.ReadAsStringAsync() );
+                        HttpResponseMessage response = await client.GetAsync( 
+                            BaseApiUrl + $"list/delete/{ LoginToken }/{ item.Tag }" );
 
-                        if( reply.Descendants( "success" ).Any() )
-                            flowLayoutPanel.Controls.Remove( item );
-                    }
-                } catch { }
-            }
+                        if( response.IsSuccessStatusCode )
+                        {
+                            var reply = XDocument.Parse( await response.Content.ReadAsStringAsync() );
+
+                            if( reply.Descendants( "success" ).Any() )
+                                flowLayoutPanel.Controls.Remove( item );
+                        }
+                    } catch { }
+                }
+            } else Show();
         }
 
         private async void TryRename( SlideItem.SlideItem item )

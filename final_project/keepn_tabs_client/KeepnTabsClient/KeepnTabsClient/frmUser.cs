@@ -428,21 +428,21 @@ namespace KeepnTabsClient
         {
             Invoke( new Action( () =>
             {
-                var frm = new frmDelete( 5, "your account and all lists and tasks in it" );
+                var frm = new frmDelete( 10, "your account and all lists and tasks in it" );
 
                 Hide();
 
-                if( frm.ShowDialog( this ) == DialogResult.Yes)
+                if( frm.ShowDialog( this ) == DialogResult.Yes )
                 {
                     Show();
 
-                    UserAccount.Trigger(Trigger.deleteConfirmed);
+                    UserAccount.Trigger( Trigger.deleteConfirmed );
                 }
                 else
                 {
                     Show();
 
-                    UserAccount.Trigger(Trigger.deleteDenied);
+                    UserAccount.Trigger( Trigger.deleteDenied );
                 }
                     
             } ) ); 
