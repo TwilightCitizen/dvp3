@@ -83,6 +83,8 @@ namespace KeepnTabsClient
 
         /* Implementation Methods */
 
+        /* Get the Lists for the Logged in User. */
+
         private async void TryGetLists()
         {
             using( var client = new HttpClient() )
@@ -116,6 +118,8 @@ namespace KeepnTabsClient
             }
         }
 
+        /* Delete the Selected List for the Logged in User on a 5-second Confirmation. */
+
         private async void TryDelete( SlideItem.SlideItem item )
         {
             var frm = new frmDelete( 5, "your list and all tasks in it" );
@@ -145,6 +149,8 @@ namespace KeepnTabsClient
             } else Show();
         }
 
+        /* Rename the Selected List for the Logged in User, Cancelling on Blank. */
+
         private async void TryRename( SlideItem.SlideItem item )
         {
             var title = Interaction.InputBox(
@@ -170,6 +176,8 @@ namespace KeepnTabsClient
                 } catch { }
             }
         }
+
+        /* Add a List to the Logged in User's Account with the Given Name, Cancelling on Blank. */
 
         private async void TryAdd()
         {
@@ -204,6 +212,8 @@ namespace KeepnTabsClient
                 } catch { }
             }
         }
+
+        /* View all the Tasks for the Selected List of the Logged in User. */
 
         private void ViewTasks( SlideItem.SlideItem item )
         {

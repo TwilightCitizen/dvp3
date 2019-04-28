@@ -96,6 +96,8 @@ namespace KeepnTabsClient
 
         /* Implementation Methods. */
 
+        /* Get the Tasks for the Selected List of the Logged in User. */
+
         private async void TryGetTasks()
         {
             using( var client = new HttpClient() )
@@ -135,6 +137,8 @@ namespace KeepnTabsClient
             }
         }
 
+        /* Add a Task to the List for the Logged in User.  Cancel Task Addition on Blank. */
+
         private async void TryAdd()
         {
             var title = Interaction.InputBox(
@@ -171,6 +175,8 @@ namespace KeepnTabsClient
             }
         }
 
+        /* Delete the Selected Task from the List for the Logged in User.  Confirm on 2-second Hold. */
+
         private async void TryDelete( SlideItem.SlideItem item )
         {
             var frm = new frmDelete( 2, "your task" );
@@ -199,6 +205,8 @@ namespace KeepnTabsClient
                 }
             } else Show();
         }
+
+        /* Toggle the Selected Task for the Logged in User from Done to Not Done, or Vice Versa. */
 
         private async void TryToggle( SlideItem.SlideItem item )
         {
@@ -230,6 +238,8 @@ namespace KeepnTabsClient
             }
         }
 
+        /* Rename the Selected Task for the Logged in User to the Given Title, Cancelling on Blank. */
+
         private async void TryRename( SlideItem.SlideItem item )
         {
             var title = Interaction.InputBox(
@@ -257,6 +267,8 @@ namespace KeepnTabsClient
                 } catch { }
             }
         }
+
+        /* Export the Logged in User's Tasks from the Selected List to an XML File of the User's Choosing. */
 
         private async void ExportTasks()
         {
