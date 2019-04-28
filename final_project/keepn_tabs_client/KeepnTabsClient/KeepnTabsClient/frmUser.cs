@@ -426,17 +426,15 @@ namespace KeepnTabsClient
         /* Confirm the User's Intention to Delete the User/Account */
         private void CanDelete()
         {
-            var confirmed = Interaction.InputBox(
-                "Are you sure you want to delete your account?  "
-            +   "This action cannot be undone!  "
-            +   "If so, enter your password to confirm.  "
-            +   "Enter anything else to cancel account deletion."
-            ,   "Confirm Account Deletion" );
+            Invoke( new Action( () =>
+            {
+                var frm = new frmDelete();
 
-            if( confirmed == txtPassword.Text )
-                UserAccount.Trigger( Trigger.deleteConfirmed );
-            else
-                UserAccount.Trigger( Trigger.deleteDenied    );
+                if( frm.ShowDialog( this ) == DialogResult.Yes )
+                    UserAccount.Trigger( Trigger.deleteConfirmed );
+                else
+                    UserAccount.Trigger( Trigger.deleteDenied    );
+            } ) ); 
         }
 
         /* Try Deleting the User's Account */

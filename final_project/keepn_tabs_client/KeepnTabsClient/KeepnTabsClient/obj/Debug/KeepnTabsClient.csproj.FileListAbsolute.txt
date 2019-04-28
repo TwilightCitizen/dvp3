@@ -15,3 +15,4 @@
 \\vmware-host\Shared Folders\Desktop\dvp3\final_project\keepn_tabs_client\KeepnTabsClient\KeepnTabsClient\bin\Debug\FluentStateMachine.pdb
 \\vmware-host\Shared Folders\Desktop\dvp3\final_project\keepn_tabs_client\KeepnTabsClient\KeepnTabsClient\bin\Debug\SlideItem.dll
 \\vmware-host\Shared Folders\Desktop\dvp3\final_project\keepn_tabs_client\KeepnTabsClient\KeepnTabsClient\bin\Debug\SlideItem.pdb
+\\vmware-host\Shared Folders\Desktop\dvp3\final_project\keepn_tabs_client\KeepnTabsClient\KeepnTabsClient\obj\Debug\KeepnTabsClient.frmDelete.resources
