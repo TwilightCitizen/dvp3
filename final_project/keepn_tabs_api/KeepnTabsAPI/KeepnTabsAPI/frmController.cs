@@ -28,8 +28,9 @@ namespace KeepnTabsAPI
 
         /* MySql Database Backing Store */
 
-        private const string Path  =
-            "C:\\VFW\\connect.txt",
+        private const string
+            DBPath   = "C:\\VFW\\connect.txt",
+            APIPath  = "C:\\VFW\\listen.txt",
             User     = "dbsAdmin",
             Password = "password",
             Database = "keepntabs",
@@ -66,7 +67,7 @@ namespace KeepnTabsAPI
 
         private void InitializeAPIServer()
         {
-            Server          = new Server( "http://192.168.82.128:8080/todo/", Invalid );
+            Server          = new Server( $"http://{ GetListener() }:8080/todo/", Invalid );
 
             Server.Handlers = new Dictionary< string, Server.Handler >
             {
@@ -197,7 +198,15 @@ namespace KeepnTabsAPI
         
         private string GetServer( )
         {
-            try   { return File.ReadAllText( Path ); }
+            try   { return File.ReadAllText( DBPath ); }
+            catch { return null;                     }
+        }
+
+        /* Read listener path from text file at hard coded path. */
+
+        private string GetListener( )
+        {
+            try   { return File.ReadAllText( APIPath ); }
             catch { return null;                     }
         }
 

@@ -203,6 +203,7 @@ namespace KeepnTabsClient
                             var item         = new SlideItem.SlideItem( "Rename", "Delete", title );
 
                             item.Tag         = reply.Descendants( "listid" ).FirstOrDefault().Value;
+                            item.Click      += Item_Click;
                             item.SlideLeft  += Item_SlideLeft;
                             item.SlideRight += Item_SlideRight;
 
