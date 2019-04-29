@@ -206,7 +206,7 @@ namespace KeepnTabsAPI
 
         private string GetListener( )
         {
-            try   { return File.ReadAllText( APIPath ); }
+            try   { return File.ReadAllText( APIPath ).TrimEnd( '\n', '\r' ); }
             catch { return null;                     }
         }
 
