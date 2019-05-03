@@ -9,3 +9,4 @@
 \\vmware-host\Shared Folders\Desktop\dvp3\final_project_do_over\KeepnTabs\KeepnTabs\obj\Debug\KeepnTabs.pdb
 \\vmware-host\Shared Folders\Desktop\dvp3\final_project_do_over\KeepnTabs\KeepnTabs\obj\Debug\KeepnTabs.frmUser.resources
 \\vmware-host\Shared Folders\Desktop\dvp3\final_project_do_over\KeepnTabs\KeepnTabs\obj\Debug\KeepnTabs.frmLists.resources
+\\vmware-host\Shared Folders\Desktop\dvp3\final_project_do_over\KeepnTabs\KeepnTabs\obj\Debug\KeepnTabs.frmTasks.resources

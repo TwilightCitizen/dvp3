@@ -14,13 +14,17 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.Net.Http;
+using System.Xml.Linq;
 using System.ComponentModel.DataAnnotations;
 
 namespace KeepnTabs
 {
     public partial class frmUser : Form
     {
-        private bool LoggedIn = false;
+        private bool   LoggedIn = false;
+        private bool   Updating = false;
+        private string LoginToken;
 
         public frmUser()
         {
@@ -36,6 +40,11 @@ namespace KeepnTabs
         {
             LogOut();
             Close();
+        }
+
+        private void BtnUpdateCommit_Click( object sender, EventArgs e )
+        {
+            if( Updating ) Commit(); else Update_();
         }
 
         private void BtnDelete_Click( object sender, EventArgs e )
@@ -60,7 +69,15 @@ namespace KeepnTabs
 
         private void CheckCredentials()
         {
-            btnLogInOutRegister.Enabled = txtPassword.Text.Any() && new EmailAddressAttribute().IsValid( txtEmail.Text );
+            btnLogInOutRegister.Enabled =
+                txtPassword.Text.Any() &&
+                new EmailAddressAttribute().IsValid( txtEmail.Text ) &&
+                !LoggedIn;
+
+            btnUpdateCommit.Enabled     = 
+                txtPassword.Text.Any() && 
+                new EmailAddressAttribute().IsValid( txtEmail.Text ) &&
+                Updating;
         }
 
         private void LogOut()
@@ -75,14 +92,41 @@ namespace KeepnTabs
             btnLogInOutRegister.Text = "Login";
         }
 
-        private void LogInRegister()
+        private async void LogInRegister()
         {
-            txtEmail.Enabled         = 
-            txtPassword.Enabled      = false;
-            btnDelete.Enabled        =
-            btnLists.Enabled         = true;
-            LoggedIn                 = true;
-            btnLogInOutRegister.Text = "Logout";
+            using( var client = new HttpClient( new FakeAPI() ) )
+            {
+                try
+                {
+                    HttpResponseMessage response = await client.GetAsync( 
+                        Program.ApiBase + $"user/login/{ txtEmail.Text }/{ txtPassword.Text }" );
+
+                    if( response.IsSuccessStatusCode )
+                    {
+                        LoginToken               = await response.Content.ReadAsStringAsync();
+                        txtEmail.Enabled         = 
+                        txtPassword.Enabled      = false;
+                        btnDelete.Enabled        =
+                        btnLists.Enabled         = true;
+                        LoggedIn                 = true;
+                        btnLogInOutRegister.Text = "Logout";
+                    }
+                } catch { }
+            }
+        }
+
+        private void Update_()
+        {
+            txtEmail.Enabled    =
+            txtPassword.Enabled = true;
+            Updating            = true;
+        }
+
+        private void Commit()
+        {
+            txtEmail.Enabled    =
+            txtPassword.Enabled = false;
+            Updating = false;
         }
 
         private void Delete()

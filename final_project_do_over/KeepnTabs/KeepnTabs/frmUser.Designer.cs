@@ -43,6 +43,7 @@
             this.btnDelete = new System.Windows.Forms.Button();
             this.btnQuit = new System.Windows.Forms.Button();
             this.btnLists = new System.Windows.Forms.Button();
+            this.btnUpdateCommit = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.picLogo)).BeginInit();
             this.SuspendLayout();
             // 
@@ -59,7 +60,7 @@
             // 
             // txtEmail
             // 
-            this.txtEmail.Location = new System.Drawing.Point(60, 424);
+            this.txtEmail.Location = new System.Drawing.Point(60, 396);
             this.txtEmail.Name = "txtEmail";
             this.txtEmail.Size = new System.Drawing.Size(209, 20);
             this.txtEmail.TabIndex = 1;
@@ -67,7 +68,7 @@
             // 
             // txtPassword
             // 
-            this.txtPassword.Location = new System.Drawing.Point(60, 450);
+            this.txtPassword.Location = new System.Drawing.Point(60, 422);
             this.txtPassword.Name = "txtPassword";
             this.txtPassword.Size = new System.Drawing.Size(209, 20);
             this.txtPassword.TabIndex = 2;
@@ -76,7 +77,7 @@
             // btnLogInOutRegister
             // 
             this.btnLogInOutRegister.Enabled = false;
-            this.btnLogInOutRegister.Location = new System.Drawing.Point(60, 476);
+            this.btnLogInOutRegister.Location = new System.Drawing.Point(60, 448);
             this.btnLogInOutRegister.Name = "btnLogInOutRegister";
             this.btnLogInOutRegister.Size = new System.Drawing.Size(105, 23);
             this.btnLogInOutRegister.TabIndex = 3;
@@ -87,7 +88,7 @@
             // btnDelete
             // 
             this.btnDelete.Enabled = false;
-            this.btnDelete.Location = new System.Drawing.Point(167, 505);
+            this.btnDelete.Location = new System.Drawing.Point(167, 477);
             this.btnDelete.Name = "btnDelete";
             this.btnDelete.Size = new System.Drawing.Size(104, 23);
             this.btnDelete.TabIndex = 6;
@@ -97,7 +98,7 @@
             // 
             // btnQuit
             // 
-            this.btnQuit.Location = new System.Drawing.Point(61, 505);
+            this.btnQuit.Location = new System.Drawing.Point(61, 477);
             this.btnQuit.Name = "btnQuit";
             this.btnQuit.Size = new System.Drawing.Size(104, 23);
             this.btnQuit.TabIndex = 5;
@@ -108,15 +109,26 @@
             // btnLists
             // 
             this.btnLists.Enabled = false;
-            this.btnLists.Location = new System.Drawing.Point(167, 476);
+            this.btnLists.Location = new System.Drawing.Point(61, 506);
             this.btnLists.Name = "btnLists";
-            this.btnLists.Size = new System.Drawing.Size(104, 23);
+            this.btnLists.Size = new System.Drawing.Size(210, 23);
             this.btnLists.TabIndex = 7;
             this.btnLists.Text = "Lists ▶";
             this.btnLists.UseVisualStyleBackColor = true;
             this.btnLists.Click += new System.EventHandler(this.BtnLists_Click);
             // 
-            // fmrUser
+            // btnUpdateCommit
+            // 
+            this.btnUpdateCommit.Enabled = false;
+            this.btnUpdateCommit.Location = new System.Drawing.Point(167, 448);
+            this.btnUpdateCommit.Name = "btnUpdateCommit";
+            this.btnUpdateCommit.Size = new System.Drawing.Size(104, 23);
+            this.btnUpdateCommit.TabIndex = 8;
+            this.btnUpdateCommit.Text = "Update";
+            this.btnUpdateCommit.UseVisualStyleBackColor = true;
+            this.btnUpdateCommit.Click += new System.EventHandler(this.BtnUpdateCommit_Click);
+            // 
+            // frmUser
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
@@ -124,6 +136,7 @@
             this.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("$this.BackgroundImage")));
             this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.ClientSize = new System.Drawing.Size(327, 636);
+            this.Controls.Add(this.btnUpdateCommit);
             this.Controls.Add(this.btnLists);
             this.Controls.Add(this.btnDelete);
             this.Controls.Add(this.btnQuit);
@@ -132,7 +145,7 @@
             this.Controls.Add(this.txtEmail);
             this.Controls.Add(this.picLogo);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
-            this.Name = "fmrUser";
+            this.Name = "frmUser";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.TransparencyKey = System.Drawing.Color.Magenta;
             ((System.ComponentModel.ISupportInitialize)(this.picLogo)).EndInit();
@@ -150,6 +163,7 @@
         private System.Windows.Forms.Button btnDelete;
         private System.Windows.Forms.Button btnQuit;
         private System.Windows.Forms.Button btnLists;
+        private System.Windows.Forms.Button btnUpdateCommit;
     }
 }
 
