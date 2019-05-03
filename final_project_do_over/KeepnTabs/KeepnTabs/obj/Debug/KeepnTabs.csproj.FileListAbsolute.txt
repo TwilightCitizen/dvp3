@@ -1,0 +1,10 @@
+\\vmware-host\Shared Folders\Desktop\dvp3\final_project_do_over\KeepnTabs\KeepnTabs\bin\Debug\KeepnTabs.exe.config
+\\vmware-host\Shared Folders\Desktop\dvp3\final_project_do_over\KeepnTabs\KeepnTabs\bin\Debug\KeepnTabs.exe
+\\vmware-host\Shared Folders\Desktop\dvp3\final_project_do_over\KeepnTabs\KeepnTabs\bin\Debug\KeepnTabs.pdb
+\\vmware-host\Shared Folders\Desktop\dvp3\final_project_do_over\KeepnTabs\KeepnTabs\obj\Debug\KeepnTabs.csprojAssemblyReference.cache
+\\vmware-host\Shared Folders\Desktop\dvp3\final_project_do_over\KeepnTabs\KeepnTabs\obj\Debug\KeepnTabs.fmrUser.resources
+\\vmware-host\Shared Folders\Desktop\dvp3\final_project_do_over\KeepnTabs\KeepnTabs\obj\Debug\KeepnTabs.Properties.Resources.resources
+\\vmware-host\Shared Folders\Desktop\dvp3\final_project_do_over\KeepnTabs\KeepnTabs\obj\Debug\KeepnTabs.csproj.GenerateResource.cache
+\\vmware-host\Shared Folders\Desktop\dvp3\final_project_do_over\KeepnTabs\KeepnTabs\obj\Debug\KeepnTabs.csproj.CoreCompileInputs.cache
+\\vmware-host\Shared Folders\Desktop\dvp3\final_project_do_over\KeepnTabs\KeepnTabs\obj\Debug\KeepnTabs.exe
+\\vmware-host\Shared Folders\Desktop\dvp3\final_project_do_over\KeepnTabs\KeepnTabs\obj\Debug\KeepnTabs.pdb

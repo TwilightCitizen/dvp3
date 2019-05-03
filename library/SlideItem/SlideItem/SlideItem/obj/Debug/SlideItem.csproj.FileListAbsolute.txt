@@ -1,0 +1,8 @@
+\\vmware-host\Shared Folders\Desktop\dvp3\library\SlideItem\SlideItem\SlideItem\bin\Debug\SlideItem.dll
+\\vmware-host\Shared Folders\Desktop\dvp3\library\SlideItem\SlideItem\SlideItem\bin\Debug\SlideItem.pdb
+\\vmware-host\Shared Folders\Desktop\dvp3\library\SlideItem\SlideItem\SlideItem\obj\Debug\SlideItem.csprojAssemblyReference.cache
+\\vmware-host\Shared Folders\Desktop\dvp3\library\SlideItem\SlideItem\SlideItem\obj\Debug\SlideItem.SlideItem.resources
+\\vmware-host\Shared Folders\Desktop\dvp3\library\SlideItem\SlideItem\SlideItem\obj\Debug\SlideItem.csproj.GenerateResource.cache
+\\vmware-host\Shared Folders\Desktop\dvp3\library\SlideItem\SlideItem\SlideItem\obj\Debug\SlideItem.csproj.CoreCompileInputs.cache
+\\vmware-host\Shared Folders\Desktop\dvp3\library\SlideItem\SlideItem\SlideItem\obj\Debug\SlideItem.dll
+\\vmware-host\Shared Folders\Desktop\dvp3\library\SlideItem\SlideItem\SlideItem\obj\Debug\SlideItem.pdb
