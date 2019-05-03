@@ -16,7 +16,7 @@ namespace KeepnTabs
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new fmrUser());
+            Application.Run(new frmUser());
         }
     }
 }

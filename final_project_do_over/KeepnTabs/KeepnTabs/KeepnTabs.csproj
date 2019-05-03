@@ -48,16 +48,25 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="FakeAPI.cs" />
-    <Compile Include="fmrUser.cs">
+    <Compile Include="frmUser.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="fmrUser.Designer.cs">
-      <DependentUpon>fmrUser.cs</DependentUpon>
+    <Compile Include="frmUser.Designer.cs">
+      <DependentUpon>frmUser.cs</DependentUpon>
+    </Compile>
+    <Compile Include="frmLists.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmLists.Designer.cs">
+      <DependentUpon>frmLists.cs</DependentUpon>
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <EmbeddedResource Include="fmrUser.resx">
-      <DependentUpon>fmrUser.cs</DependentUpon>
+    <EmbeddedResource Include="frmUser.resx">
+      <DependentUpon>frmUser.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frmLists.resx">
+      <DependentUpon>frmLists.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
