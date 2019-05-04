@@ -128,11 +128,11 @@ namespace KeepnTabs
                         {
                             rdrMatch.Close();
 
-                            using( var cmdExist = new MySqlCommand( sqlExists, con ) )
+                            using( var cmdExists = new MySqlCommand( sqlExists, con ) )
                             {
-                                cmdExist.Parameters.AddWithValue( "@Email", email );
+                                cmdExists.Parameters.AddWithValue( "@Email", email );
 
-                                var rdrExist = cmdExist.ExecuteReader();
+                                var rdrExist = cmdExists.ExecuteReader();
 
                                 if( rdrExist.HasRows )
                                 {
@@ -223,15 +223,60 @@ namespace KeepnTabs
             } catch {  return Invalid(); }
         }
 
+        /* Attempt to update the user's account with the provided email and password by
+         * user ID matching login token.  If the email address already exists, fail with
+         * invalid, otherwise return success. */
+
         private Task< HttpResponseMessage > UserUpdate( IEnumerable< string > segs )
         {
-            return Task.FromResult(
-                new HttpResponseMessage()
+            var token     = segs.Take( 1 ).FirstOrDefault();
+            var email     = segs.Skip( 1 ).Take( 1 ).FirstOrDefault();
+            var pass      = segs.Skip( 2 ).Take( 1 ).FirstOrDefault();
+
+            var sqlExists = "select ID from Users where Email = @Email";
+            var sqlUpdate = "update Users set Email = @Email, Pass = @Pass where ID = ( select UserID from Tokens where ID = @Token )";
+
+            try
+            {
+                using( var con = new MySqlConnection( Program.Connection ) )
                 {
-                    StatusCode = HttpStatusCode.OK,
-                    Content = new StringContent( "OK" )
+                    con.Open();
+
+                    using( var cmdExists = new MySqlCommand( sqlExists, con ) )
+                    {
+                        cmdExists.Parameters.AddWithValue( "@Email", email );
+
+                        var rdrExists = cmdExists.ExecuteReader();
+
+                        if( rdrExists.HasRows )
+                            return Invalid();
+                        else
+                        {
+                            rdrExists.Close();
+
+                            using( var cmdUpdate = new MySqlCommand( sqlUpdate, con ) )
+                            {
+                                cmdUpdate.Parameters.AddWithValue( "@Email", email );
+                                cmdUpdate.Parameters.AddWithValue( "@Pass",  pass  );
+                                cmdUpdate.Parameters.AddWithValue( "@Token", token );
+
+                                var numUpdate = cmdUpdate.ExecuteNonQuery();
+
+                                if( numUpdate > 0)
+                                {
+                                    return Task.FromResult(
+                                        new HttpResponseMessage()
+                                        {
+                                            StatusCode = HttpStatusCode.OK,
+                                            Content = new StringContent( "OK" )
+                                        }
+                                    );
+                                } else return Invalid();
+                            }
+                        }
+                    }
                 }
-            );
+            } catch {  return Invalid(); }
         }
 
         /* Attempt to delete the user by user ID associated with the login token,

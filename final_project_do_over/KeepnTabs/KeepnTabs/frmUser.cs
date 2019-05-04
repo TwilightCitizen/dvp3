@@ -132,15 +132,32 @@ namespace KeepnTabs
             txtEmail.Enabled     =
             txtPassword.Enabled  =
             Updating             = true;
+            btnDelete.Enabled    = false;
             btnUpdateCommit.Text = "Done";
         }
 
-        private void Commit()
+        private async void Commit()
         {
-            txtEmail.Enabled     =
-            txtPassword.Enabled  =
-            Updating             = false;
-            btnUpdateCommit.Text = "Update";
+            using( var client = new HttpClient( new FakeAPI() ) )
+            {
+                try
+                {
+                    HttpResponseMessage response = await client.GetAsync( 
+                        Program.ApiBase + $"user/update/{ LoginToken }/{ txtEmail.Text }/{ txtPassword.Text }" );
+
+                    if( response.IsSuccessStatusCode )
+                    {
+                        txtEmail.Enabled     =
+                        txtPassword.Enabled  =
+                        Updating             = false;
+                        btnDelete.Enabled    = true;
+                        btnUpdateCommit.Text = "Update";
+                    }
+                    else MessageBox.Show( "Try again with another email.  That one is taken." );
+                }
+                catch { }
+            }
+
         }
 
         private async void Delete()
