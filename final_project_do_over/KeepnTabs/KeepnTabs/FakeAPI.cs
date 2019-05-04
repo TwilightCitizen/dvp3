@@ -421,13 +421,35 @@ namespace KeepnTabs
 
         private Task< HttpResponseMessage > ListDelete( IEnumerable< string > segs )
         {
-            return Task.FromResult(
-                new HttpResponseMessage()
+            var token     = segs.Take( 1 ).FirstOrDefault();
+            var listid    = segs.Skip( 1 ).Take( 1 ).FirstOrDefault();
+            var sqlDelete = "delete from Lists where ID = @ListID and UserID = ( select UserID from Tokens where ID = @Token )";
+
+            try
+            {
+                using( var con = new MySqlConnection( Program.Connection ) )
                 {
-                    StatusCode = HttpStatusCode.OK,
-                    Content = new StringContent( "OK" )
+                    con.Open();
+
+                    using( var cmdDelete = new MySqlCommand( sqlDelete, con ) ) 
+                    {
+                        cmdDelete.Parameters.AddWithValue( "@ListID", listid );
+                        cmdDelete.Parameters.AddWithValue( "@Token",  token );
+
+                        var numDelete = cmdDelete.ExecuteNonQuery();
+
+                        if( numDelete > 0 )
+                            return Task.FromResult(
+                                new HttpResponseMessage()
+                                {
+                                    StatusCode = HttpStatusCode.OK,
+                                    Content = new StringContent( "OK" )
+                                }
+                            );
+                        else { return Invalid(); }
+                    }
                 }
-            );
+            } catch {  return Invalid(); }
         }
 
         /* Guard against invalid task actions, though we should have none, and route the request to

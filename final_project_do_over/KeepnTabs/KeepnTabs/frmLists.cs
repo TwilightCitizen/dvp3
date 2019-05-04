@@ -124,8 +124,33 @@ namespace KeepnTabs
             CheckSelection();
         }
 
-        private void Delete()
+        /* Delete the list from the user's account on confirmation. */
+
+        private async void Delete()
         {
+            var confirm = MessageBox.Show( 
+                "Are you sure you want to delete the list?" +
+                "This will permanently remove it and all tasks in it.",
+                "Whoa!", MessageBoxButtons.YesNo, MessageBoxIcon.Warning
+            );
+
+            if( confirm == DialogResult.Yes )
+            {
+                using( var client = new HttpClient( new FakeAPI() ) )
+                {
+                    try
+                    {
+                        var listid = lstLists.SelectedItems[ 0 ].Tag;
+
+                        HttpResponseMessage response = await client.GetAsync( 
+                            Program.ApiBase + $"list/delete/{ LoginToken }/{ listid }" );
+
+                        if( response.IsSuccessStatusCode ) lstLists.SelectedItems[ 0 ].Remove();    
+                        else MessageBox.Show( "There was an error deleting your account." );
+                    } catch { }
+                }
+            }
+
             CheckSelection();
         }
 
