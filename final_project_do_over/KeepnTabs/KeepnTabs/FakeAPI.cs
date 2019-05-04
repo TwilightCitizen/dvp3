@@ -142,6 +142,8 @@ namespace KeepnTabs
                                 }
                                 else
                                 {
+                                    // Doesn't Exist - Register and Login
+
                                     rdrExist.Close();
 
                                     var userid = Guid.NewGuid().ToString();
@@ -205,9 +207,9 @@ namespace KeepnTabs
                     {
                         cmdLogout.Parameters.AddWithValue( "@Token", token );
 
-                        var rdrMatch = cmdLogout.ExecuteReader();
+                        var numLogout = cmdLogout.ExecuteNonQuery();
 
-                        if( rdrMatch.HasRows )
+                        if( numLogout > 0 )
                             return Task.FromResult(
                                 new HttpResponseMessage()
                                 {
@@ -218,8 +220,7 @@ namespace KeepnTabs
                         else { return Invalid(); }
                     }
                 }
-            }
-            catch {  return Invalid(); }
+            } catch {  return Invalid(); }
         }
 
         private Task< HttpResponseMessage > UserUpdate( IEnumerable< string > segs )
@@ -233,15 +234,38 @@ namespace KeepnTabs
             );
         }
 
+        /* Attempt to delete the user by user ID associated with the login token,
+         * returning okay on success and invalid on failure. */
+
         private Task< HttpResponseMessage > UserDelete( IEnumerable< string > segs )
         {
-            return Task.FromResult(
-                new HttpResponseMessage()
+            var token     = segs.Take( 1 ).FirstOrDefault();
+            var sqlDelete = "delete from Users where ID = ( select UserID from Tokens where ID = @Token )";
+
+            try
+            {
+                using( var con = new MySqlConnection( Program.Connection ) )
                 {
-                    StatusCode = HttpStatusCode.OK,
-                    Content = new StringContent( "OK" )
+                    con.Open();
+
+                    using( var cmdDelete = new MySqlCommand( sqlDelete, con ) )
+                    {
+                        cmdDelete.Parameters.AddWithValue( "@Token", token );
+
+                        var numDelete = cmdDelete.ExecuteNonQuery();
+
+                        if( numDelete > 0 )
+                            return Task.FromResult(
+                                new HttpResponseMessage()
+                                {
+                                    StatusCode = HttpStatusCode.OK,
+                                    Content = new StringContent( "OK" )
+                                }
+                            );
+                        else { return Invalid(); }
+                    }
                 }
-            );
+            } catch {  return Invalid(); }
         }
 
         /* Guard against invalid list actions, though we should have none, and route the request to

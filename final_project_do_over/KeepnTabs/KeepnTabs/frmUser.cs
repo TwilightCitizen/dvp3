@@ -122,6 +122,7 @@ namespace KeepnTabs
                         LoggedIn                 = true;
                         btnLogInOutRegister.Text = "Logout";
                     }
+                    else MessageBox.Show( "Check the username and password and try again." );
                 } catch { }
             }
         }
@@ -142,16 +143,40 @@ namespace KeepnTabs
             btnUpdateCommit.Text = "Update";
         }
 
-        private void Delete()
+        private async void Delete()
         {
-            txtEmail.Text =
-            txtPassword.Text = "";
-            txtEmail.Enabled =
-            txtPassword.Enabled = true;
-            btnDelete.Enabled =
-            btnLists.Enabled = false;
-            LoggedIn = false;
-            btnLogInOutRegister.Text = "Login";
+            var confirm = MessageBox.Show( 
+                "Are you sure you want to delete the user account?" +
+                "This will permanently remove everything in the account.",
+                "Whoa!", MessageBoxButtons.YesNo, MessageBoxIcon.Warning
+            );
+
+            if( confirm == DialogResult.Yes )
+            {
+                using( var client = new HttpClient( new FakeAPI() ) )
+                {
+                    try
+                    {
+                        HttpResponseMessage response = await client.GetAsync( 
+                            Program.ApiBase + $"user/delete/{ LoginToken }" );
+
+                        if( response.IsSuccessStatusCode )
+                        {
+                            txtEmail.Text =
+                            txtPassword.Text = "";
+                            txtEmail.Enabled =
+                            txtPassword.Enabled = true;
+                            btnDelete.Enabled =
+                            btnLists.Enabled =
+                            LoggedIn = false;
+                            btnLogInOutRegister.Text = "Login";
+                        }
+                        else MessageBox.Show( "There was an error deleting your account." );
+                    } catch { }
+                }
+            }
+
+
         }
 
         private void Lists()
