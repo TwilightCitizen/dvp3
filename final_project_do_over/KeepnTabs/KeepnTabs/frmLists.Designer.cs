@@ -118,6 +118,7 @@
             this.btnRotate.Size = new System.Drawing.Size(27, 32);
             this.btnRotate.TabIndex = 16;
             this.btnRotate.UseVisualStyleBackColor = false;
+            this.btnRotate.Click += new System.EventHandler(this.BtnRotate_Click);
             // 
             // frmLists
             // 

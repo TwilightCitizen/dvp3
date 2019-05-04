@@ -205,9 +205,11 @@ namespace KeepnTabs
             }
         }
 
+        /* Navigate to the logged in user's tasks for the selected list. */
+        
         private void Tasks()
         {
-            var frm = new frmTasks();
+            var frm = new frmTasks( LoginToken, lstLists.SelectedItems[ 0 ].Tag.ToString() );
 
             Hide();
 

@@ -14,14 +14,38 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.Net;
+using System.Net.Http;
+using System.Xml.Linq;
+using Microsoft.VisualBasic;
 
 namespace KeepnTabs
 {
     public partial class frmTasks : Form
     {
+        /* Token for Logged in User */
+
+        private string LoginToken;
+
+        /* ID for the Selected List */
+
+        private string ListID;
+
+        /* Constructors */
+
         public frmTasks()
         {
             InitializeComponent();
+        }
+
+        public frmTasks( string loginToken, string listid )
+        {
+            InitializeComponent();
+
+            LoginToken = loginToken;
+            ListID     = listid;
+            
+            Tasks();
         }
 
         private void BtnAdd_Click( object sender, EventArgs e )
@@ -65,22 +89,52 @@ namespace KeepnTabs
             btnDelete.Enabled = lstTasks.SelectedItems.Count > 0;
         }
 
-        private void Add()
+        /* Get the tasks for the logged in user for the selected list
+         * from the API and add them to the list view. We can expect
+         * an XML payload here carrying the hiearchical task data. */
+
+        private async void Tasks()
+        {
+            using( var client = new HttpClient( new FakeAPI() ) )
+            {
+                try
+                {
+                    HttpResponseMessage response = await client.GetAsync( 
+                        Program.ApiBase + $"list/tasks/{ LoginToken }/{ ListID }" );
+
+                    if( response.IsSuccessStatusCode )
+                    {
+                        var tasks = XDocument.Parse( await response.Content.ReadAsStringAsync() );
+
+                        foreach( XElement task in tasks.Descendants( "task" ) )
+                        {
+                            var toadd = new ListViewItem( WebUtility.UrlDecode( task.Element( "title" ).Value ) );
+
+                            toadd.Tag = task.Element( "id" ).Value;
+
+                            lstTasks.Items.Add( toadd );
+                        }
+                    }
+                } catch { }
+            }
+        }
+
+        private async void Add()
         {
 
         }
 
-        private void Toggle()
+        private async void Toggle()
         {
 
         }
 
-        private void Rename()
+        private async void Rename()
         {
             CheckSelection();
         }
 
-        private void Delete()
+        private async void Delete()
         {
             CheckSelection();
         }

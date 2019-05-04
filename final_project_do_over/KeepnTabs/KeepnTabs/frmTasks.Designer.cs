@@ -105,6 +105,7 @@
             this.lstTasks.Size = new System.Drawing.Size(210, 304);
             this.lstTasks.TabIndex = 16;
             this.lstTasks.UseCompatibleStateImageBehavior = false;
+            this.lstTasks.View = System.Windows.Forms.View.List;
             this.lstTasks.SelectedIndexChanged += new System.EventHandler(this.LstTasks_SelectedIndexChanged);
             // 
             // btnToggle
@@ -126,6 +127,7 @@
             this.btnRotate.Size = new System.Drawing.Size(27, 32);
             this.btnRotate.TabIndex = 23;
             this.btnRotate.UseVisualStyleBackColor = false;
+            this.btnRotate.Click += new System.EventHandler(this.BtnRotate_Click);
             // 
             // frmTasks
             // 

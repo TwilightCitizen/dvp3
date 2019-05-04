@@ -364,11 +364,58 @@ namespace KeepnTabs
         {
             switch( segs.FirstOrDefault() )
             {
-                case "add":    return ListAdd( segs.Skip( 1 ) );
+                case "add":    return ListAdd(    segs.Skip( 1 ) );
                 case "update": return ListUpdate( segs.Skip( 1 ) );
                 case "delete": return ListDelete( segs.Skip( 1 ) );
+                case "tasks":  return ListTasks(  segs.Skip( 1 ) );
                 default:       return Invalid();
             }
+        }
+
+        /* Attempt to return an XML payload of all the lists associated with the
+         * user ID associated with the login token, returning it on success and
+         * returning invalid on failure. */
+
+        private Task< HttpResponseMessage > ListTasks( IEnumerable< string > segs )
+        {
+            var token    = segs.Take( 1 ).FirstOrDefault();
+            var listid   = segs.Skip( 1 ).Take( 1 ).FirstOrDefault();
+            var sqlTasks = "select ID, Title, Done from Tasks where ListID = ( select ID from lists where ID = @ListID and UserID = ( select UserID from Tokens where ID = @Token ) )";
+
+            try
+            {
+                using( var con = new MySqlConnection( Program.Connection ) )
+                {
+                    con.Open();
+
+                    using( var cmdTasks = new MySqlCommand( sqlTasks, con ) ) 
+                    {
+                        cmdTasks.Parameters.AddWithValue( "@Token",  token  );
+                        cmdTasks.Parameters.AddWithValue( "@ListID", listid );
+
+                        var rdrTasks = cmdTasks.ExecuteReader();
+                        var tasks    = new XElement( "tasks" );
+
+                        while( rdrTasks.Read() )
+                        {
+                            tasks.Add( new XElement( "task",
+                                new XElement( "id",    new XText( rdrTasks[ "ID"    ].ToString() ) )
+                            ,   new XElement( "title", new XText( rdrTasks[ "Title" ].ToString() ) )
+                            ,   new XElement( "done",  new XText( rdrTasks[ "Done"  ].ToString() ) )
+                            ) );
+                        }
+
+                        return Task.FromResult(
+                            new HttpResponseMessage()
+                            {
+                                StatusCode = HttpStatusCode.OK,
+                                Content = new StringContent( tasks.ToString() )
+                            }
+                        );
+                    }
+                }
+                
+            } catch {  return Invalid(); }
         }
 
         private Task< HttpResponseMessage > ListAdd( IEnumerable< string > segs )
