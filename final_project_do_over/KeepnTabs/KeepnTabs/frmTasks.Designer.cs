@@ -43,6 +43,7 @@
             this.btnBack = new System.Windows.Forms.Button();
             this.lstTasks = new System.Windows.Forms.ListView();
             this.btnToggle = new System.Windows.Forms.Button();
+            this.btnRotate = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // lblTasks
@@ -116,6 +117,16 @@
             this.btnToggle.UseVisualStyleBackColor = true;
             this.btnToggle.Click += new System.EventHandler(this.BtnToggle_Click);
             // 
+            // btnRotate
+            // 
+            this.btnRotate.BackColor = System.Drawing.Color.Black;
+            this.btnRotate.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnRotate.Location = new System.Drawing.Point(152, 585);
+            this.btnRotate.Name = "btnRotate";
+            this.btnRotate.Size = new System.Drawing.Size(27, 32);
+            this.btnRotate.TabIndex = 23;
+            this.btnRotate.UseVisualStyleBackColor = false;
+            // 
             // frmTasks
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -124,6 +135,7 @@
             this.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("$this.BackgroundImage")));
             this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.ClientSize = new System.Drawing.Size(327, 636);
+            this.Controls.Add(this.btnRotate);
             this.Controls.Add(this.btnToggle);
             this.Controls.Add(this.lblTasks);
             this.Controls.Add(this.btnAdd);
@@ -150,5 +162,6 @@
         private System.Windows.Forms.Button btnBack;
         private System.Windows.Forms.ListView lstTasks;
         private System.Windows.Forms.Button btnToggle;
+        private System.Windows.Forms.Button btnRotate;
     }
 }

@@ -11,6 +11,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.IO;
+using System.Drawing;
 
 namespace KeepnTabs
 {
@@ -48,6 +49,36 @@ namespace KeepnTabs
         {
             try   { return File.ReadAllLines( DBPath )[ 1 ]; }
             catch { return Port;                             }
+        }
+
+        /* Simulate rotating a form from landscape to portrait. */
+
+        public static void SimulateRotation( Form frm )
+        {
+            using( var bmp = new Bitmap( frm.Width, frm.Height  ) )
+            {
+                frm.DrawToBitmap( bmp, new Rectangle( 0, 0, frm.Width, frm.Height ) );
+                bmp.RotateFlip( RotateFlipType.Rotate270FlipNone );
+
+                var sim             = new Form();
+
+                sim.Width           = bmp.Width;
+                sim.Height          = bmp.Height;
+                sim.FormBorderStyle = FormBorderStyle.None;
+                sim.BackgroundImage = bmp;
+                sim.TransparencyKey = Color.Fuchsia;
+                sim.StartPosition   = FormStartPosition.CenterParent;
+
+                void Sim_Click( object sender, EventArgs e) => sim.Close();
+
+                sim.Click           += Sim_Click;
+
+                frm.Hide();
+
+                sim.ShowDialog( frm );
+
+                frm.Show();
+            }
         }
 
         /// <summary>

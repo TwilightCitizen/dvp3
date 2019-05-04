@@ -76,6 +76,11 @@ namespace KeepnTabs
             CheckCredentials();
         }
 
+        private void BtnRotate_Click( object sender, EventArgs e )
+        {
+            Program.SimulateRotation( this );
+        }
+
         /* Tie the clickability of buttons to the contents of the text
          * boxes and the module level state. */
 

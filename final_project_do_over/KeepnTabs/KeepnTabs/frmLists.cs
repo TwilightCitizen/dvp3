@@ -73,6 +73,11 @@ namespace KeepnTabs
             Tasks();
         }
 
+        private void BtnRotate_Click( object sender, EventArgs e )
+        {
+            Program.SimulateRotation( this );
+        }
+
         /* Tie renaming and deletion to selection state. */
 
         private void CheckSelection()

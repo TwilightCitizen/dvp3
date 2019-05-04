@@ -44,6 +44,7 @@
             this.btnQuit = new System.Windows.Forms.Button();
             this.btnLists = new System.Windows.Forms.Button();
             this.btnUpdateCommit = new System.Windows.Forms.Button();
+            this.btnRotate = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.picLogo)).BeginInit();
             this.SuspendLayout();
             // 
@@ -128,6 +129,17 @@
             this.btnUpdateCommit.UseVisualStyleBackColor = true;
             this.btnUpdateCommit.Click += new System.EventHandler(this.BtnUpdateCommit_Click);
             // 
+            // btnRotate
+            // 
+            this.btnRotate.BackColor = System.Drawing.Color.Black;
+            this.btnRotate.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnRotate.Location = new System.Drawing.Point(151, 585);
+            this.btnRotate.Name = "btnRotate";
+            this.btnRotate.Size = new System.Drawing.Size(27, 32);
+            this.btnRotate.TabIndex = 9;
+            this.btnRotate.UseVisualStyleBackColor = false;
+            this.btnRotate.Click += new System.EventHandler(this.BtnRotate_Click);
+            // 
             // frmUser
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -136,6 +148,7 @@
             this.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("$this.BackgroundImage")));
             this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.ClientSize = new System.Drawing.Size(327, 636);
+            this.Controls.Add(this.btnRotate);
             this.Controls.Add(this.btnUpdateCommit);
             this.Controls.Add(this.btnLists);
             this.Controls.Add(this.btnDelete);
@@ -164,6 +177,7 @@
         private System.Windows.Forms.Button btnQuit;
         private System.Windows.Forms.Button btnLists;
         private System.Windows.Forms.Button btnUpdateCommit;
+        private System.Windows.Forms.Button btnRotate;
     }
 }
 
