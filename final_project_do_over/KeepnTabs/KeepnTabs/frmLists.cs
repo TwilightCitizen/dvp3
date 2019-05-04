@@ -126,6 +126,7 @@ namespace KeepnTabs
         }
 
         /* Update the list title to the user's choice unless it's blank. */
+
         private async void Rename()
         {
             var title = Interaction.InputBox(

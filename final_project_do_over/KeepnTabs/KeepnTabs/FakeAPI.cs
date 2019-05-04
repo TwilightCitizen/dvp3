@@ -570,7 +570,7 @@ namespace KeepnTabs
                         cmdAdd.Parameters.AddWithValue( "@TaskID", taskid );
                         cmdAdd.Parameters.AddWithValue( "@ListID", listid );
                         cmdAdd.Parameters.AddWithValue( "@Title",  title  );
-                        cmdAdd.Parameters.AddWithValue( "@Token",  token );
+                        cmdAdd.Parameters.AddWithValue( "@Token",  token  );
 
                         var numAdd = cmdAdd.ExecuteNonQuery();
 
@@ -593,13 +593,39 @@ namespace KeepnTabs
 
         private Task< HttpResponseMessage > TaskUpdate( IEnumerable< string > segs )
         {
-            return Task.FromResult(
-                new HttpResponseMessage()
+            var token     = segs.Take( 1 ).FirstOrDefault();
+            var taskid    = segs.Skip( 1 ).Take( 1 ).FirstOrDefault();
+            var title     = segs.Skip( 2 ).Take( 1 ).FirstOrDefault();
+            var done      = segs.Skip( 3 ).Take( 1 ).FirstOrDefault();
+            var sqlUpdate = "update Tasks set Title = @Title, Done = @Done where ID = @TaskID";
+
+            try
+            {
+                using( var con = new MySqlConnection( Program.Connection ) )
                 {
-                    StatusCode = HttpStatusCode.OK,
-                    Content = new StringContent( "OK" )
+                    con.Open();
+
+                    using( var cmdUpdate = new MySqlCommand( sqlUpdate, con ) ) 
+                    {
+                        cmdUpdate.Parameters.AddWithValue( "@TaskID", taskid                     );
+                        cmdUpdate.Parameters.AddWithValue( "@Done",   bool.Parse( done ) ? 1 : 0 );
+                        cmdUpdate.Parameters.AddWithValue( "@Title",  title                      );
+                        //cmdUpdate.Parameters.AddWithValue( "@Token",  token                      );
+
+                        var numUpdate = cmdUpdate.ExecuteNonQuery();
+
+                        if( numUpdate > 0 )
+                            return Task.FromResult(
+                                new HttpResponseMessage()
+                                {
+                                    StatusCode = HttpStatusCode.OK,
+                                    Content = new StringContent( "OK" )
+                                }
+                            );
+                        else { return Invalid(); }
+                    }
                 }
-            );
+            } catch {  return Invalid(); }
         }
 
         /* Attempt to delete the task matching the task ID matching the list ID matching the user

@@ -128,6 +128,8 @@ namespace KeepnTabs
             }
         }
 
+        /* Attempt to add a new task to the list for the user, cancelling on
+         * user cancel or empty task title. */
         private async void Add()
         {
             var title = Interaction.InputBox(
@@ -156,18 +158,82 @@ namespace KeepnTabs
             }
         }
 
+        /* Attempt to toggle the complete/incomplete status of the task. */
+
         private async void Toggle()
         {
+            using( var client = new HttpClient( new FakeAPI() ) )
+            {
+                var task   = lstTasks.SelectedItems[ 0 ];
+                var taskid = task.Tag;
+                var title  = task.Text;
+                var done   = !task.Font.Strikeout;
 
+                try
+                {
+                    HttpResponseMessage response = await client.GetAsync( 
+                        Program.ApiBase + $"task/update/{ LoginToken }/{ taskid }/{ title }/{ done }" );
+
+                    if( response.IsSuccessStatusCode )
+                        task.Font = new Font( task.Font, done ? FontStyle.Strikeout : FontStyle.Regular );
+                } catch { }
+            }
+
+            CheckSelection();
         }
+
+        /* Update the task title to the user's choice unless it's blank. */
 
         private async void Rename()
         {
+            var title = Interaction.InputBox(
+                "To what title would you like to rename this task?  "
+            +   "Leave it blank to cancel renaming the list."
+            );
+
+            if( !string.IsNullOrEmpty( title ) )
+            using( var client = new HttpClient( new FakeAPI() ) )
+            {
+                var task   = lstTasks.SelectedItems[ 0 ];
+                var taskid = task.Tag;
+                var done   = !task.Font.Strikeout;
+
+                try
+                {
+                    HttpResponseMessage response = await client.GetAsync( 
+                        Program.ApiBase + $"task/update/{ LoginToken }/{ taskid }/{ title }/{ done }" );
+
+                    if( response.IsSuccessStatusCode ) task.Text = title;
+                } catch { }
+            }
+
             CheckSelection();
         }
 
         private async void Delete()
         {
+            var confirm = MessageBox.Show( 
+                "Are you sure you want to delete the task?",
+                "Whoa!", MessageBoxButtons.YesNo, MessageBoxIcon.Warning
+            );
+
+            if( confirm == DialogResult.Yes )
+            {
+                using( var client = new HttpClient( new FakeAPI() ) )
+                {
+                    try
+                    {
+                        var taskid = lstTasks.SelectedItems[ 0 ].Tag;
+
+                        HttpResponseMessage response = await client.GetAsync( 
+                            Program.ApiBase + $"task/delete/{ LoginToken }/{ taskid }" );
+
+                        if( response.IsSuccessStatusCode ) lstTasks.SelectedItems[ 0 ].Remove();    
+                        else MessageBox.Show( "There was an error deleting your list." );
+                    } catch { }
+                }
+            }
+
             CheckSelection();
         }
     }
