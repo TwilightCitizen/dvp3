@@ -14,8 +14,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.Net;
 using System.Net.Http;
 using System.Xml.Linq;
+using Microsoft.VisualBasic;
 
 namespace KeepnTabs
 {
@@ -86,9 +88,35 @@ namespace KeepnTabs
             btnDelete.Enabled = lstLists.SelectedItems.Count > 0;
         }
 
-        private void Add()
-        {
+        /* Attempt to add a new list for the user, cancelling on
+         * user cancel or empty list title. */
 
+        private async void Add()
+        {
+            var title = Interaction.InputBox(
+                "What title would you like for this list?  "
+            +   "Leave it blank to cancel adding the list."
+            );
+
+            if( !string.IsNullOrEmpty( title ) )
+            using ( var client = new HttpClient( new FakeAPI() ) )
+            {
+                try
+                {
+                    HttpResponseMessage response = await client.GetAsync( 
+                        Program.ApiBase + $"list/add/{ LoginToken }/{ title }" );
+
+                    if( response.IsSuccessStatusCode )
+                    {
+                        var listid = response.Content.ReadAsStringAsync();
+                        var toadd  = new ListViewItem( title );
+
+                        toadd.Tag = listid;
+
+                        lstLists.Items.Add( toadd );
+                    }
+                } catch { }
+            }
         }
 
         private void Rename()
@@ -120,7 +148,7 @@ namespace KeepnTabs
 
                         foreach( XElement list in lists.Descendants( "list" ) )
                         {
-                            var toadd = new ListViewItem( list.Element( "title" ).Value );
+                            var toadd = new ListViewItem( WebUtility.UrlDecode( list.Element( "title" ).Value ) );
 
                             toadd.Tag = list.Element( "id" ).Value;
 

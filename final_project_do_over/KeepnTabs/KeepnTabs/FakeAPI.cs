@@ -30,7 +30,7 @@ namespace KeepnTabs
         {
             if( request.RequestUri.Host.ToLower() != Program.ApiHost ) return Invalid();
 
-            var segs = request.RequestUri.Segments.Skip( 1 ).Select( seg => seg.TrimEnd( '/' ).ToLower() );
+            var segs = request.RequestUri.Segments.Skip( 1 ).Select( seg => seg.TrimEnd( '/' ) );
 
             switch( segs.FirstOrDefault() )
             {
@@ -362,7 +362,7 @@ namespace KeepnTabs
          * appropriate subordinate handlers with the subsequent URL segments. */
         private Task< HttpResponseMessage > List_( IEnumerable< string > segs )
         {
-            switch( segs.Skip( 1 ).FirstOrDefault() )
+            switch( segs.FirstOrDefault() )
             {
                 case "add":    return ListAdd( segs.Skip( 1 ) );
                 case "update": return ListUpdate( segs.Skip( 1 ) );
@@ -373,13 +373,39 @@ namespace KeepnTabs
 
         private Task< HttpResponseMessage > ListAdd( IEnumerable< string > segs )
         {
-            return Task.FromResult(
-                new HttpResponseMessage()
+            var token  = segs.Take( 1 ).FirstOrDefault();
+            var title  = segs.Skip( 1 ).Take( 1 ).FirstOrDefault();
+            var sqlAdd = "insert into Lists( ID, Title, UserID ) values( @ListID, @Title, ( select UserID from Tokens where ID = @Token) )";
+
+            try
+            {
+                using( var con = new MySqlConnection( Program.Connection ) )
                 {
-                    StatusCode = HttpStatusCode.OK,
-                    Content = new StringContent( "OK" )
+                    con.Open();
+
+                    using( var cmdAdd = new MySqlCommand( sqlAdd, con ) ) 
+                    {
+                        var listid = Guid.NewGuid().ToString();
+
+                        cmdAdd.Parameters.AddWithValue( "@ListID", listid );
+                        cmdAdd.Parameters.AddWithValue( "@Title",  title  );
+                        cmdAdd.Parameters.AddWithValue( "@Token",  token );
+
+                        var numLists = cmdAdd.ExecuteNonQuery();
+
+                        if( numLists > 0 )
+                            return Task.FromResult(
+                                new HttpResponseMessage()
+                                {
+                                    StatusCode = HttpStatusCode.OK,
+                                    Content = new StringContent( listid )
+                                }
+                            );
+                        else { return Invalid(); }
+                    }
                 }
-            );
+                
+            } catch {  return Invalid(); }
         }
 
         private Task< HttpResponseMessage > ListUpdate( IEnumerable< string > segs )
@@ -409,7 +435,7 @@ namespace KeepnTabs
 
         private Task< HttpResponseMessage > Task_( IEnumerable< string > segs )
         {
-            switch( segs.Skip( 1 ).FirstOrDefault() )
+            switch( segs.FirstOrDefault() )
             {
                 case "add":    return TaskAdd( segs.Skip( 1 ) );
                 case "update": return TaskUpdate( segs.Skip( 1 ) );
