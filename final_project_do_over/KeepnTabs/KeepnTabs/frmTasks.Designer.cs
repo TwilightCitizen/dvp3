@@ -44,6 +44,7 @@
             this.lstTasks = new System.Windows.Forms.ListView();
             this.btnToggle = new System.Windows.Forms.Button();
             this.btnRotate = new System.Windows.Forms.Button();
+            this.btnExport = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // lblTasks
@@ -59,7 +60,7 @@
             // 
             this.btnAdd.Location = new System.Drawing.Point(60, 446);
             this.btnAdd.Name = "btnAdd";
-            this.btnAdd.Size = new System.Drawing.Size(210, 23);
+            this.btnAdd.Size = new System.Drawing.Size(104, 23);
             this.btnAdd.TabIndex = 20;
             this.btnAdd.Text = "Add";
             this.btnAdd.UseVisualStyleBackColor = true;
@@ -68,7 +69,7 @@
             // btnRename
             // 
             this.btnRename.Enabled = false;
-            this.btnRename.Location = new System.Drawing.Point(166, 475);
+            this.btnRename.Location = new System.Drawing.Point(166, 446);
             this.btnRename.Name = "btnRename";
             this.btnRename.Size = new System.Drawing.Size(104, 23);
             this.btnRename.TabIndex = 19;
@@ -79,7 +80,7 @@
             // btnDelete
             // 
             this.btnDelete.Enabled = false;
-            this.btnDelete.Location = new System.Drawing.Point(166, 504);
+            this.btnDelete.Location = new System.Drawing.Point(166, 475);
             this.btnDelete.Name = "btnDelete";
             this.btnDelete.Size = new System.Drawing.Size(104, 23);
             this.btnDelete.TabIndex = 18;
@@ -129,6 +130,16 @@
             this.btnRotate.UseVisualStyleBackColor = false;
             this.btnRotate.Click += new System.EventHandler(this.BtnRotate_Click);
             // 
+            // btnExport
+            // 
+            this.btnExport.Location = new System.Drawing.Point(166, 504);
+            this.btnExport.Name = "btnExport";
+            this.btnExport.Size = new System.Drawing.Size(104, 23);
+            this.btnExport.TabIndex = 24;
+            this.btnExport.Text = "Export ▶";
+            this.btnExport.UseVisualStyleBackColor = true;
+            this.btnExport.Click += new System.EventHandler(this.BtnExport_Click);
+            // 
             // frmTasks
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -137,6 +148,7 @@
             this.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("$this.BackgroundImage")));
             this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.ClientSize = new System.Drawing.Size(327, 636);
+            this.Controls.Add(this.btnExport);
             this.Controls.Add(this.btnRotate);
             this.Controls.Add(this.btnToggle);
             this.Controls.Add(this.lblTasks);
@@ -165,5 +177,6 @@
         private System.Windows.Forms.ListView lstTasks;
         private System.Windows.Forms.Button btnToggle;
         private System.Windows.Forms.Button btnRotate;
+        private System.Windows.Forms.Button btnExport;
     }
 }

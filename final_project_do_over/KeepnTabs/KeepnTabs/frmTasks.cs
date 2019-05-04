@@ -48,6 +48,8 @@ namespace KeepnTabs
             Tasks();
         }
 
+        /* Event Handlers */
+
         private void BtnAdd_Click( object sender, EventArgs e )
         {
             Add();
@@ -78,6 +80,11 @@ namespace KeepnTabs
             CheckSelection();
         }
 
+        private void BtnExport_Click( object sender, EventArgs e )
+        {
+
+        }
+
         private void BtnRotate_Click( object sender, EventArgs e )
         {
             Program.SimulateRotation( this );
@@ -86,7 +93,9 @@ namespace KeepnTabs
         private void CheckSelection()
         {
             btnRename.Enabled =
-            btnDelete.Enabled = lstTasks.SelectedItems.Count > 0;
+            btnDelete.Enabled =
+            btnToggle.Enabled =
+            btnExport.Enabled = lstTasks.SelectedItems.Count > 0;
         }
 
         /* Get the tasks for the logged in user for the selected list
@@ -121,7 +130,30 @@ namespace KeepnTabs
 
         private async void Add()
         {
+            var title = Interaction.InputBox(
+                "What title would you like for this task?  "
+            +   "Leave it blank to cancel adding the task."
+            );
 
+            if( !string.IsNullOrEmpty( title ) )
+            using ( var client = new HttpClient( new FakeAPI() ) )
+            {
+                try
+                {
+                    HttpResponseMessage response = await client.GetAsync( 
+                        Program.ApiBase + $"task/add/{ LoginToken }/{ ListID }/{ title }" );
+
+                    if( response.IsSuccessStatusCode )
+                    {
+                        var taskid = response.Content.ReadAsStringAsync();
+                        var toadd  = new ListViewItem( title );
+
+                        toadd.Tag = taskid;
+
+                        lstTasks.Items.Add( toadd );
+                    }
+                } catch { }
+            }
         }
 
         private async void Toggle()

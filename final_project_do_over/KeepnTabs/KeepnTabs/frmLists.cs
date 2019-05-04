@@ -75,6 +75,11 @@ namespace KeepnTabs
             Tasks();
         }
 
+        private void BtnTasks_Click( object sender, EventArgs e )
+        {
+            Tasks();
+        }
+
         private void BtnRotate_Click( object sender, EventArgs e )
         {
             Program.SimulateRotation( this );
@@ -85,7 +90,8 @@ namespace KeepnTabs
         private void CheckSelection()
         {
             btnRename.Enabled =
-            btnDelete.Enabled = lstLists.SelectedItems.Count > 0;
+            btnDelete.Enabled = 
+            btnTasks.Enabled  = lstLists.SelectedItems.Count > 0;
         }
 
         /* Attempt to add a new list for the user, cancelling on

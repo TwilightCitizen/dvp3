@@ -418,11 +418,14 @@ namespace KeepnTabs
             } catch {  return Invalid(); }
         }
 
+        /* Attempt to add a list with the given title to the user ID matching the login
+         * token, returning invalid or success accordingly. */
+
         private Task< HttpResponseMessage > ListAdd( IEnumerable< string > segs )
         {
             var token  = segs.Take( 1 ).FirstOrDefault();
             var title  = segs.Skip( 1 ).Take( 1 ).FirstOrDefault();
-            var sqlAdd = "insert into Lists( ID, Title, UserID ) values( @ListID, @Title, ( select UserID from Tokens where ID = @Token) )";
+            var sqlAdd = "insert into Lists( ID, Title, UserID ) values( @ListID, @Title, ( select UserID from Tokens where ID = @Token ) )";
 
             try
             {
@@ -451,9 +454,11 @@ namespace KeepnTabs
                         else { return Invalid(); }
                     }
                 }
-                
             } catch {  return Invalid(); }
         }
+
+        /* Attempt to update the list matching the list ID and user ID matching the
+         * login token with the give title, returning success or failure. */
 
         private Task< HttpResponseMessage > ListUpdate( IEnumerable< string > segs )
         {
@@ -490,6 +495,9 @@ namespace KeepnTabs
                 
             } catch {  return Invalid(); }
         }
+
+        /* Attempt to delete the list matchig the list ID where the user ID matches
+         * the login token, returning success or invalid accordingly. */
 
         private Task< HttpResponseMessage > ListDelete( IEnumerable< string > segs )
         {
@@ -538,16 +546,50 @@ namespace KeepnTabs
             }
         }
 
+        /* Attempt to add the task to the list matching the list ID where it belongs to the user
+         * matching the user ID associated with the login token, returning success or invalid. */
+
         private Task< HttpResponseMessage > TaskAdd( IEnumerable< string > segs )
         {
-            return Task.FromResult(
-                new HttpResponseMessage()
+            var token  = segs.Take( 1 ).FirstOrDefault();
+            var listid = segs.Skip( 1 ).Take( 1 ).FirstOrDefault();
+            var title  = segs.Skip( 2 ).Take( 1 ).FirstOrDefault();
+            var sqlAdd = "insert into Tasks( ID, Title, Done, ListID ) values( @TaskID, @Title, 0, " +
+                         "( select ID from Lists where ID = @ListID and UserID = ( select UserID from Tokens where ID = @Token ) ) )";
+
+            try
+            {
+                using( var con = new MySqlConnection( Program.Connection ) )
                 {
-                    StatusCode = HttpStatusCode.OK,
-                    Content = new StringContent( "OK" )
+                    con.Open();
+
+                    using( var cmdAdd = new MySqlCommand( sqlAdd, con ) ) 
+                    {
+                        var taskid = Guid.NewGuid().ToString();
+
+                        cmdAdd.Parameters.AddWithValue( "@TaskID", taskid );
+                        cmdAdd.Parameters.AddWithValue( "@ListID", listid );
+                        cmdAdd.Parameters.AddWithValue( "@Title",  title  );
+                        cmdAdd.Parameters.AddWithValue( "@Token",  token );
+
+                        var numAdd = cmdAdd.ExecuteNonQuery();
+
+                        if( numAdd > 0 )
+                            return Task.FromResult(
+                                new HttpResponseMessage()
+                                {
+                                    StatusCode = HttpStatusCode.OK,
+                                    Content = new StringContent( taskid )
+                                }
+                            );
+                        else { return Invalid(); }
+                    }
                 }
-            );
+            } catch {  return Invalid(); }
         }
+
+        /* Attempt to update the task matching the task ID with the title and status given where
+         * it matches the list ID of the user ID of the login token, returning success or invalid. */
 
         private Task< HttpResponseMessage > TaskUpdate( IEnumerable< string > segs )
         {
@@ -559,6 +601,9 @@ namespace KeepnTabs
                 }
             );
         }
+
+        /* Attempt to delete the task matching the task ID matching the list ID matching the user
+         * ID of the login token, returning success or invalid. */
 
         private Task< HttpResponseMessage > TaskDelete( IEnumerable< string > segs )
         {

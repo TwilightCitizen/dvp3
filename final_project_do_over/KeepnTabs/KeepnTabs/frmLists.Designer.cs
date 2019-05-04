@@ -43,6 +43,7 @@
             this.btnAdd = new System.Windows.Forms.Button();
             this.lblLists = new System.Windows.Forms.Label();
             this.btnRotate = new System.Windows.Forms.Button();
+            this.btnTasks = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // lstLists
@@ -51,7 +52,7 @@
             this.lstLists.Location = new System.Drawing.Point(61, 126);
             this.lstLists.MultiSelect = false;
             this.lstLists.Name = "lstLists";
-            this.lstLists.Size = new System.Drawing.Size(210, 327);
+            this.lstLists.Size = new System.Drawing.Size(210, 305);
             this.lstLists.TabIndex = 9;
             this.lstLists.UseCompatibleStateImageBehavior = false;
             this.lstLists.View = System.Windows.Forms.View.List;
@@ -61,7 +62,7 @@
             // btnRename
             // 
             this.btnRename.Enabled = false;
-            this.btnRename.Location = new System.Drawing.Point(167, 475);
+            this.btnRename.Location = new System.Drawing.Point(167, 449);
             this.btnRename.Name = "btnRename";
             this.btnRename.Size = new System.Drawing.Size(104, 23);
             this.btnRename.TabIndex = 13;
@@ -72,7 +73,7 @@
             // btnDelete
             // 
             this.btnDelete.Enabled = false;
-            this.btnDelete.Location = new System.Drawing.Point(167, 504);
+            this.btnDelete.Location = new System.Drawing.Point(167, 478);
             this.btnDelete.Name = "btnDelete";
             this.btnDelete.Size = new System.Drawing.Size(104, 23);
             this.btnDelete.TabIndex = 12;
@@ -82,7 +83,7 @@
             // 
             // btnBack
             // 
-            this.btnBack.Location = new System.Drawing.Point(61, 504);
+            this.btnBack.Location = new System.Drawing.Point(61, 478);
             this.btnBack.Name = "btnBack";
             this.btnBack.Size = new System.Drawing.Size(104, 23);
             this.btnBack.TabIndex = 11;
@@ -92,7 +93,7 @@
             // 
             // btnAdd
             // 
-            this.btnAdd.Location = new System.Drawing.Point(61, 475);
+            this.btnAdd.Location = new System.Drawing.Point(61, 449);
             this.btnAdd.Name = "btnAdd";
             this.btnAdd.Size = new System.Drawing.Size(104, 23);
             this.btnAdd.TabIndex = 14;
@@ -120,6 +121,17 @@
             this.btnRotate.UseVisualStyleBackColor = false;
             this.btnRotate.Click += new System.EventHandler(this.BtnRotate_Click);
             // 
+            // btnTasks
+            // 
+            this.btnTasks.Enabled = false;
+            this.btnTasks.Location = new System.Drawing.Point(61, 507);
+            this.btnTasks.Name = "btnTasks";
+            this.btnTasks.Size = new System.Drawing.Size(210, 23);
+            this.btnTasks.TabIndex = 17;
+            this.btnTasks.Text = "Tasks ▶";
+            this.btnTasks.UseVisualStyleBackColor = true;
+            this.btnTasks.Click += new System.EventHandler(this.BtnTasks_Click);
+            // 
             // frmLists
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -128,6 +140,7 @@
             this.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("$this.BackgroundImage")));
             this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.ClientSize = new System.Drawing.Size(327, 636);
+            this.Controls.Add(this.btnTasks);
             this.Controls.Add(this.btnRotate);
             this.Controls.Add(this.lblLists);
             this.Controls.Add(this.btnAdd);
@@ -153,5 +166,6 @@
         private System.Windows.Forms.Button btnAdd;
         private System.Windows.Forms.Label lblLists;
         private System.Windows.Forms.Button btnRotate;
+        private System.Windows.Forms.Button btnTasks;
     }
 }
