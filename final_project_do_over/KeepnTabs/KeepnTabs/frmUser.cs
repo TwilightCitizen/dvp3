@@ -22,14 +22,23 @@ namespace KeepnTabs
 {
     public partial class frmUser : Form
     {
+        /* Module Level State Flags */
+
         private bool   LoggedIn = false;
         private bool   Updating = false;
+
+        /* Token for Logged in User */
+
         private string LoginToken;
+
+        /* Constructors */
 
         public frmUser()
         {
             InitializeComponent();
         }
+
+        /* Event Handlers */
 
         private void BtnLogInOutRegister_Click( object sender, EventArgs e )
         {
@@ -67,6 +76,9 @@ namespace KeepnTabs
             CheckCredentials();
         }
 
+        /* Tie the clickability of buttons to the contents of the text
+         * boxes and the module level state. */
+
         private void CheckCredentials()
         {
             btnLogInOutRegister.Enabled =
@@ -79,6 +91,9 @@ namespace KeepnTabs
                 new EmailAddressAttribute().IsValid( txtEmail.Text ) &&
                 Updating;
         }
+
+        /* Log the user out.  Even if this fails at the API end, we
+         * do it on the client end for real.  The tokens expire anyway. */
 
         private async void LogOut()
         {
@@ -101,6 +116,9 @@ namespace KeepnTabs
             LoggedIn                 = false;
             btnLogInOutRegister.Text = "Login";
         }
+
+        /* Log the user in, or register and log the user in if the credentials are
+         * new.  If the email matches but the password doesn't, fail. */
 
         private async void LogInRegister()
         {
@@ -127,6 +145,8 @@ namespace KeepnTabs
             }
         }
 
+        /* Let the user update the login credentials. */
+
         private void Update_()
         {
             txtEmail.Enabled     =
@@ -135,6 +155,10 @@ namespace KeepnTabs
             btnDelete.Enabled    = false;
             btnUpdateCommit.Text = "Done";
         }
+
+        /* Attempt to commit the user's changed login credentials.  Won't fail unless
+         * the email already exists and/or the user attempts to keep same email. This
+         * is somewhat brittle and forceful. */
 
         private async void Commit()
         {
@@ -159,6 +183,8 @@ namespace KeepnTabs
             }
 
         }
+
+        /* Delete the user's account on confirmation. */
 
         private async void Delete()
         {
@@ -192,13 +218,13 @@ namespace KeepnTabs
                     } catch { }
                 }
             }
-
-
         }
+
+        /* Navigate to the logged in user's lists. */
 
         private void Lists()
         {
-            var frm = new frmLists();
+            var frm = new frmLists( LoginToken );
 
             Hide();
 

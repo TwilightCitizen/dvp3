@@ -14,17 +14,36 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.Net.Http;
+using System.Xml.Linq;
 
 namespace KeepnTabs
 {
     public partial class frmLists : Form
     {
+        /* Token for Logged in User */
+
+        private string LoginToken;
+
+        /* Constructors */
+
         public frmLists()
         {
             InitializeComponent();
         }
 
-        private void BtnAdd_Click(object sender, EventArgs e)
+        public frmLists( string loginToken )
+        {
+            InitializeComponent();
+
+            LoginToken = loginToken;
+            
+            Lists();
+        }
+
+        /* Event Handlers */
+
+        private void BtnAdd_Click( object sender, EventArgs e )
         {
             Add();
         }
@@ -54,6 +73,8 @@ namespace KeepnTabs
             Tasks();
         }
 
+        /* Tie renaming and deletion to selection state. */
+
         private void CheckSelection()
         {
             btnRename.Enabled =
@@ -73,6 +94,36 @@ namespace KeepnTabs
         private void Delete()
         {
             CheckSelection();
+        }
+
+        /* Get the lists for the logged in user from the API and add
+         * them to the list view. We can expect an XML payload here
+         * carrying the hiearchical list data. */
+
+        private async void Lists()
+        {
+            using( var client = new HttpClient( new FakeAPI() ) )
+            {
+                try
+                {
+                    HttpResponseMessage response = await client.GetAsync( 
+                        Program.ApiBase + $"user/lists/{ LoginToken }" );
+
+                    if( response.IsSuccessStatusCode )
+                    {
+                        var lists = XDocument.Parse( await response.Content.ReadAsStringAsync() );
+
+                        foreach( XElement list in lists.Descendants( "list" ) )
+                        {
+                            var toadd = new ListViewItem( list.Element( "title" ).Value );
+
+                            toadd.Tag = list.Element( "id" ).Value;
+
+                            lstLists.Items.Add( toadd );
+                        }
+                    }
+                } catch { }
+            }
         }
 
         private void Tasks()

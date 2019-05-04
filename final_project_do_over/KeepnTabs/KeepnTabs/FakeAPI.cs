@@ -14,6 +14,7 @@ using System.Net;
 using System.Net.Http;
 using System.Threading;
 using MySql.Data.MySqlClient;
+using System.Xml.Linq;
 
 namespace KeepnTabs
 {
@@ -33,7 +34,7 @@ namespace KeepnTabs
 
             switch( segs.FirstOrDefault() )
             {
-                case "user": return User( segs.Skip( 1 ) );
+                case "user": return User(  segs.Skip( 1 ) );
                 case "list": return List_( segs.Skip( 1 ) );
                 case "task": return Task_( segs.Skip( 1 ) );
                 default:     return Invalid();
@@ -60,10 +61,11 @@ namespace KeepnTabs
         {
             switch( segs.FirstOrDefault() )
             {
-                case "login":  return UserLogin( segs.Skip( 1 ) );
+                case "login":  return UserLogin(  segs.Skip( 1 ) );
                 case "logout": return UserLogout( segs.Skip( 1 ) );
                 case "update": return UserUpdate( segs.Skip( 1 ) );
                 case "delete": return UserDelete( segs.Skip( 1 ) );
+                case "lists":  return UserLists(  segs.Skip( 1 ) );
                 default:       return Invalid();
             }
         }
@@ -310,6 +312,49 @@ namespace KeepnTabs
                         else { return Invalid(); }
                     }
                 }
+            } catch {  return Invalid(); }
+        }
+
+        /* Attempt to return an XML payload of all the lists associated with the
+         * user ID associated with the login token, returning it on success and
+         * returning invalid on failure. */
+
+        private Task< HttpResponseMessage > UserLists( IEnumerable< string > segs )
+        {
+            var token    = segs.Take( 1 ).FirstOrDefault();
+            var sqlLists = "select ID, Title from Lists where UserID = ( select UserID from Tokens where ID = @Token )";
+
+            try
+            {
+                using( var con = new MySqlConnection( Program.Connection ) )
+                {
+                    con.Open();
+
+                    using( var cmdLists = new MySqlCommand( sqlLists, con ) ) 
+                    {
+                        cmdLists.Parameters.AddWithValue( "@Token", token );
+
+                        var rdrLists = cmdLists.ExecuteReader();
+                        var lists    = new XElement( "lists" );
+
+                        while( rdrLists.Read() )
+                        {
+                            lists.Add( new XElement( "list",
+                                new XElement( "id",    new XText( rdrLists[ "ID"    ].ToString() ) )
+                            ,   new XElement( "title", new XText( rdrLists[ "Title" ].ToString() ) )
+                            ) );
+                        }
+
+                        return Task.FromResult(
+                            new HttpResponseMessage()
+                            {
+                                StatusCode = HttpStatusCode.OK,
+                                Content = new StringContent( lists.ToString() )
+                            }
+                        );
+                    }
+                }
+                
             } catch {  return Invalid(); }
         }
 

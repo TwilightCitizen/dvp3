@@ -48,10 +48,12 @@
             // 
             this.lstLists.HideSelection = false;
             this.lstLists.Location = new System.Drawing.Point(61, 126);
+            this.lstLists.MultiSelect = false;
             this.lstLists.Name = "lstLists";
             this.lstLists.Size = new System.Drawing.Size(210, 327);
             this.lstLists.TabIndex = 9;
             this.lstLists.UseCompatibleStateImageBehavior = false;
+            this.lstLists.View = System.Windows.Forms.View.List;
             this.lstLists.SelectedIndexChanged += new System.EventHandler(this.LstLists_SelectedIndexChanged);
             this.lstLists.DoubleClick += new System.EventHandler(this.LstLists_DoubleClick);
             // 
