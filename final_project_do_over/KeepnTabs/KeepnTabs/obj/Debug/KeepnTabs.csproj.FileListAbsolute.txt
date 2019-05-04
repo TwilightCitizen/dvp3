@@ -10,3 +10,9 @@
 \\vmware-host\Shared Folders\Desktop\dvp3\final_project_do_over\KeepnTabs\KeepnTabs\obj\Debug\KeepnTabs.frmUser.resources
 \\vmware-host\Shared Folders\Desktop\dvp3\final_project_do_over\KeepnTabs\KeepnTabs\obj\Debug\KeepnTabs.frmLists.resources
 \\vmware-host\Shared Folders\Desktop\dvp3\final_project_do_over\KeepnTabs\KeepnTabs\obj\Debug\KeepnTabs.frmTasks.resources
+\\vmware-host\Shared Folders\Desktop\dvp3\final_project_do_over\KeepnTabs\KeepnTabs\bin\Debug\BouncyCastle.Crypto.dll
+\\vmware-host\Shared Folders\Desktop\dvp3\final_project_do_over\KeepnTabs\KeepnTabs\bin\Debug\Google.Protobuf.dll
+\\vmware-host\Shared Folders\Desktop\dvp3\final_project_do_over\KeepnTabs\KeepnTabs\bin\Debug\MySql.Data.dll
+\\vmware-host\Shared Folders\Desktop\dvp3\final_project_do_over\KeepnTabs\KeepnTabs\bin\Debug\Google.Protobuf.xml
+\\vmware-host\Shared Folders\Desktop\dvp3\final_project_do_over\KeepnTabs\KeepnTabs\bin\Debug\MySql.Data.xml
+\\vmware-host\Shared Folders\Desktop\dvp3\final_project_do_over\KeepnTabs\KeepnTabs\obj\Debug\KeepnTabs.csproj.CopyComplete

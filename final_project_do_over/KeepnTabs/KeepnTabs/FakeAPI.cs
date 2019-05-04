@@ -13,6 +13,7 @@ using System.Threading.Tasks;
 using System.Net;
 using System.Net.Http;
 using System.Threading;
+using MySql.Data.MySqlClient;
 
 namespace KeepnTabs
 {
@@ -57,7 +58,7 @@ namespace KeepnTabs
 
         private Task< HttpResponseMessage > User( IEnumerable< string > segs )
         {
-            switch( segs.Skip( 1 ).FirstOrDefault() )
+            switch( segs.FirstOrDefault() )
             {
                 case "login":  return UserLogin( segs.Skip( 1 ) );
                 case "logout": return UserLogout( segs.Skip( 1 ) );
@@ -67,7 +68,145 @@ namespace KeepnTabs
             }
         }
 
-        private Task<HttpResponseMessage> UserLogin( IEnumerable< string > segs )
+        /* Attempt to login the user with the provided email and password.  Failing that, attempt
+         * to first register the user, then login.  Failing that, the combination is invalid. */
+
+        private Task< HttpResponseMessage > UserLogin( IEnumerable< string > segs )
+        {
+            var email       = segs.Take( 1 ).FirstOrDefault();
+            var pass        = segs.Skip( 1 ).Take( 1 ).FirstOrDefault();
+
+            var sqlMatches  = "select ID from Users where Email = @Email and Pass = @Pass";
+            var sqlExists   = "select ID from Uuser where Email = @Email";
+            var sqlLogin    = "insert into Tokens( ID, UserID, Expires ) values( @Token, @UserID, @Expires )";
+            var sqlRegister = "insert into Users( ID, Email, Pass, Confirmed ) values( @UserID, @Email, @Pass, 1 )";
+
+            try
+            {
+                using( var con = new MySqlConnection( Program.Connection ) )
+                {
+                    con.Open();
+
+                    using( var cmdMatch = new MySqlCommand( sqlMatches, con ) )
+                    {
+                        cmdMatch.Parameters.AddWithValue( "@Email", email );
+                        cmdMatch.Parameters.AddWithValue( "@Pass",  pass  );
+
+                        var rdrMatch = cmdMatch.ExecuteReader();
+
+                        if( rdrMatch.HasRows )
+                        {
+                            // Matches - Login
+
+                            rdrMatch.Read();
+
+                            var userid  = rdrMatch[ 0 ].ToString();
+                            var token   = Guid.NewGuid().ToString();
+                            var expires = DateTime.Now.AddMinutes( 30 );
+                        
+                            rdrMatch.Close();
+
+                            using( var cmdLogin = new MySqlCommand( sqlLogin, con ) )
+                            {
+                                cmdLogin.Parameters.AddWithValue( "@Token",   token  );
+                                cmdLogin.Parameters.AddWithValue( "@UserID",  userid  );
+                                cmdLogin.Parameters.AddWithValue( "@Expires", expires );
+
+                                var numLogin = cmdLogin.ExecuteNonQuery();
+
+                                if( numLogin > 0 )
+                                {
+                                    return Task.FromResult(
+                                        new HttpResponseMessage()
+                                        {
+                                            StatusCode = HttpStatusCode.OK,
+                                            Content = new StringContent( token )
+                                        }
+                                    );
+                                }
+                                else
+                                {
+                                    return Invalid();
+                                }
+                            }
+                        }
+                        else
+                        {
+                            rdrMatch.Close();
+
+                            using( var cmdExist = new MySqlCommand( sqlExists, con ) )
+                            {
+                                cmdExist.Parameters.AddWithValue( "@Email", email );
+
+                                var rdrExist = cmdExist.ExecuteReader();
+
+                                if( rdrExist.HasRows )
+                                {
+                                    // Exists - Don't Login
+
+                                    return Invalid();
+                                }
+                                else
+                                {
+                                    rdrExist.Close();
+
+                                    var userid = Guid.NewGuid().ToString();
+
+                                    using( var cmdRegister = new MySqlCommand( sqlRegister, con ) )
+                                    {
+                                        cmdRegister.Parameters.AddWithValue( "@UserID", userid );
+                                        cmdRegister.Parameters.AddWithValue( "@Email",  email  );
+                                        cmdRegister.Parameters.AddWithValue( "@Pass",   pass   );
+
+                                        var numRegister = cmdRegister.ExecuteNonQuery();
+
+                                        if( numRegister > 0 )
+                                        {
+                                            var token   = Guid.NewGuid().ToString();
+                                            var expires = DateTime.Now.AddMinutes( 30 );
+
+                                            using( var cmdLogin = new MySqlCommand( sqlLogin, con ) )
+                                            {
+                                                cmdLogin.Parameters.AddWithValue( "@Token",   token  );
+                                                cmdLogin.Parameters.AddWithValue( "@UserID",  userid  );
+                                                cmdLogin.Parameters.AddWithValue( "@Expires", expires );
+
+                                                var rdrLogin = cmdLogin.ExecuteNonQuery();
+
+                                                if( rdrLogin > 0 )
+                                                {
+                                                    return Task.FromResult(
+                                                        new HttpResponseMessage()
+                                                        {
+                                                            StatusCode = HttpStatusCode.OK,
+                                                            Content = new StringContent( token )
+                                                        }
+                                                    );
+                                                }
+                                                else
+                                                {
+                                                    return Invalid();
+                                                }
+                                            }
+                                        }
+                                        else
+                                        {
+                                            return Invalid();
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            catch( Exception e )
+            {
+                return Invalid();
+            }
+        }
+
+        private Task< HttpResponseMessage > UserLogout( IEnumerable< string > segs )
         {
             return Task.FromResult(
                 new HttpResponseMessage()
@@ -78,7 +217,7 @@ namespace KeepnTabs
             );
         }
 
-        private Task<HttpResponseMessage> UserLogout( IEnumerable< string > segs )
+        private Task< HttpResponseMessage > UserUpdate( IEnumerable< string > segs )
         {
             return Task.FromResult(
                 new HttpResponseMessage()
@@ -89,18 +228,7 @@ namespace KeepnTabs
             );
         }
 
-        private Task<HttpResponseMessage> UserUpdate( IEnumerable< string > segs )
-        {
-            return Task.FromResult(
-                new HttpResponseMessage()
-                {
-                    StatusCode = HttpStatusCode.OK,
-                    Content = new StringContent( "OK" )
-                }
-            );
-        }
-
-        private Task<HttpResponseMessage> UserDelete( IEnumerable< string > segs )
+        private Task< HttpResponseMessage > UserDelete( IEnumerable< string > segs )
         {
             return Task.FromResult(
                 new HttpResponseMessage()
@@ -124,7 +252,7 @@ namespace KeepnTabs
             }
         }
 
-        private Task<HttpResponseMessage> ListAdd( IEnumerable< string > segs )
+        private Task< HttpResponseMessage > ListAdd( IEnumerable< string > segs )
         {
             return Task.FromResult(
                 new HttpResponseMessage()
@@ -135,7 +263,7 @@ namespace KeepnTabs
             );
         }
 
-        private Task<HttpResponseMessage> ListUpdate( IEnumerable< string > segs )
+        private Task< HttpResponseMessage > ListUpdate( IEnumerable< string > segs )
         {
             return Task.FromResult(
                 new HttpResponseMessage()
@@ -146,7 +274,7 @@ namespace KeepnTabs
             );
         }
 
-        private Task<HttpResponseMessage> ListDelete( IEnumerable< string > segs )
+        private Task< HttpResponseMessage > ListDelete( IEnumerable< string > segs )
         {
             return Task.FromResult(
                 new HttpResponseMessage()
@@ -171,7 +299,7 @@ namespace KeepnTabs
             }
         }
 
-        private Task<HttpResponseMessage> TaskAdd( IEnumerable< string > segs )
+        private Task< HttpResponseMessage > TaskAdd( IEnumerable< string > segs )
         {
             return Task.FromResult(
                 new HttpResponseMessage()
@@ -182,7 +310,7 @@ namespace KeepnTabs
             );
         }
 
-        private Task<HttpResponseMessage> TaskUpdate( IEnumerable< string > segs )
+        private Task< HttpResponseMessage > TaskUpdate( IEnumerable< string > segs )
         {
             return Task.FromResult(
                 new HttpResponseMessage()
@@ -193,7 +321,7 @@ namespace KeepnTabs
             );
         }
 
-        private Task<HttpResponseMessage> TaskDelete( IEnumerable< string > segs )
+        private Task< HttpResponseMessage > TaskDelete( IEnumerable< string > segs )
         {
             return Task.FromResult(
                 new HttpResponseMessage()

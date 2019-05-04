@@ -87,7 +87,8 @@ namespace KeepnTabs
             txtEmail.Enabled         =
             txtPassword.Enabled      = true;
             btnDelete.Enabled        =
-            btnLists.Enabled         = false;
+            btnLists.Enabled         =
+            btnUpdateCommit.Enabled  =
             LoggedIn                 = false;
             btnLogInOutRegister.Text = "Login";
         }
@@ -106,27 +107,30 @@ namespace KeepnTabs
                         LoginToken               = await response.Content.ReadAsStringAsync();
                         txtEmail.Enabled         = 
                         txtPassword.Enabled      = false;
+                        btnUpdateCommit.Enabled  = true;
                         btnDelete.Enabled        =
                         btnLists.Enabled         = true;
                         LoggedIn                 = true;
                         btnLogInOutRegister.Text = "Logout";
                     }
-                } catch { }
+                } catch( Exception e ) { var a = e; }
             }
         }
 
         private void Update_()
         {
-            txtEmail.Enabled    =
-            txtPassword.Enabled = true;
-            Updating            = true;
+            txtEmail.Enabled     =
+            txtPassword.Enabled  =
+            Updating             = true;
+            btnUpdateCommit.Text = "Done";
         }
 
         private void Commit()
         {
-            txtEmail.Enabled    =
-            txtPassword.Enabled = false;
-            Updating = false;
+            txtEmail.Enabled     =
+            txtPassword.Enabled  =
+            Updating             = false;
+            btnUpdateCommit.Text = "Update";
         }
 
         private void Delete()
