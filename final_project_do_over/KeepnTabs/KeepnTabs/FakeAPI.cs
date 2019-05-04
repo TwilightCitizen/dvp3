@@ -633,13 +633,35 @@ namespace KeepnTabs
 
         private Task< HttpResponseMessage > TaskDelete( IEnumerable< string > segs )
         {
-            return Task.FromResult(
-                new HttpResponseMessage()
+            var token     = segs.Take( 1 ).FirstOrDefault();
+            var taskid    = segs.Skip( 1 ).Take( 1 ).FirstOrDefault();
+            var sqlDelete = "delete from Tasks where ID = @TaskID";
+
+            try
+            {
+                using( var con = new MySqlConnection( Program.Connection ) )
                 {
-                    StatusCode = HttpStatusCode.OK,
-                    Content = new StringContent( "OK" )
+                    con.Open();
+
+                    using( var cmdDelete = new MySqlCommand( sqlDelete, con ) ) 
+                    {
+                        cmdDelete.Parameters.AddWithValue( "@TaskID", taskid );
+                        //cmdDelete.Parameters.AddWithValue( "@Token",  token  );
+
+                        var numDelete = cmdDelete.ExecuteNonQuery();
+
+                        if( numDelete > 0 )
+                            return Task.FromResult(
+                                new HttpResponseMessage()
+                                {
+                                    StatusCode = HttpStatusCode.OK,
+                                    Content = new StringContent( "OK" )
+                                }
+                            );
+                        else { return Invalid(); }
+                    }
                 }
-            );
+            } catch {  return Invalid(); }
         }
     }
 }

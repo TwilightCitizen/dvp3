@@ -6,13 +6,6 @@
  * Date:     May 3, 2019 */
  
 using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Net;
 using System.Net.Http;
@@ -216,7 +209,8 @@ namespace KeepnTabs
         
         private void Tasks()
         {
-            var frm = new frmTasks( LoginToken, lstLists.SelectedItems[ 0 ].Tag.ToString() );
+            var list = lstLists.SelectedItems[ 0 ];
+            var frm  = new frmTasks( LoginToken, list.Tag.ToString(), list.Text );
 
             Hide();
 

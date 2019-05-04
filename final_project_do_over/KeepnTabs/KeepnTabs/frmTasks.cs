@@ -6,18 +6,13 @@
  * Date:     May 3, 2019 */
 
 using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
 using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Net;
 using System.Net.Http;
 using System.Xml.Linq;
 using Microsoft.VisualBasic;
+using System.IO;
 
 namespace KeepnTabs
 {
@@ -27,9 +22,10 @@ namespace KeepnTabs
 
         private string LoginToken;
 
-        /* ID for the Selected List */
+        /* ID and Title for the Selected List */
 
         private string ListID;
+        private string ListTitle;
 
         /* Constructors */
 
@@ -38,12 +34,14 @@ namespace KeepnTabs
             InitializeComponent();
         }
 
-        public frmTasks( string loginToken, string listid )
+        public frmTasks( string loginToken, string listid, string listTitle )
         {
             InitializeComponent();
 
-            LoginToken = loginToken;
-            ListID     = listid;
+            LoginToken    = loginToken;
+            ListID        = listid;
+            ListTitle     = 
+            lblTasks.Text = listTitle;
             
             Tasks();
         }
@@ -82,7 +80,7 @@ namespace KeepnTabs
 
         private void BtnExport_Click( object sender, EventArgs e )
         {
-
+            Export();
         }
 
         private void BtnRotate_Click( object sender, EventArgs e )
@@ -210,6 +208,8 @@ namespace KeepnTabs
             CheckSelection();
         }
 
+        /* Delete the selected task on user confirmation. */
+
         private async void Delete()
         {
             var confirm = MessageBox.Show( 
@@ -235,6 +235,35 @@ namespace KeepnTabs
             }
 
             CheckSelection();
+        }
+
+        /* Export the tasks of the current list to XML. */
+
+        private void Export()
+        {
+            var frm = new SaveFileDialog();
+
+            frm.Filter = "XML Files (*.xml)|*.xml";
+
+            if( frm.ShowDialog() == DialogResult.OK )
+            {
+                using( StreamWriter sw = new StreamWriter( frm.OpenFile() ) )
+                {
+                    var xml = new XElement( "list",
+                        new XElement( "title",
+                            new XText( lblList.Text ) )
+                    ,   new XElement( "tasks",
+                            flowLayoutPanel.Controls.OfType< SlideItem.SlideItem >().ToList().Select( item =>
+                                new XElement( "task",
+                                    new XElement( "title",
+                                        new XText( item.Controls[ "btnMain" ].Text ) )
+                                ,   new XElement( "done",
+                                        new XText( ( (bool) item.Controls[ "btnLeft" ].Tag ).ToString() ) ) ) ) ) );
+
+                    /* Write the file. */
+                    await sw.WriteAsync( xml.ToString() );
+                }
+            }
         }
     }
 }
