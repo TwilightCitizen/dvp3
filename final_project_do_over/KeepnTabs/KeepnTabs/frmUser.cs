@@ -80,8 +80,17 @@ namespace KeepnTabs
                 Updating;
         }
 
-        private void LogOut()
+        private async void LogOut()
         {
+            using( var client = new HttpClient( new FakeAPI() ) )
+            {
+                try
+                {
+                    HttpResponseMessage response = await client.GetAsync( 
+                        Program.ApiBase + $"user/logout/{ LoginToken }" );
+                } catch { }
+            }
+
             txtEmail.Text            =
             txtPassword.Text         = "";
             txtEmail.Enabled         =
@@ -113,7 +122,7 @@ namespace KeepnTabs
                         LoggedIn                 = true;
                         btnLogInOutRegister.Text = "Logout";
                     }
-                } catch( Exception e ) { var a = e; }
+                } catch { }
             }
         }
 

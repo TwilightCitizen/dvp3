@@ -75,9 +75,8 @@ namespace KeepnTabs
         {
             var email       = segs.Take( 1 ).FirstOrDefault();
             var pass        = segs.Skip( 1 ).Take( 1 ).FirstOrDefault();
-
             var sqlMatches  = "select ID from Users where Email = @Email and Pass = @Pass";
-            var sqlExists   = "select ID from Uuser where Email = @Email";
+            var sqlExists   = "select ID from Users where Email = @Email";
             var sqlLogin    = "insert into Tokens( ID, UserID, Expires ) values( @Token, @UserID, @Expires )";
             var sqlRegister = "insert into Users( ID, Email, Pass, Confirmed ) values( @UserID, @Email, @Pass, 1 )";
 
@@ -115,7 +114,6 @@ namespace KeepnTabs
                                 var numLogin = cmdLogin.ExecuteNonQuery();
 
                                 if( numLogin > 0 )
-                                {
                                     return Task.FromResult(
                                         new HttpResponseMessage()
                                         {
@@ -123,11 +121,7 @@ namespace KeepnTabs
                                             Content = new StringContent( token )
                                         }
                                     );
-                                }
-                                else
-                                {
-                                    return Invalid();
-                                }
+                                else return Invalid();
                             }
                         }
                         else
@@ -182,39 +176,50 @@ namespace KeepnTabs
                                                             Content = new StringContent( token )
                                                         }
                                                     );
-                                                }
-                                                else
-                                                {
-                                                    return Invalid();
-                                                }
+                                                } else return Invalid();
                                             }
-                                        }
-                                        else
-                                        {
-                                            return Invalid();
-                                        }
+                                        } else  return Invalid();
                                     }
                                 }
                             }
                         }
                     }
                 }
-            }
-            catch( Exception e )
-            {
-                return Invalid();
-            }
+            } catch { return Invalid(); }
         }
+
+        /* Attempt to log the user out, returning ok on success and invalid on failure. */
 
         private Task< HttpResponseMessage > UserLogout( IEnumerable< string > segs )
         {
-            return Task.FromResult(
-                new HttpResponseMessage()
+            var token     = segs.Take( 1 ).FirstOrDefault();
+            var sqlLogout = "delete from Tokens where ID = @Token";
+
+            try
+            {
+                using( var con = new MySqlConnection( Program.Connection ) )
                 {
-                    StatusCode = HttpStatusCode.OK,
-                    Content = new StringContent( "OK" )
+                    con.Open();
+
+                    using( var cmdLogout = new MySqlCommand( sqlLogout, con ) )
+                    {
+                        cmdLogout.Parameters.AddWithValue( "@Token", token );
+
+                        var rdrMatch = cmdLogout.ExecuteReader();
+
+                        if( rdrMatch.HasRows )
+                            return Task.FromResult(
+                                new HttpResponseMessage()
+                                {
+                                    StatusCode = HttpStatusCode.OK,
+                                    Content = new StringContent( "OK" )
+                                }
+                            );
+                        else { return Invalid(); }
+                    }
                 }
-            );
+            }
+            catch {  return Invalid(); }
         }
 
         private Task< HttpResponseMessage > UserUpdate( IEnumerable< string > segs )
