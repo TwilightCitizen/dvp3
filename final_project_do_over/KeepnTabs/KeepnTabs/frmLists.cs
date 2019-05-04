@@ -119,8 +119,29 @@ namespace KeepnTabs
             }
         }
 
-        private void Rename()
+        /* Update the list title to the user's choice unless it's blank. */
+        private async void Rename()
         {
+            var title = Interaction.InputBox(
+                "To what title would you like to rename this list?  "
+            +   "Leave it blank to cancel renaming the list."
+            );
+
+            if( !string.IsNullOrEmpty( title ) )
+            using( var client = new HttpClient( new FakeAPI() ) )
+            {
+                try
+                {
+                    var listid = lstLists.SelectedItems[ 0 ].Tag;
+
+                    HttpResponseMessage response = await client.GetAsync( 
+                        Program.ApiBase + $"list/update/{ LoginToken }/{ listid }/{ title }" );
+
+                    if( response.IsSuccessStatusCode ) lstLists.SelectedItems[ 0 ].Text = title;
+                    else MessageBox.Show( "There was an error updating your list." );
+                } catch { }
+            }
+
             CheckSelection();
         }
 
@@ -146,7 +167,7 @@ namespace KeepnTabs
                             Program.ApiBase + $"list/delete/{ LoginToken }/{ listid }" );
 
                         if( response.IsSuccessStatusCode ) lstLists.SelectedItems[ 0 ].Remove();    
-                        else MessageBox.Show( "There was an error deleting your account." );
+                        else MessageBox.Show( "There was an error deleting your list." );
                     } catch { }
                 }
             }

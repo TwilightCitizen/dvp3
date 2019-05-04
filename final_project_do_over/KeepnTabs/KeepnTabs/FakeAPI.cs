@@ -391,9 +391,9 @@ namespace KeepnTabs
                         cmdAdd.Parameters.AddWithValue( "@Title",  title  );
                         cmdAdd.Parameters.AddWithValue( "@Token",  token );
 
-                        var numLists = cmdAdd.ExecuteNonQuery();
+                        var numAdd = cmdAdd.ExecuteNonQuery();
 
-                        if( numLists > 0 )
+                        if( numAdd > 0 )
                             return Task.FromResult(
                                 new HttpResponseMessage()
                                 {
@@ -410,13 +410,38 @@ namespace KeepnTabs
 
         private Task< HttpResponseMessage > ListUpdate( IEnumerable< string > segs )
         {
-            return Task.FromResult(
-                new HttpResponseMessage()
+            var token     = segs.Take( 1 ).FirstOrDefault();
+            var listid    = segs.Skip( 1 ).Take( 1 ).FirstOrDefault();
+            var title     = segs.Skip( 2 ).Take( 1 ).FirstOrDefault();
+            var sqlUpdate = "update Lists set Title = @Title where ID = @ListID and UserID = ( select UserID from Tokens where ID = @Token )";
+
+            try
+            {
+                using( var con = new MySqlConnection( Program.Connection ) )
                 {
-                    StatusCode = HttpStatusCode.OK,
-                    Content = new StringContent( "OK" )
+                    con.Open();
+
+                    using( var cmdUpdate = new MySqlCommand( sqlUpdate, con ) ) 
+                    {
+                        cmdUpdate.Parameters.AddWithValue( "@ListID", listid );
+                        cmdUpdate.Parameters.AddWithValue( "@Title",  title  );
+                        cmdUpdate.Parameters.AddWithValue( "@Token",  token );
+
+                        var numUpdate = cmdUpdate.ExecuteNonQuery();
+
+                        if( numUpdate > 0 )
+                            return Task.FromResult(
+                                new HttpResponseMessage()
+                                {
+                                    StatusCode = HttpStatusCode.OK,
+                                    Content = new StringContent( "OK" )
+                                }
+                            );
+                        else { return Invalid(); }
+                    }
                 }
-            );
+                
+            } catch {  return Invalid(); }
         }
 
         private Task< HttpResponseMessage > ListDelete( IEnumerable< string > segs )
