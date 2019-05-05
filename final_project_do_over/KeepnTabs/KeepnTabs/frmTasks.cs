@@ -11,6 +11,7 @@ using System.Windows.Forms;
 using System.Net;
 using System.Net.Http;
 using System.Xml.Linq;
+using System.Linq;
 using Microsoft.VisualBasic;
 using System.IO;
 
@@ -249,19 +250,19 @@ namespace KeepnTabs
             {
                 using( StreamWriter sw = new StreamWriter( frm.OpenFile() ) )
                 {
-                    var xml = new XElement( "list",
-                        new XElement( "title",
-                            new XText( lblList.Text ) )
-                    ,   new XElement( "tasks",
-                            flowLayoutPanel.Controls.OfType< SlideItem.SlideItem >().ToList().Select( item =>
-                                new XElement( "task",
-                                    new XElement( "title",
-                                        new XText( item.Controls[ "btnMain" ].Text ) )
-                                ,   new XElement( "done",
-                                        new XText( ( (bool) item.Controls[ "btnLeft" ].Tag ).ToString() ) ) ) ) ) );
+                    var list = new XElement( "list",
+                        new XElement( "title", new XText( ListTitle ) )
+                    ,   new XElement( "tasks" ) );
 
-                    /* Write the file. */
-                    await sw.WriteAsync( xml.ToString() );
+                    foreach( ListViewItem task in lstTasks.Items )
+                        list.Descendants( "tasks" ).First().Add(
+                            new XElement( "task",
+                                new XElement( "title", new XText( task.Text                      ) )
+                            ,   new XElement( "done",  new XText( task.Font.Strikeout.ToString() ) )
+                            )
+                        );
+
+                    sw.Write( list.ToString() );
                 }
             }
         }
