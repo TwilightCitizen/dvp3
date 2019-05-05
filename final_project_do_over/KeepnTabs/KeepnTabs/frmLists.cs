@@ -107,7 +107,7 @@ namespace KeepnTabs
 
                     if( response.IsSuccessStatusCode )
                     {
-                        var listid = response.Content.ReadAsStringAsync();
+                        var listid = await response.Content.ReadAsStringAsync();
                         var toadd  = new ListViewItem( title );
 
                         toadd.Tag = listid;

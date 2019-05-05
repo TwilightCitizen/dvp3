@@ -118,7 +118,8 @@ namespace KeepnTabs
                         {
                             var toadd = new ListViewItem( WebUtility.UrlDecode( task.Element( "title" ).Value ) );
 
-                            toadd.Tag = task.Element( "id" ).Value;
+                            toadd.Tag  = task.Element( "id" ).Value;
+                            toadd.Font = new Font( toadd.Font, bool.Parse( task.Element( "done" ).Value.ToString() ) ? FontStyle.Strikeout : FontStyle.Regular );
 
                             lstTasks.Items.Add( toadd );
                         }
@@ -146,7 +147,7 @@ namespace KeepnTabs
 
                     if( response.IsSuccessStatusCode )
                     {
-                        var taskid = response.Content.ReadAsStringAsync();
+                        var taskid = await response.Content.ReadAsStringAsync();
                         var toadd  = new ListViewItem( title );
 
                         toadd.Tag = taskid;
@@ -195,7 +196,7 @@ namespace KeepnTabs
             {
                 var task   = lstTasks.SelectedItems[ 0 ];
                 var taskid = task.Tag;
-                var done   = !task.Font.Strikeout;
+                var done   = task.Font.Strikeout;
 
                 try
                 {
